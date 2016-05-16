@@ -1,6 +1,6 @@
 import json
 import sys
-from Membership import MembershipFactory
+from core.Membership import MembershipFactory
 
 
 class RulesSet():
