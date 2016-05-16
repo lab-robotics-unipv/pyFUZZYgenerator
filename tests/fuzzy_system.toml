@@ -1,0 +1,203 @@
+[model]
+
+# a name for the model
+name = "MembershipTest"
+
+version = "1.0alpha"
+description = "Example fuzzy model, not really working, to test this new file format"
+
+# model type (supported types are "f-ind" and "fis")
+type = "f-ind"
+
+# the list of input variables
+fuzzify = [
+  "inVar1",
+  "inVar2",
+  "inVar3",
+  "inVar4",
+  "inVar5",
+  "inVar5_1",
+  "inVar6",
+  "inVar7",
+  "inVar8"
+]
+
+# --------------------------------------------
+# specification of all the required variables
+# --------------------------------------------
+
+[inVar1]
+
+description = "Example of variable made by pairwise linear membership functions"
+membership_functions = ["poor", "good", "excellent"]
+worst = "poor"
+best = "excellent"
+weight = 1.0
+
+  [inVar1.poor]
+  type = "pairwise-linear"
+  parameters = [[0, 1], [2, 1], [4, 0]]
+
+  [inVar1.good]
+  type = "pairwise-linear"
+  parameters = [[1.0, 0.0], [2.0, 0.5], [3.0, 0.7], [4.0, 1.0], [4.5, 1.0], [5.0, 0.6], [6.0, 0.3], [7.0, 0.3], [8.0, 0.8], [9.0, 0.8], [10.0, 0.0]]
+
+  [inVar1.excellent]
+  type = "pairwise-linear"
+  parameters = [[6, 0], [9, 1], [10, 1]]
+
+[inVar2]
+membership_functions = ["poor", "good", "excellent"]
+worst = "poor"
+best = "excellent"
+weight = 1.0
+
+  [inVar2.poor]
+  type = "triangle"
+  parameters = [0.0, 2.5, 5.0]
+
+  [inVar2.good]
+  type = "triangle"
+  parameters = [2.5, 5.0, 7.5]
+
+  [inVar2.excellent]
+  type = "triangle"
+  parameters = [5.0, 7.5, 10.0]
+
+
+[inVar3]
+membership_functions = ["poor", "good", "excellent"]
+worst = "poor"
+best = "excellent"
+weight = 1.0
+
+  [inVar3.poor]
+  type = "trapezoid"
+  parameters = [0.0, 2.0, 3.0, 4.0]
+
+  [inVar3.good]
+  type = "trapezoid"
+  parameters = [3.0, 4.0, 5.0, 6.0]
+
+  [inVar3.excellent]
+  type = "trapezoid"
+  parameters = [5.0, 6.0, 7.0, 8.0]
+
+[inVar4]
+membership_functions = ["poor", "good", "excellent"]
+worst = "poor"
+best = "excellent"
+weight = 1.0
+
+  [inVar4.poor]
+  type = "gaussian-bell"
+  parameters = [ 2.0, 4.0, 2.0 ]
+
+  [inVar4.good]
+  type = "gaussian-bell"
+  parameters = [ 2.0, 4.0, 5.0 ]
+
+  [inVar4.excellent]
+  type = "gaussian-bell"
+  parameters = [ 2.0, 4.0, 8.0 ]
+
+[inVar5]
+membership_functions = ["poor", "good", "excellent"]
+worst = "poor"
+best = "excellent"
+weight = 1.0
+
+  [inVar5.poor]
+  type = "gaussian"
+  parameters = [ 2.0, 2.0 ]
+
+  [inVar5.good]
+  type = "gaussian"
+  parameters = [ 5, 2 ]
+
+  [inVar5.excellent]
+  type = "gaussian"
+  parameters = [ 8, 2 ]
+
+
+[inVar5_1]
+membership_functions = ["poor", "good", "excellent"]
+worst = "poor"
+best = "excellent"
+weight = 1.0
+
+  [inVar5_1.poor]
+  type = "gaussian2"
+  parameters = [ 2, 2, 3, 1 ]
+
+  [inVar5_1.good]
+  type = "gaussian2"
+  parameters = [ 5, 2, 6, 3 ]
+
+  [inVar5_1.excellent]
+  type = "gaussian2"
+  parameters = [ 8, 2, 12, 5 ]
+
+[inVar6]
+membership_functions = ["poor", "good"]
+worst = "poor"
+best = "good"
+weight = 1.0
+
+  [inVar6.poor]
+  type = "sigmoid"
+  parameters = [ -4, 3 ]
+
+  [inVar6.good]
+  type = "sigmoid"
+  parameters = [ 4, 7 ]
+
+[inVar7]
+description = "Generalized singleton"
+membership_functions = [ "poor", "good", "excellent" ]
+worst = "poor"
+best = "excellent"
+weight = 1.0
+
+  [inVar7.poor]
+  type = "singleton"
+  parameters = 2
+
+  [inVar7.good]
+  type = "singleton"
+  parameters = 5
+
+  [inVar7.excellent]
+  type = "singleton"
+  parameters = 8
+
+[inVar8]
+description = "Mixed types"
+membership_functions = [ "t1", "t2", "t3", "t4", "t5", "t6" ]
+worst = "t1"
+best = "t6"
+weight = 1.0
+
+   [inVar8.t1]
+   type = "pairwise-linear"
+   parameters = [ [1, 0], [2.0, 0.5], [3.0, 0.7], [4.0,1.0], [4.5, 1.0], [5.0, 0.6], [6.0, 0.3], [7.0, 0.3], [8.0, 0.8], [9.0, 0.8], [10.0,0.0] ]
+   
+   [inVar8.t2]
+   type = "triangle"
+   parameters = [ 12.0, 14.0, 16.0 ]
+   
+   [inVar8.t3]
+   type = "trapezoid"
+   parameters = [ 18.0, 20.0, 24.0, 28.0 ]
+
+   [inVar8.t4]
+   type = "gaussian-bell"
+   parameters = [ 2.0, 4.0, 30.0 ]
+
+   [inVar8.t5]
+   type = "gaussian"
+   parameters = [ 35, 2 ]
+
+   [inVar8.t6]
+   type = "sigmoid"
+   parameters = [ 4, 40 ]
