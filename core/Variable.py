@@ -42,7 +42,9 @@ class Variable:
 
         :return: a floating point value.
         """
-        return max([mf.getMaxX() for mf in self.membership_functions])
+        max_x_values = [mf.getMaxX() for mf in self.membership_functions]
+        logging.debug(max_x_values)
+        return max(max_x_values)
 
 
 class VariableFIND(Variable):
@@ -57,12 +59,12 @@ class VariableFIND(Variable):
 
     @best.setter
     def best(self, value):
-        if value is None:
-            pass  # will assign the value in the end
-        elif hasattr(self, 'worst') and value == self.worst:
-            raise ValueError("Best can not be same as worst")
-        elif value < 0 or value > len(self.membership_functions):
-            raise ValueError("Best value is {}, allowed range is [{},{}]".format(value, 0, len(self.membership_functions)))
+        # if value is None:
+        #     pass  # will assign the value in the end
+        # elif hasattr(self, 'worst') and value == self.worst:
+        #     raise ValueError("Best can not be same as worst")
+        # elif value < 0 or value > len(self.membership_functions):
+        #     raise ValueError("Best value is {}, allowed range is [{},{}]".format(value, 0, len(self.membership_functions)))
         self.__best = value
 
     @property
@@ -71,12 +73,12 @@ class VariableFIND(Variable):
 
     @worst.setter
     def worst(self, value):
-        if value is None:
-            pass   # will assign the value in the end
-        elif hasattr(self, 'best') and value == self.best:
-            raise ValueError("Wosrt can not be same as best")
-        elif value < 0 or value > len(self.membership_functions):
-            raise ValueError("Worst value is {}, allowed range is [{},{}]".format(value, 0, len(self.membership_functions)))
+        # if value is None:
+        #     pass   # will assign the value in the end
+        # elif hasattr(self, 'best') and value == self.best:
+        #     raise ValueError("Wosrt can not be same as best")
+        # elif value < 0 or value > len(self.membership_functions):
+        #     raise ValueError("Worst value is {}, allowed range is [{},{}]".format(value, 0, len(self.membership_functions)))
         self.__worst = value
 
     def getBestMF(self):

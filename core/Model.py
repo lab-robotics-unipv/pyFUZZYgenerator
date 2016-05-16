@@ -64,8 +64,20 @@ class ModelFIND(Model):
 
         for var_name in data['model']['fuzzify']:
             var = VariableFIND(name=var_name, data=data[var_name])
+
+            if 'best' not in data[var_name]:
+                raise ValueError("Missing 'best' field in {} variable.".format(var_name))
+            # should also check that best/worst are valid function names (must find an elegant way to do it)
+            var.best = data[var_name]['best']
+
+            if 'worst' not in data[var_name]:
+                raise ValueError("Missing 'worst' field in {} variable.".format(var_name))
+            # should also check that best/worst are valid function names (must find an elegant way to do it)
+            var.worst = data[var_name]['worst']
+
             self.variables.append(var)
             logging.debug(str(var))
+
         output_function_name = data['model']['defuzzify']
         self.defuzzify = VariableFIND(name=output_function_name, data=data[output_function_name])
         return data
@@ -245,5 +257,6 @@ class ModelFIND(Model):
         #     v.get(i).computeWeights(step)
         # computeNormalizedWeights()
 
-        computeWeights(self, step)
+        for var in self.variables:
+            computeWeights(var, step)
         self.computeNormalizedWeights(self)

@@ -207,7 +207,7 @@ def getInternalDistance(f1, f2, x_min, x_max, scale, step):
 
 
 # TODO: should become a class method
-def computeWeights(model, step):
+def computeWeights(variable, step):
     """
 	/**
 	 * Compute and assign a weight of every function. WORST has weight=0, BEST
@@ -226,38 +226,42 @@ def computeWeights(model, step):
 
     d = []
 
-    if (model.isCrisp()):   # TODO: check what this means
-        return
-    if (model.worst == model.best):
-        raise ValueError("Worst and best membership functions are the same.")
+    # TODO: check if this is really required
+    # if (model.isCrisp()):
+    #     return
+    logging.debug(variable)
+    logging.debug(variable.best)
+    logging.debug(variable.worst)
+    if (variable.worst == variable.best):
+        raise ValueError("{}: worst and best membership functions are the same.".format(variable.name))
 
-    nf = len(model.membership_functions)
-    interval = model.getMaxX() - model.getMinX()
-    for mf in model.membership_functions:    # TODO: fix since we need to address i-th and (i+1)-th mf
+    nf = len(variable.membership_functions)
+    interval = variable.getMaxX() - variable.getMinX()
+    for mf in variable.membership_functions:    # TODO: fix since we need to address i-th and (i+1)-th mf
         d.append(getInternalDistance(getMF(i), getMF(i + 1), interval, step))
     d.append(getExternalDistance(getMF(0), getMF(nf - 1), getMinX(), getMaxX(), interval, step))
 
-    model.getWorstMF().setWeight(0.0)
+    variable.getWorstMF().setWeight(0.0)
 
-    d1 = sumVect(d, nf, model.worst, model.best, True)
-    d2 = sumVect(d, nf, model.worst, model.best, False)
+    d1 = sumVect(d, nf, variable.worst, variable.best, True)
+    d2 = sumVect(d, nf, variable.worst, variable.best, False)
 
     if (d1 > d2):
-        model.getBestMF().setWeight(d1)
+        variable.getBestMF().setWeight(d1)
         internal = True
     else:
-        model.getBestMF().setWeight(d2)
+        variable.getBestMF().setWeight(d2)
         internal = False
 
     # for (i = 0; i < nf; i++):
-    for i, mf in enumerate(model.membership_functions):
+    for i, mf in enumerate(variable.membership_functions):
         if (i != worst) and (i != best):
             d1 = sumVect(d, nf, worst, i, true);
             d2 = sumVect(d, nf, worst, i, false);
 
             # it seems independent from the value of the "internal" flag
             if (internal):
-                if (model.worst < best):
+                if (variable.worst < best):
                     if (i < best):
                         getMF(i).setWeight(d1)
                     else:
@@ -411,16 +415,16 @@ class Triangle(MembershipFunction):
         self.centroid_x = None
 
     def getMinX(self):
-        return self.parameters[0][0]
+        return self.parameters[0]
 
     def getMaxX(self):
-        return self.parameters[2][0]
+        return self.parameters[2]
 
     def getTopLeftX(self):
-        return self.parameters[1][0]
+        return self.parameters[1]
 
     def getTopRightX(self):
-        return self.parameters[1][0]
+        return self.parameters[1]
 
     def f(self, x):
         p = self.parameters
@@ -468,16 +472,16 @@ class Trapezoid(MembershipFunction):
         self.centroid_x = None
 
     def getMinX(self):
-        return self.parameters[0][0]
+        return self.parameters[0]
 
     def getMaxX(self):
-        return self.parameters[3][0]
+        return self.parameters[3]
 
     def getTopLeftX(self):
-        return self.parameters[1][0]
+        return self.parameters[1]
 
     def getTopRightX(self):
-        return self.parameters[2][0]
+        return self.parameters[2]
 
     def f(self, x):
         p = self.parameters
@@ -520,6 +524,12 @@ class Singleton(MembershipFunction):
         self.__parameters = [float(x) for x in param]
         self.centroid_x = None   # invalidates the stored centroid value
 
+    def getMinX(self):
+        return self.parameters[0]
+
+    def getMaxX(self):
+        return self.parameters[-1]
+
     def f(self, value):
         if value in self.parameters:
             return 1
@@ -552,6 +562,12 @@ class Sigmoid(MembershipFunction):
         self.__parameters = [float(x) for x in param]
         self.centroid_x = None  # invalidates the stored centroid value
 
+    def getMinX(self):
+        raise NotImplementedError("To be calculated for sigmoid functions")
+
+    def getMaxX(self):
+        raise NotImplementedError("To be calculated for sigmoid functions")
+
     def f(self, value):
         return 1. / (1. + np.exp(-self.parameters[0] * (value - self.parameters[1])))
 
@@ -581,6 +597,12 @@ class PairwiseLinear(MembershipFunction):
         self.check_parameters_pairwise_order(param)
         self.__parameters = param
         self.centroid_x = None  # invalidates the stored centroid value
+
+    def getMinX(self):
+        return self.parameters[0][0]
+
+    def getMaxX(self):
+        return self.parameters[-1][0]
 
     def f(self, x):
         logging.debug(self.parameters)
