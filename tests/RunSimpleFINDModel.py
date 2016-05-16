@@ -9,7 +9,7 @@ m = ModelFIND()
 obj = m.load('simple_find.toml')
 pprint.pprint(obj)
 
-m.input_values = [-10.0, -10.0]
+m.setInputValuesList([-10.0, -10.0])
 index = m.calcIndex()
 print(index)
 

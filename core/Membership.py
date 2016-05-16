@@ -1,5 +1,5 @@
 import numpy as np
-
+import logging
 
 def getExternalDiff(f1, f2, x_min, x_max, scale, step):
     """
@@ -319,8 +319,16 @@ class MembershipFunction(object):
             raise ValueError("{} parameters must sorted in increasing order (given '{}')".format(self.printable_type_name, str(param)))
 
     def check_parameters_pairwise_order(self, param):
-        # TODO: to be implemented
-        raise BaseException("To be implemented")
+        """
+        Checks that the list of pairwise elements is sorted.
+
+        We want to check the correct ordering of the list of X coordinate components.
+
+        :param param: list of parameters to be checked
+        :return: raises a ValueError in case of issues
+        """
+        x_components = [x[0] for x in param]
+        self.check_parameters_scalar_order(x_components)
 
     def getMinX(self):
         raise NotImplementedError("To be overriden in child classes")
@@ -570,10 +578,11 @@ class PairwiseLinear(MembershipFunction):
     def parameters(self, param):
         # self.check_distinct_parameters(param)
         self.check_parameters_pairwise_order(param)
-        # self.__parameters = [float(x) for x in param]
+        self.__parameters = param
         self.centroid_x = None  # invalidates the stored centroid value
 
     def f(self, x):
+        logging.debug(self.parameters)
         if x <= self.parameters[0][0]:
             return self.parameters[0][1]
         elif x >= self.parameters[-1][0]:

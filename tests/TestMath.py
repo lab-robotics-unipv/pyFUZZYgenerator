@@ -3,6 +3,19 @@ from core.Membership import Triangle
 from core.Membership import Sigmoid
 
 
+class TestMembership(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        pass
+
+    def test_check_parameters_number_too_few(self):
+        param = {'type': 'triangle', 'parameters': [-10, 0, 10]}
+        name = 'Test Triangle'
+        t = Triangle(name, param)
+        with self.assertRaises(ValueError):
+            t.check_parameters_number(param)
+
+
 class TestTriangleMF(unittest.TestCase):
     @classmethod
     def setUpClass(cls):

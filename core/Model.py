@@ -37,6 +37,16 @@ class Model:
         """
         return max([len(v.membership_functions) for v in self.variables])
 
+    def setInputValuesList(self, values):
+        """
+        Assign the input value to each input variable taking values from a list.
+
+        :param values: the list of input values
+        :return: None
+        """
+        for i, var in enumerate(self.variables):
+            var.input = values[i]
+
 
 class ModelFIND(Model):
     def load(self, infile):
