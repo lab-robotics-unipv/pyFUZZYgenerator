@@ -10,6 +10,7 @@ obj = m.load('simple_find.toml')
 pprint.pprint(obj)
 
 m.setInputValuesList([-10.0, -10.0])
+m.computeVariables(10000)
 index = m.calcIndex()
 print(index)
 

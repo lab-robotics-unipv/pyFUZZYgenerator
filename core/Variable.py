@@ -78,3 +78,6 @@ class VariableFIND(Variable):
         elif value < 0 or value > len(self.membership_functions):
             raise ValueError("Worst value is {}, allowed range is [{},{}]".format(value, 0, len(self.membership_functions)))
         self.__worst = value
+
+    def getBestMF(self):
+        return self.membership_functions[self.best]

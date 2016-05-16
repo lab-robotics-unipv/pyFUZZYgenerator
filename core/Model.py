@@ -3,6 +3,7 @@ import numpy as np
 import pytoml as toml
 
 from core.Variable import VariableFIND
+from core.Membership import computeWeights
 
 
 class Model:
@@ -166,7 +167,8 @@ class ModelFIND(Model):
                 mf = var.membership_functions[int(activeMF[j][count[j]])]
 
                 # sum the contribution of the j-th variable
-                weight_sum += mf.getNormalizedWeight()
+                # weight_sum += mf.getNormalizedWeight()
+                weight_sum += mf.normalized_weight
 
                 # calculate the membership grade of j-th variable
                 membership[j] = mf.f(var.getInput())
@@ -202,3 +204,46 @@ class ModelFIND(Model):
         return indexValue
 
 
+    def computeNormalizedWeights(self):
+        """
+	    Compute and assign the normalized weights of the functions. First add the
+	    weights of all the best functions of all the variables, then divide the
+	    weight of all the functions of all the variables by this sum.
+	    """
+        # int nv, nf;
+		# int i, j;
+		# double sum, w;
+
+		# get the sum of all the weights of the best cases
+        sum = 0.0
+        for var in self.variables:
+            sum += var.weight * var.getBestMF().weight
+
+        for var in self.variables:
+            nf = var.getFuncNumber()
+
+            # compute and assign the normalized weights
+            # for (j = 0; j < nf; j++):
+            #     w = var.getMF(j).getWeight()
+            #     var.getMF(j).setNormalizedWeight(var.getWeight() * w / sum)
+
+
+            for mf in var.membership_functions:
+                w = mf.weight
+                mf.normalized_weight = var.weight * w / sum
+
+    def computeVariables(self, step):
+        """
+        First computes the weights for each variable; afterwards calculates the normalized weights
+        of all the functions for all the variables in the model
+
+        :param step: the number of integration steps used to calculate the distances between membership functions.
+	    """
+
+        # nv = getVarNumber()
+        # for (i = 0; i < nv; i++) {
+        #     v.get(i).computeWeights(step)
+        # computeNormalizedWeights()
+
+        computeWeights(self, step)
+        self.computeNormalizedWeights(self)

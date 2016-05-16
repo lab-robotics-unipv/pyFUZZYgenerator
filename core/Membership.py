@@ -206,7 +206,8 @@ def getInternalDistance(f1, f2, x_min, x_max, scale, step):
     return getInternalDiff(f1, f2, x_min, x_max, scale, step) + getInternalHoleSize(f1, f2, x_min, x_max, scale, step)
 
 
-def computeWeights(self, step):
+# TODO: should become a class method
+def computeWeights(model, step):
     """
 	/**
 	 * Compute and assign a weight of every function. WORST has weight=0, BEST
@@ -225,38 +226,38 @@ def computeWeights(self, step):
 
     d = []
 
-    if (self.isCrisp()):   # TODO: check what this means
+    if (model.isCrisp()):   # TODO: check what this means
         return
-    if (self.worst == self.best):
+    if (model.worst == model.best):
         raise ValueError("Worst and best membership functions are the same.")
 
-    nf = len(self.membership_functions)
-    interval = self.getMaxX() - self.getMinX()
-    for mf in self.membership_functions:    # TODO: fix since we need to address i-th and (i+1)-th mf
+    nf = len(model.membership_functions)
+    interval = model.getMaxX() - model.getMinX()
+    for mf in model.membership_functions:    # TODO: fix since we need to address i-th and (i+1)-th mf
         d.append(getInternalDistance(getMF(i), getMF(i + 1), interval, step))
     d.append(getExternalDistance(getMF(0), getMF(nf - 1), getMinX(), getMaxX(), interval, step))
 
-    self.getWorstMF().setWeight(0.0)
+    model.getWorstMF().setWeight(0.0)
 
-    d1 = sumVect(d, nf, self.worst, self.best, True)
-    d2 = sumVect(d, nf, self.worst, self.best, False)
+    d1 = sumVect(d, nf, model.worst, model.best, True)
+    d2 = sumVect(d, nf, model.worst, model.best, False)
 
     if (d1 > d2):
-        self.getBestMF().setWeight(d1)
+        model.getBestMF().setWeight(d1)
         internal = True
     else:
-        self.getBestMF().setWeight(d2)
+        model.getBestMF().setWeight(d2)
         internal = False
 
     # for (i = 0; i < nf; i++):
-    for i, mf in enumerate(self.membership_functions):
+    for i, mf in enumerate(model.membership_functions):
         if (i != worst) and (i != best):
             d1 = sumVect(d, nf, worst, i, true);
             d2 = sumVect(d, nf, worst, i, false);
 
             # it seems independent from the value of the "internal" flag
             if (internal):
-                if (self.worst < best):
+                if (model.worst < best):
                     if (i < best):
                         getMF(i).setWeight(d1)
                     else:
