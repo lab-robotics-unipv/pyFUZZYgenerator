@@ -162,7 +162,8 @@ class ModelFIND(Model):
             for j, var in enumerate(self.variables):
                 # Variable currVar = v.get(j)
 
-                mf = var.getMF(activeMF[j][count[j]])
+                # mf = var.getMF(activeMF[j][count[j]])
+                mf = var.membership_functions[int(activeMF[j][count[j]])]
 
                 # sum the contribution of the j-th variable
                 weight_sum += mf.getNormalizedWeight()
