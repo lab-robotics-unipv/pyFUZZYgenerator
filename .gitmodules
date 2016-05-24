@@ -1,0 +1,3 @@
+[submodule "foozzy"]
+	path = foozzy
+	url = ssh://git@rlabgw0.unipv.it:10022/quadricottero/foozzy.git
