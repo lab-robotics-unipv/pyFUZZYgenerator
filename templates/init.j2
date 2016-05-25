@@ -1,0 +1,94 @@
+#include "definitions.h"
+#include "fuzzyLogic.h"
+
+int newState(fuzzyLogic * fl) {
+	memFunction MF_pos[3];
+	double poi_pos_neg[4] = {-1, -1, -0.5, 0};
+	createMemFunction(&(MF_pos[0]), "NEG", TRAP_MF, poi_pos_neg);
+
+	double poi_pos_0[3] = {-0.5, 0, 0.5};
+	createMemFunction(&(MF_pos[1]), "ZERO", TRI_MF, poi_pos_0);
+
+	double poi_pos_pos[4] = {0, 0.5, 1, 1};
+	createMemFunction(&(MF_pos[2]), "POS", TRAP_MF, poi_pos_pos);
+
+	fuzzyInput fi;
+	int flag;
+	flag = createInput(&fi, "POS", MF_pos, 3);
+	if (flag < 0) {
+		printf("ERRORE 1\n");
+		return 1;
+	}
+
+	// A three MF output for force
+	memFunction MF_force[3];
+	double poi_force_neg[4] = {-1, -1, -0.5, 0};
+	createMemFunction(&(MF_force[0]), "NEG", TRAP_MF, poi_force_neg);
+
+	double poi_force_0[3] = {-0.5, 0, 0.5};
+	createMemFunction(&(MF_force[1]), "ZERO", TRI_MF, poi_force_0);
+
+	double poi_force_pos[4] = {0, 0.5, 1, 1};
+	createMemFunction(&(MF_force[2]), "POS", TRAP_MF, poi_force_pos);
+
+	fuzzyOutput fo;
+	flag = createOutput(&fo, "FORCE", MF_pos, 3);
+	if (flag < 0) {
+		printf("ERRORE 2\n");
+		return 2;
+	}
+
+	// Create rules
+	rule rules[N_RULES];
+
+	rules[0].nIfRules = 1;
+	strcpy(rules[0].ifRules[0].name, "POS");
+	strcpy(rules[0].ifRules[0].mf, "NEG");
+	rules[0].thenValue = 1;
+	rules[0].nThenRules = 1;
+	strcpy(rules[0].thenRules[0].name, "FORCE");
+	strcpy(rules[0].thenRules[0].mf, "POS");
+
+	rules[1].nIfRules = 1;
+	strcpy(rules[1].ifRules[0].name, "POS");
+	strcpy(rules[1].ifRules[0].mf, "ZERO");
+	rules[1].thenValue = 1;
+	rules[1].nThenRules = 1;
+	strcpy(rules[1].thenRules[0].name, "FORCE");
+	strcpy(rules[1].thenRules[0].mf, "ZERO");
+
+	rules[2].nIfRules = 1;
+	strcpy(rules[2].ifRules[0].name, "POS");
+	strcpy(rules[2].ifRules[0].mf, "POS");
+	rules[2].thenValue = 1;
+	rules[2].nThenRules = 1;
+	strcpy(rules[2].thenRules[0].name, "FORCE");
+	strcpy(rules[2].thenRules[0].mf, "NEG");
+
+	// Create logic
+	fuzzyLogic fl;
+	flag = createLogic(&fl, &fi, &fo, rules);
+	if ( flag < 0 ) {
+		printf("ERRORE 3\n");
+		return 3;
+	}
+
+	char linea[100];
+	double input, output;
+	double fuzzified[N_INPUT][MAX_N_MF];
+	int i, j;
+	while (1) {
+		fgets(linea, 100, stdin);
+		input = atof(linea);
+		printf("%lf\n", input);
+
+		fuzzify(&fl, &input, fuzzified);
+		for ( i = 0; i < N_INPUT; i++) {
+			for ( j = 0; j < MAX_N_MF; j++) {
+
+			}
+		}
+	}
+
+	return 0;
+}
