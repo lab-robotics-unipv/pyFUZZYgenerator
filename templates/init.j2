@@ -82,22 +82,5 @@ int newState(fuzzyLogic * fl) {
 		return 3;
 	}
 
-	char linea[100];
-	double input, output;
-	double fuzzified[N_INPUT][MAX_N_MF];
-	int i, j;
-	while (1) {
-		fgets(linea, 100, stdin);
-		input = atof(linea);
-		printf("%lf\n", input);
-
-		fuzzify(&fl, &input, fuzzified);
-		for ( i = 0; i < N_INPUT; i++) {
-			for ( j = 0; j < MAX_N_MF; j++) {
-
-			}
-		}
-	}
-
 	return 0;
 }
