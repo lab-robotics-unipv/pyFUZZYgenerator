@@ -623,17 +623,21 @@ class PairwiseLinear(MembershipFunction):
 
 
 class MembershipFactory():
-	def __init__(self, name=None, data=None):
-		self.name = name
+	def __init__(self, data):
 		self.data = data
+		if self.data is None:
+			raise ValueError("data is None in MF {}".format(self.data['name']))
+
+		try:
+			self.name = self.data['name']
+		except:
+			raise ValueError("name is None in MF {}".format(self.data['name']))
 
 	def getMF(self):
-		if self.data is None:
-			raise ValueError("data is None in MF {}".format(self.name))
 		if 'type' not in self.data:
 			raise ValueError("Missing type field in MF {}".format(self.name))
+
 		type_name = self.data['type']
-		mf = None
 		if type_name == 'pairwise-linear':
 			mf = PairwiseLinear(self.name, self.data)
 		elif type_name == 'triangle':
