@@ -7,47 +7,21 @@ from core.Membership import computeWeights
 
 
 class Model:
-	def __init__(self, name=None, data=None):
-		if name is not None:
-			self.name = name
-			if data is not None and 'fuzzify' in data['model']:
-				self.variables = data['model']['fuzzify']
-			else:
-				self.variables = []
+	def __init__(self, data):
+		self.name = data.get('name', None)
+		self.description = data.get('description', None)
+		self.version = data.get('version', None)
+		self.type = data.get('type', 'fis')
 
-		if data is not None and 'defuzzify' in data['model']:
-			self.defuzzify = data['model']['defuzzify']
-		else:
-			self.defuzzify = []
+		self.input_var = []
+		self.output_var = []
+		try:
+			self._input_var = data['input_var']
+			self._output_var = data['output_var']
+		except:
+			raise
 
-	def getNumRules(self):
-		"""
-		Computes the total number of rules required by the current model, considering all the possible
-		combinations of membership functions and variables.
-		:return: Total number of rules.
-		"""
-		n_rules = 1.0
-		for v in self.variables:
-			n_rules *= len(v.membership_functions)
-			return n_rules
-
-	def getMaxNumberOfMF(self):
-		"""
-		Computes the maximum number of membership functions among all the variables.
-		:return: Maximum number of membership functions.
-		"""
-		return max([len(v.membership_functions) for v in self.variables])
-
-	def setInputValuesList(self, values):
-		"""
-		Assign the input value to each input variable taking values from a list.
-
-		:param values: the list of input values
-		:return: None
-		"""
-		for i, var in enumerate(self.variables):
-			var.input = values[i]
-
+		self._rules = data.get('rules', None)
 
 class ModelFIND(Model):
 	def load(self, infile):
@@ -260,3 +234,30 @@ class ModelFIND(Model):
 		for var in self.variables:
 			computeWeights(var, step)
 			self.computeNormalizedWeights(self)
+	# def getNumRules(self):
+	# 	"""
+	# 	Computes the total number of rules required by the current model, considering all the possible
+	# 	combinations of membership functions and variables.
+	# 	:return: Total number of rules.
+	# 	"""
+	# 	n_rules = 1.0
+	# 	for v in self.input_var:
+	# 		n_rules *= len(v.membership_functions)
+	# 		return n_rules
+
+	# def getMaxNumberOfMF(self):
+	# 	"""
+	# 	Computes the maximum number of membership functions among all the variables.
+	# 	:return: Maximum number of membership functions.
+	# 	"""
+	# 	return max([len(v.membership_functions) for v in self.variables])
+
+	# def setInputValuesList(self, values):
+	# 	"""
+	# 	Assign the input value to each input variable taking values from a list.
+
+	# 	:param values: the list of input values
+	# 	:return: None
+	# 	"""
+	# 	for i, var in enumerate(self.variables):
+	# 		var.input = values[i]
