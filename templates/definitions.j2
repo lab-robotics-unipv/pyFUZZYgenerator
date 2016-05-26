@@ -1,9 +1,9 @@
 #ifndef DEFINITIONS_H
 #define DEFINITIONS_H
 
-#define N_INPUT {{ len(model.variables) }}
-#define N_OUTPUT {{ len(model.defuzzify) }}
-#define N_RULES {{ model.getNumRules }}
+#define N_INPUT {{ len(model.input_var) }}
+#define N_OUTPUT {{ len(model.output_var) }}
+#define N_RULES {{ len(model.rules) }}
 
 // TODO incapsulate both in functions or fields of the class
 #define MAX_N_MF_INPUT {{ max([len(v.membership_functions) for v in model.variables]) }}
