@@ -74,11 +74,12 @@ int newState(fuzzyLogic * fl) {
 	strcpy(rules[2].thenRules[0].name, "FORCE");
 	strcpy(rules[2].thenRules[0].mf, "NEG");
 
-	// Create logic
-	fuzzyLogic fl;
-	flag = createLogic(&fl, &fi, &fo, rules);
+	/*
+	 * LOGIC
+	 */
+
+	flag = createLogic(fl, &fi, &fo, rules);
 	if ( flag < 0 ) {
-		printf("ERRORE 3\n");
 		return 3;
 	}
 
