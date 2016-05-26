@@ -1,6 +1,17 @@
 import jinja2 as j2
 import os
 
+mfDict = {
+	# 'pairwise-linear': ,
+	'trinagle': 'TRI_MF',
+	'trapezoid': 'TRAP_MF',
+	# 'gaussian-bell': ,
+	# 'gaussian': ,
+	# 'gaussian2': ,
+	# 'sigmoid': ,
+	'singleton': 'SPIKE_MF',
+}
+
 class templateRenderer(object):
 	def __init__(self, model, directory=os.getcwd()):
 		loader = j2.FileSystemLoader(directory)
@@ -9,7 +20,7 @@ class templateRenderer(object):
 
 	def render(self, template):
 		tmpl = self.env.get_template(template)
-		return tmpl.render(model=model)
+		return tmpl.render(model=self.model)
 
 	def write(self, fileOut, template):
 		with open(fileOut, 'w') as fo:
