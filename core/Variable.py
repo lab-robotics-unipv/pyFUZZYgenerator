@@ -24,10 +24,6 @@ class VariableFis(Variable):
 	def __init__(self, data):
 		super().__init__(data)
 
-# 		for mf_name in data['membership_functions']:
-# 			self.add_membership_function(name=mf_name, data=data[mf_name])
-# 			self.input = None
-#
 # 	def __str__(self):
 # 		s = str(self.name) + ': '
 # 		for mf in self.membership_functions:
