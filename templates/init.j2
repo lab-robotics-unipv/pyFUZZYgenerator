@@ -2,23 +2,32 @@
 #include "fuzzyLogic.h"
 
 int newState(fuzzyLogic * fl) {
-	memFunction MF_pos[3];
-	double poi_pos_neg[4] = {-1, -1, -0.5, 0};
-	createMemFunction(&(MF_pos[0]), "NEG", TRAP_MF, poi_pos_neg);
 
-	double poi_pos_0[3] = {-0.5, 0, 0.5};
-	createMemFunction(&(MF_pos[1]), "ZERO", TRI_MF, poi_pos_0);
+	/*
+	 * INPUT VARIABLES
+	 */
 
-	double poi_pos_pos[4] = {0, 0.5, 1, 1};
-	createMemFunction(&(MF_pos[2]), "POS", TRAP_MF, poi_pos_pos);
-
-	fuzzyInput fi;
 	int flag;
-	flag = createInput(&fi, "POS", MF_pos, 3);
+	fuzzyInput fi[{{ model.ninput }}];
+
+	{% for i, vin in enumerate(model.variables) %}
+	// Input variable: {{ vin.name }}
+	{% if vin.description is defined %}
+	// {{ vin.description }}
+	{% endif %}
+
+	memFunction MF_{{ vin.name }}[{{ len(vin.mfs) }}];
+
+	{% for j, mf in enumerate(vin.mfs) %}
+	double poi_{{ vin.name }}_{{ mf.name }}[] = {{{ mf.poi | join(', ') }}};
+	createMemFunction(&(MF_{{ vin.name }}[{{ j }}]), {{ mf.name }}, {{ mfDict[mf.type] }}, poi_{{ vin.name }}_{{ mf.name }});
+	{% endfor %}
+
+	flag = createInput(&(fi[{{ i }}]), {{ vin.name }}, MF_{{ vin.name }}, {{ len(vin.mfs) }});
 	if (flag < 0) {
-		printf("ERRORE 1\n");
 		return 1;
 	}
+	{% endfor %}
 
 	// A three MF output for force
 	memFunction MF_force[3];
