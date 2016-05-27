@@ -22,7 +22,7 @@ int newState_{{ model.name }}(fuzzyLogic_{{ model.name }} * fl) {
 	createMemFunction(&(MF_{{ vin.name }}[{{ loop.index0 }}]), "{{ mf.name }}", {{ mfDict.get(mf.type) }}, poi_{{ vin.name }}_{{ mf.name }});
 	{% endfor %}
 
-	flag = createInput(&(fi[{{ loop.index0 }}]), {{ vin.name }}, MF_{{ vin.name }}, {{ vin.mfs | length }});
+	flag = createInput(&(fi[{{ loop.index0 }}]), {{ vin.name }}, MF_{{ vin.name }}, {{ vin.membership_functions | length }}, {{ vin.getMinX() }}, {{ vin.getMaxX() }});
 	if (flag < 0) {
 		return 1;
 	}
@@ -47,7 +47,7 @@ int newState_{{ model.name }}(fuzzyLogic_{{ model.name }} * fl) {
 	createMemFunction(&(MF_{{ vo.name }}[{{ loop.index0 }}]), "{{ mf.name }}", {{ mfDict.get(mf.type) }}, poi_{{ vo.name }}_{{ mf.name }});
 	{% endfor %}
 
-	flag = createOutput(&(fo[{{ loop.index0 }}]), {{ vo.name }}, MF_{{ vo.name }}, {{ vo.mfs | length }});
+	flag = createOutput(&(fo[{{ loop.index0 }}]), {{ vo.name }}, MF_{{ vo.name }}, {{ vo.membership_functions | length }}, {{ vo.getMinX() }}, {{ vo.getMaxX() }});
 	if (flag < 0) {
 		return 1;
 	}

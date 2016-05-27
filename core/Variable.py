@@ -20,6 +20,23 @@ class Variable:
 		mf = factory.getMF()
 		self.membership_functions.append(mf)
 
+	def getMinX(self):
+		"""
+		Returns the minimum X value among all the membership functions belonging to the variable.
+
+		:return: a floating point value.
+		"""
+		return min([mf.getMinX() for mf in self.membership_functions])
+
+
+	def getMaxX(self):
+		"""
+		Returns the maximum X value among all the membership functions belonging to the variable.
+
+		:return: a floating point value.
+		"""
+		return max([mf.getMaxX() for mf in self.membership_functions])
+
 class VariableFis(Variable):
 	def __init__(self, data):
 		super().__init__(data)
