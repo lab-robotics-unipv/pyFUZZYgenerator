@@ -1,23 +1,23 @@
-#ifndef FUZZY_OUTPUT_H
-#define FUZZY_OUTPUT_H
+#ifndef FUZZY_OUTPUT_{{ model.name }}_H
+#define FUZZY_OUTPUT_{{ model.name }}_H
 
-#include "definitions.h"
-#include "memFunc.h"
+#include "definitions_{{ model.name }}.h"
+#include "memFunc_{{ model.name }}.h"
 
-#ifndef MAX_L_NAME
-#error "MAX_L_NAME not defined: check definitions.h"
+#ifndef MAX_L_NAME_{{ model.name }}
+#error "MAX_L_NAME_{{ model.name }} not defined: check definitions_{{ model.name }}.h"
 #endif
 
-#ifndef MAX_N_MF_OUTPUT
-#error "MAX_N_MF not defined: check definitions.h"
+#ifndef MAX_N_MF_OUTPUT_{{ model.name }}
+#error "MAX_N_MF_{{ model.name }} not defined: check definitions_{{ model.name }}.h"
 #endif
 
 //! FUZZY OUTPUT STRUCTURE
 typedef struct {
-	char name[MAX_L_NAME];		//!< Name of the output
-	memFunction mf[MAX_N_MF_OUTPUT];	//!< List of the Member Functions
+	char name[MAX_L_NAME_{{ model.name }}];		//!< Name of the output
+	memFunction mf[MAX_N_MF_OUTPUT_{{ model.name }}];	//!< List of the Member Functions
 	int nMF;					//!< Number of MF
-} fuzzyOutput;
+} fuzzyOutput_{{ model.name }};
 
 /*! INIT OF A FUZZY OUTPUT
  *		output		fo			Fuzzy output to init
@@ -27,18 +27,7 @@ typedef struct {
  *
  *		return					Flag: -1 if error, 0 otherwise
  */
-int createOutput(fuzzyOutput * fo, char* name, memFunction * MFs, int nMF);
-
-// /*! DEALLOCATION OF A FUZZY OUTPUT
-//  *		input		fuzzy_input		Pointer to a Member Function
-//  */
-// void killOutput(fuzzyOutput * fuzzy_output);
-//
-// /*! ADD A FUZZY SET TO A FUZZY OUTPUT
-//  *		input		fuzzy_output	Pointer to a Fuzzy Output struct
-//  *		input		memb_funct		Pointer to a Fuzzy Set struct
-//  */
-// void addFuzzySetOutput(fuzzyOutput * fuzzy_output , memFunction * memb_funct);
+int createOutput_{{ model.name }}(fuzzyOutput_{{ model.name }} * fo, char* name, memFunction_{{ model.name }} * MFs, int nMF);
 
 /*! FIND MF GIVEN NAME
  *		input		fuzzy_output	Pointer to the Fuzzy Output struct
@@ -46,6 +35,6 @@ int createOutput(fuzzyOutput * fo, char* name, memFunction * MFs, int nMF);
  *
  *		return						Index of the MF or -1 if not found
  */
-int getOutputMFFromName(fuzzyOutput * fuzzy_output, char * name);
+int getOutputMFFromName_{{ model.name }}(fuzzyOutput_{{ model.name }} * fuzzy_output, char * name);
 
 #endif
