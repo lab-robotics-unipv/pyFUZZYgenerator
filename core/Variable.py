@@ -45,40 +45,45 @@ class VariableFis(Variable):
 		super().__init__(data)
 
 
-# class VariableFIND(Variable):
-# 	def __init__(self, name=None, data=None):
-# 		super().__init__(name, data)
-# 		self.weight = data.get('weight', None)
-# 		self.best = None
-# 		self.worst = None
-#
-# 	@property
-# 	def best(self):
-# 		return self.__best
-#
-# 	@best.setter
-# 	def best(self, value):
-# 		# if value is None:
-# 		#     pass  # will assign the value in the end
-# 		# elif hasattr(self, 'worst') and value == self.worst:
-# 		#     raise ValueError("Best can not be same as worst")
-# 		# elif value < 0 or value > len(self.membership_functions):
-# 		#     raise ValueError("Best value is {}, allowed range is [{},{}]".format(value, 0, len(self.membership_functions)))
-# 		self.__best = value
-#
-# 	@property
-# 	def worst(self):
-# 		return self.__worst
-#
-# 	@worst.setter
-# 	def worst(self, value):
-# 		# if value is None:
-# 		#     pass   # will assign the value in the end
-# 		# elif hasattr(self, 'best') and value == self.best:
-# 		#     raise ValueError("Wosrt can not be same as best")
-# 		# elif value < 0 or value > len(self.membership_functions):
-# 		#     raise ValueError("Worst value is {}, allowed range is [{},{}]".format(value, 0, len(self.membership_functions)))
-# 		self.__worst = value
-#
-# 	def getBestMF(self):
-# 		return self.membership_functions[self.best]
+class VariableFIND(Variable):
+	def __init__(self, name=None, data=None):
+		super().__init__(name, data)
+		self.weight = data.get('weight', None)
+		self.best = None
+		self.worst = None
+
+	@property
+	def best(self):
+		if self.__best:
+			return self.__best
+		raise ValueError("Best not set yet")
+
+	@best.setter
+	def best(self, bst):
+		best = next((mf for mf in self.membership_functions if mf.name == bst), None)
+		if best is None:
+			raise ValueError("{} not contained in variable {}".format(bst, self.name))
+		elif hasattr(self, 'worst') and best == self.worst:
+		    raise ValueError("Best can not be same as worst")
+		self.__best = best
+
+	@property
+	def worst(self):
+		if self.__worst:
+			return self.__worst
+		raise ValueError("Worst not set yet")
+
+	@worst.setter
+	def worst(self, wst):
+		worst = next((mf for mf in self.membership_functions if mf.name == wst), None)
+		if worst is None:
+			raise ValueError("{} not contained in variable {}".format(wst, self.name))
+		elif hasattr(self, 'best') and worst == self.best:
+		    raise ValueError("Worst can not be same as best")
+		self.__worst = worst
+
+	def getBestMF(self):
+		return self.membership_functions[self.best]
+
+	def getWorstMF(self):
+		return self.membership_functions[self.worst]
