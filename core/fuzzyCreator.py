@@ -40,3 +40,24 @@ class templateRenderer(object):
 	def write(self, fileOut, template):
 		with open(fileOut, 'w') as fo:
 			fo.write(self.render(template))
+
+class fuzzyCreator(object):
+	def __init__(self, models, tmplDir=os.getcwd(), outDir=os.getcwd()):
+		self.models = models
+		self.tmplDir = tmplDir
+		self.outDir = outDir
+
+	def render(self, inFolder=True):
+		for model in self.models:
+			outDir = self.outDir
+
+			if inFolder:
+				outDir = os.path.join(outDir, model.name)
+				os.mkdir(outDir)
+
+			renderer = templateRenderer(model, self.tmplDir)
+
+			for tmpl in templateList:
+				tmplSplit = tmpl.split('.')
+				outfile = tmplSplit[0] + '_' + model.name + '.' + tmplSplit[1]
+				renderer.write(os.path.join(outDir, outfile), tmpl)
