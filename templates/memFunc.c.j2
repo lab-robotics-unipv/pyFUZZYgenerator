@@ -20,7 +20,6 @@ int createMemFunction(memFunction * mf, char* name, memFuncShape ms, double* poi
 
 	mf->lPoi = getMFPoiNum(ms);
 	if (mf->lPoi == -1) {
-		// killMemFunction(mf);
 		return -1;
 	}
 	memcpy(mf->poi, poi, mf->lPoi*sizeof(double));
@@ -69,55 +68,6 @@ double getPercentage(memFunction * mf , double inputValue)
 
 		case SPIKE_MF:
 			if(inputValue==mf->poi[0])
-				return 1;
-			else
-				return 0;
-	}
-}
-
-/*! CALCULATION OF THE MEMBERSHIP TO A GIVEN FUZZY SET (No Pointer in Input)
- *			input		mf				A Member Function
- *			input 		inputValue		Value of the input
- *
- *			return		double			Return the % of membership to a Fuzzy set (mf) given as input inputValue
- */
-double getPercentageNP(memFunction mf , double inputValue){
-	
-	double slope;
-
-	switch (mf.ms) {
-		case TRI_MF:
-			if (inputValue <= mf.poi[0] || inputValue >= mf.poi[2])
-				return 0;
-			else {
-				if (inputValue < mf.poi[1]) {
-					slope = 1/(mf.poi[1]-mf.poi[0]);
-					return slope*(inputValue - mf.poi[0]);
-				} else if (inputValue > mf.poi[1]) {
-					slope = 1/(mf.poi[1]-mf.poi[2]);
-					return slope*(inputValue - mf.poi[2]);
-				} else {
-					return 1;
-				}
-			}
-
-		case TRAP_MF:
-			if (inputValue >= mf.poi[1] && inputValue <= mf.poi[2])
-				return 1;
-
-			if (inputValue <= mf.poi[0] || inputValue >= mf.poi[3])
-				return 0;
-
-			else if (inputValue < mf.poi[1]) {
-						slope = 1/(mf.poi[1]-mf.poi[0]);
-						return slope*(inputValue - mf.poi[0]);
-					} else if (inputValue > mf.poi[2]) {
-						slope = 1/(mf.poi[2]-mf.poi[3]);
-						return slope*(inputValue - mf.poi[3]);
-						}
-
-		case SPIKE_MF:
-			if(inputValue==mf.poi[0])
 				return 1;
 			else
 				return 0;

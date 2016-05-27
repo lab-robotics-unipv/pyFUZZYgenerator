@@ -38,12 +38,4 @@ int createMemFunction_{{ model.name }}(memFunction_{{ model.name }} * mf, char* 
  */
 double getPercentage_{{ model.name }}(memFunction_{{ model.name }} * mf , double inputValue);
 
-/*! CALCULATION OF THE MEMBERSHIP TO A GIVEN FUZZY SET (No Pointer in Input)
- *			input		mf				A Member Function
- *			input 		inputValue		Value of the input
- *
- *			return		double			Return the % of membership to a Fuzzy set (mf) given as input inputValue
- */
-double getPercentageNP_{{ model.name }}(memFunction_{{ model.name }} mf , double inputValue);
-
 #endif

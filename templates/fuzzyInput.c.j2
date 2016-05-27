@@ -85,6 +85,6 @@ void getPercentageFromInput(fuzzyInput * fuzzy_input, double inputValue, double 
 	
 	int i;	
 	for ( i = 0; i < fuzzy_input->nMF; i++) {
-		output[i] = getPercentageNP(fuzzy_input->mf[i], inputValue);		
+		output[i] = getPercentage(&(fuzzy_input->mf[i]), inputValue);		
 	}		
 }
