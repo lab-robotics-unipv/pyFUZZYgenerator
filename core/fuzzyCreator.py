@@ -35,7 +35,7 @@ class templateRenderer(object):
 
 	def render(self, template):
 		tmpl = self.env.get_template(template)
-		return tmpl.render(model=self.model)
+		return tmpl.render(model=self.model, mfDict=mfDict)
 
 	def write(self, fileOut, template):
 		with open(fileOut, 'w') as fo:
