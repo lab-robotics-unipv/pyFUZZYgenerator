@@ -1,86 +1,89 @@
-#include "definitions.h"
-#include "fuzzyLogic.h"
+#include "definitions_{{ model.name }}.h"
+#include "fuzzyLogic_{{ model.name }}.h"
 
-int newState(fuzzyLogic * fl) {
+int newState_{{ model.name }}(fuzzyLogic_{{ model.name }} * fl) {
 
 	/*
 	 * INPUT VARIABLES
 	 */
-{#
-	int flag;
-	fuzzyInput fi[{{ model.input_var | length }}];
 
-	{% for i, vin in enumerate(model.input_var) %}
+	int flag;
+	fuzzyInput_{{ model.name }} fi[NINPUT_{{ model.name }}];
+
+	{% for vin in model.input_var %}
 	// Input variable: {{ vin.name }}
 	{% if vin.description is defined %}
 	// {{ vin.description }}
 	{% endif %}
+	memFunction MF_{{ vin.name }}[{{ vin.membership_functions | length }}];
 
-	memFunction MF_{{ vin.name }}[{{ len(vin.membership_function) }}];
-
-	{% for j, mf in enumerate(vin.membership_function) %}
-	{# TODO double poi_{{ vin.name }}_{{ mf.name }}[] = {{{ mf.parameters | join(', ') }}};#}		{# parameters.join non va bene #}
-	createMemFunction(&(MF_{{ vin.name }}[{{ j }}]), {{ mf.name }}, {{ mfDict[mf.type] }}, poi_{{ vin.name }}_{{ mf.name }});
+	{% for mf in vin.membership_functions %}
+	double poi_{{ vin.name }}_{{ mf.name }}[] = { {% for p in mf.parameters recursive %}{% if p is iterable %}{{ loop(p) }}{% else %}{{ p }}{% endif %}{% if not loop.last %}, {% endif %}{% endfor %} };
+	createMemFunction(&(MF_{{ vin.name }}[{{ loop.index0 }}]), "{{ mf.name }}", {{ mfDict.get(mf.type) }}, poi_{{ vin.name }}_{{ mf.name }});
 	{% endfor %}
 
-	flag = createInput(&(fi[{{ i }}]), {{ vin.name }}, MF_{{ vin.name }}, {{ len(vin.mfs) }});
+	flag = createInput(&(fi[{{ loop.index0 }}]), {{ vin.name }}, MF_{{ vin.name }}, {{ vin.mfs | length }});
 	if (flag < 0) {
 		return 1;
 	}
+
 	{% endfor %}
 
-	// A three MF output for force
-	memFunction MF_force[3];
-	double poi_force_neg[4] = {-1, -1, -0.5, 0};
-	createMemFunction(&(MF_force[0]), "NEG", TRAP_MF, poi_force_neg);
+	/*
+	 * OUTPUT VARIABLES
+	 */
 
-	double poi_force_0[3] = {-0.5, 0, 0.5};
-	createMemFunction(&(MF_force[1]), "ZERO", TRI_MF, poi_force_0);
+	fuzzyOutput{{ model.name }} fo[NOUTPUT_{{ model.name }}];
 
-	double poi_force_pos[4] = {0, 0.5, 1, 1};
-	createMemFunction(&(MF_force[2]), "POS", TRAP_MF, poi_force_pos);
+	{% for vo in model.output_var %}
+	// Output variable: {{ vo.name }}
+	{% if vo.description is defined %}
+	// {{ vo.description }}
+	{% endif %}
+	memFunction MF_{{ vo.name }}[{{ vo.membership_functions | length }}];
 
-	fuzzyOutput fo;
-	flag = createOutput(&fo, "FORCE", MF_pos, 3);
+	{% for mf in vo.membership_functions %}
+	double poi_{{ vo.name }}_{{ mf.name }}[] = { {% for p in mf.parameters recursive %}{% if p is iterable %}{{ loop(p) }}{% else %}{{ p }}{% endif %}{% if not loop.last %}, {% endif %}{% endfor %} };
+	createMemFunction(&(MF_{{ vo.name }}[{{ loop.index0 }}]), "{{ mf.name }}", {{ mfDict.get(mf.type) }}, poi_{{ vo.name }}_{{ mf.name }});
+	{% endfor %}
+
+	flag = createOutput(&(fo[{{ loop.index0 }}]), {{ vo.name }}, MF_{{ vo.name }}, {{ vo.mfs | length }});
 	if (flag < 0) {
-		printf("ERRORE 2\n");
-		return 2;
+		return 1;
 	}
 
-	// Create rules
-	rule rules[N_RULES];
+	{% endfor %}
 
-	rules[0].nIfRules = 1;
-	strcpy(rules[0].ifRules[0].name, "POS");
-	strcpy(rules[0].ifRules[0].mf, "NEG");
-	rules[0].thenValue = 1;
-	rules[0].nThenRules = 1;
-	strcpy(rules[0].thenRules[0].name, "FORCE");
-	strcpy(rules[0].thenRules[0].mf, "POS");
+	/*
+	 * RULES
+	 */
 
-	rules[1].nIfRules = 1;
-	strcpy(rules[1].ifRules[0].name, "POS");
-	strcpy(rules[1].ifRules[0].mf, "ZERO");
-	rules[1].thenValue = 1;
-	rules[1].nThenRules = 1;
-	strcpy(rules[1].thenRules[0].name, "FORCE");
-	strcpy(rules[1].thenRules[0].mf, "ZERO");
+	rule rules[N_RULES_{{ model.name }}];
 
-	rules[2].nIfRules = 1;
-	strcpy(rules[2].ifRules[0].name, "POS");
-	strcpy(rules[2].ifRules[0].mf, "POS");
-	rules[2].thenValue = 1;
-	rules[2].nThenRules = 1;
-	strcpy(rules[2].thenRules[0].name, "FORCE");
-	strcpy(rules[2].thenRules[0].mf, "NEG");
+	{% for r in model.rules %}{% set outerLoop = loop %}
+	rules[{{ loop.index0 }}].nIfRules = {{ r[0] | length }};
 
-#}
+	{% for ir in r[0] %}
+	strcpy(rules[{{ outerLoop.index0 }}].ifRules[{{ loop.index0 }}].name, "{{ ir[0] }}");
+	strcpy(rules[{{ outerLoop.index0 }}].ifRules[{{ loop.index0 }}].mf, "{{ ir[1] }}");
+	{% endfor %}
+
+	rules[{{ loop.index0 }}].thenValue = {{ r[2] }};
+	
+	rules[{{ loop.index0 }}].nThenRules = {{ r[1] | length }};
+
+	{% for tr in r[1] %}
+	strcpy(rules[{{ outerLoop.index0 }}].thenRules[{{ loop.index0 }}].name, "{{ tr[0] }}");
+	strcpy(rules[{{ outerLoop.index0 }}].thenRules[{{ loop.index0 }}].mf, "{{ tr[1] }}");
+	{% endfor %}
+
+	{% endfor %}
 
 	/*
 	 * LOGIC
 	 */
 
-	flag = createLogic(fl, &fi, &fo, rules);
+	flag = createLogic_{{ model.name }}(fl, &fi, &fo, rules);
 	if ( flag < 0 ) {
 		return 3;
 	}
