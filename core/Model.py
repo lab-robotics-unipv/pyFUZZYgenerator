@@ -112,38 +112,14 @@ class ModelFis(Model):
 	# 		var.input = values[i]
 
 
-# class ModelFIND(Model):
-# 	def load(self, infile):
-# 		with open(infile, 'rb') as f:
-# 			data = toml.load(f)
-# 			if 'model' not in data:
-# 				raise ValueError("Missing 'model' section")
-# 		if 'fuzzify' not in data['model']:
-# 			raise ValueError("Missing 'fuzzify' section in model section")
-# 		if 'defuzzify' not in data['model']:
-# 			raise ValueError("Missing 'defuzzify' section in model section")
-# 		if len(data['model']['fuzzify']) < 1:
-# 			raise ValueError("At least 1 input variable required")
-#
-# 		for var_name in data['model']['fuzzify']:
-# 			var = VariableFIND(name=var_name, data=data[var_name])
-#
-# 			if 'best' not in data[var_name]:
-# 				raise ValueError("Missing 'best' field in {} variable.".format(var_name))
-# 			# should also check that best/worst are valid function names (must find an elegant way to do it)
-# 			var.best = data[var_name]['best']
-#
-# 			if 'worst' not in data[var_name]:
-# 				raise ValueError("Missing 'worst' field in {} variable.".format(var_name))
-# 			# should also check that best/worst are valid function names (must find an elegant way to do it)
-# 			var.worst = data[var_name]['worst']
-#
-# 			self.variables.append(var)
-# 			logging.debug(str(var))
-#
-# 		output_function_name = data['model']['defuzzify']
-# 		self.defuzzify = VariableFIND(name=output_function_name, data=data[output_function_name])
-# 		return data
+class ModelFIND(Model):
+	def __init__(self, data):
+		super().__init__(data)
+		for iv in self._input_var:
+			self.input_var.append(VariableFIND(iv))
+
+		for ov in self._output_var:
+			self.output_var.append(VariableFIND(ov))
 #
 # 	def calcIndex(self):
 # 		"""
