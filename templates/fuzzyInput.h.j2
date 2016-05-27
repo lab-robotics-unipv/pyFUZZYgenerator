@@ -1,25 +1,25 @@
-#ifndef FUZZY_INPUT_H
-#define FUZZY_INPUT_H
+#ifndef FUZZY_INPUT__{{ model.name }}H
+#define FUZZY_INPUT__{{ model.name }}H
 
-#include "definitions.h"
-#include "memFunc.h"
+#include "definitions_{{ model.name }}.h"
+#include "memFunc_{{ model.name }}.h"
 
-#ifndef MAX_L_NAME
-#error "MAX_L_NAME not defined: check definitions.h"
+#ifndef MAX_L_NAME_{{ model.name }}
+#error "MAX_L_NAME_{{ model.name }} not defined: check definitions_{{ model.name }}.h"
 #endif
 
-#ifndef MAX_N_MF_INPUT
-#error "MAX_N_MF_INPUT not defined: check definitions.h"
+#ifndef MAX_N_MF_INPUT_{{ model.name }}
+#error "MAX_N_MF_INPUT_{{ model.name }} not defined: check definitions_{{ model.name }}.h"
 #endif
 
 //! FUZZY INPUT STRUCTURE
 typedef struct {
-	char name[MAX_L_NAME];		//!< Name of the input
-	memFunction mf[MAX_N_MF_INPUT];	//!< List of Member Functions
+	char name[MAX_L_NAME_{{ model.name }}];		//!< Name of the input
+	memFunction mf[MAX_N_MF_INPUT_{{ model.name }}];	//!< List of Member Functions
 	int nMF;					//!< Number of MF
 	double minValue;			//!< Minimum value of the Fuzzy Input
 	double maxValue;			//!< Maximum value of the Fuzzy Input
-} fuzzyInput;
+} fuzzyInput_{{ model.name }};
 
 /*! INIT OF A FUZZY INPUT
  *		output		fi			Fuzzy input to init
@@ -31,18 +31,7 @@ typedef struct {
  *
  *		return					Flag: -1 if error, 0 otherwise
  */
-int createInput(fuzzyInput * fi, char* name, memFunction * MFs, int nMF, double min, double max);
-
-// /*! DEALLOCATION OF A FUZZY INPUT
-//  *		input		fuzzy_input		Pointer to a Member Function
-//  */
-// void killInput(fuzzyInput * fuzzy_input);
-
-// /*! ADD A FUZZY SET TO A FUZZY INPUT
-//  *		input		fuzzy_input		Pointer to a Fuzzy Input struct
-//  *		input		memb_funct		Pointer to a Fuzzy Set struct
-//  */
-// void addFuzzySetInput(fuzzyInput * fuzzy_input , memFunction * memb_funct);
+int createInput_{{ model.name }}(fuzzyInput_{{ model.name }} * fi, char* name, memFunction_{{ model.name }} * MFs, int nMF, double min, double max);
 
 /*! FIND MF GIVEN NAME
  *		input		fuzzy_input		Pointer to the Fuzzy Input struct
@@ -50,7 +39,7 @@ int createInput(fuzzyInput * fi, char* name, memFunction * MFs, int nMF, double 
  *
  *		return						Index of the MF or -1 if not found
  */
-int getInputMFFromName(fuzzyInput * fuzzy_input, char * name);
+int getInputMFFromName_{{ model.name }}(fuzzyInput_{{ model.name }} * fuzzy_input, char * name);
 
 /*! CALCULATION OF THE MEMBERSHIP TO A GIVEN FUZZY INPUT
  *			input		fuzzy_input		A Fuzzy Input
@@ -58,6 +47,6 @@ int getInputMFFromName(fuzzyInput * fuzzy_input, char * name);
  * 
  * 			output		output			The % of membership to a Fuzzy Input given an input value		
  */
-void getPercentageFromInput(fuzzyInput * fuzzy_input, double inputValue, double * output);
+void getPercentageFromInput_{{ model.name }}(fuzzyInput_{{ model.name }} * fuzzy_input, double inputValue, double * output);
 
 #endif
