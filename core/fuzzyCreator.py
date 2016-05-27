@@ -3,7 +3,7 @@ import os
 
 mfDict = {
 	# 'pairwise-linear': ,
-	'trinagle': 'TRI_MF',
+	'triangle': 'TRI_MF',
 	'trapezoid': 'TRAP_MF',
 	# 'gaussian-bell': ,
 	# 'gaussian': ,
