@@ -28,12 +28,12 @@ typedef struct {
  *
  *		return					Flag: -1 if error, 0 otherwise
  */
-int createMemFunction(memFunction_{{ model.name }} * mf, char* name, memFuncShape ms, double* poi);
+int createMemFunction_{{ model.name }}(memFunction_{{ model.name }} * mf, char* name, memFuncShape ms, double* poi);
 
 // /*! DEALLOCATION OF A MEMBER FUNCTION
 //  *			input		mf				Pointer to a Member Function
 //  */
-// void killMemFunction(memFunction_{{ model.name }} * mf);
+// void killMemFunction_{{ model.name }}(memFunction_{{ model.name }} * mf);
 
 /*! CALCULATION OF THE MEMBERSHIP TO A GIVEN FUZZY SET
  *			input		mf				Pointer to a Member Function
@@ -41,7 +41,7 @@ int createMemFunction(memFunction_{{ model.name }} * mf, char* name, memFuncShap
  *
  *			return		double			Return the % of membership to a Fuzzy set (mf) given as input inputValue
  */
-double getPercentage(memFunction_{{ model.name }} * mf , double inputValue);
+double getPercentage_{{ model.name }}(memFunction_{{ model.name }} * mf , double inputValue);
 
 /*! CALCULATION OF THE MEMBERSHIP TO A GIVEN FUZZY SET (No Pointer in Input)
  *			input		mf				A Member Function
@@ -49,6 +49,6 @@ double getPercentage(memFunction_{{ model.name }} * mf , double inputValue);
  *
  *			return		double			Return the % of membership to a Fuzzy set (mf) given as input inputValue
  */
-double getPercentageNP(memFunction_{{ model.name }} mf , double inputValue);
+double getPercentageNP_{{ model.name }}(memFunction_{{ model.name }} mf , double inputValue);
 
 #endif
