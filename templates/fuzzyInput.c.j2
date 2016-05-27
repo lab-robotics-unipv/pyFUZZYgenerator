@@ -21,14 +21,14 @@ int createInput_{{ model.name }}(fuzzyInput_{{ model.name }} * fi, char* name, m
 	fi->maxValue = max;
 
 	fi->nMF = nMF;
-	if (nMF > MAX_N_MF_INPUT) {
+	if (nMF > MAX_N_MF_INPUT_{{ model.name }}) {
 		return -1;
 	}
 
 	if (MFs == NULL) {
 		return -1;
 	}
-	memcpy(fi->mf, MFs, nMF*sizeof(memFunction));
+	memcpy(fi->mf, MFs, nMF*sizeof(memFunction_{{ model.name }}));
 
 	return 0;
 }
