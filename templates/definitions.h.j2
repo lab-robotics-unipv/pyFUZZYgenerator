@@ -1,10 +1,11 @@
 #ifndef DEFINITIONS_H
 #define DEFINITIONS_H
 
-#define N_INPUT {{ len(model.variables) }}
-#define N_OUTPUT {{ len(model.defuzzify) }}
-#define N_RULES {{ model.getNumRules }}
+#define N_INPUT {{ model.input_var | length }}
+#define N_OUTPUT {{ model.output_var | length }}
+#define N_RULES {{ model.rules | length }}
 
+{#
 // TODO incapsulate both in functions or fields of the class
 #define MAX_N_MF_INPUT {{ max([len(v.membership_functions) for v in model.variables]) }}
 #define MAX_N_MF_OUTPUT {{ max([len(v.membership_functions) for v in model.defuzzify]) }}
@@ -12,5 +13,6 @@
 // TODO incapsulate both in functions or fields of the class
 #define MAX_L_NAME {{ 1 }}
 #define MAX_N_POI {{ 1 }}
+#}
 
 #endif
