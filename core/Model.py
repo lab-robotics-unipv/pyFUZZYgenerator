@@ -2,8 +2,7 @@ import re
 # import logging
 # import numpy as np
 
-# from core.Variable import VariableFIND
-from core.Variable import VariableFis
+from core.Variable import VariableFis, VariableFIND
 # from core.Membership import computeWeights
 
 
