@@ -12,6 +12,21 @@ mfDict = {
 	'singleton': 'SPIKE_MF',
 }
 
+templateList = [
+	"definitions.h.j2",
+	"fuzzyInput.c.j2",
+	"fuzzyInput.h.j2",
+	"fuzzyLogic.c.j2",
+	"fuzzyLogic.h.j2",
+	"fuzzyOutput.c.j2",
+	"fuzzyOutput.h.j2",
+	"init.c.j2",
+	"init.h.j2",
+	"memFunc.c.j2",
+	"memFunc.h.j2",
+	"rules.h.j2",
+]
+
 class templateRenderer(object):
 	def __init__(self, model, directory=os.getcwd()):
 		loader = j2.FileSystemLoader(directory)
