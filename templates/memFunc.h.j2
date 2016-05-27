@@ -1,24 +1,24 @@
-#ifndef MEMBERSHIP_FUNCTION_H
-#define MEMBERSHIP_FUNCTION_H
+#ifndef MEMBERSHIP_FUNCTION_{{ model.name }}_H
+#define MEMBERSHIP_FUNCTION_{{ model.name }}_H
 
-#include "definitions.h"
+#include "definitions_{{ model.name }}.h"
 #include "MFShapes.h"
 
-#ifndef MAX_L_NAME
-#error "MAX_L_NAME not defined: check definitions.h"
+#ifndef MAX_L_NAME_{{ model.name }}
+#error "MAX_L_NAME_{{ model.name }} not defined: check definitions_{{ model.name }}.h"
 #endif
 
-#ifndef MAX_N_POI
-#error "MAX_N_POI not defined: check definitions.h"
+#ifndef MAX_N_POI_{{ model.name }}
+#error "MAX_N_POI_{{ model.name }} not defined: check definitions_{{ model.name }}.h"
 #endif
 
 //! MEMBER FUNCTIONS
 typedef struct {
-	char name[MAX_L_NAME];		//!< Name of the Fuzzy Set
+	char name[MAX_L_NAME_{{ model.name }}];		//!< Name of the Fuzzy Set
 	memFuncShape ms;			//!< Shape of the Fuzzy Set
-	double poi[MAX_N_POI];		//!< Points of interest of the Fuzzy Set
+	double poi[MAX_N_POI_{{ model.name }}];		//!< Points of interest of the Fuzzy Set
 	int lPoi;					//!< Numbers of POI
-} memFunction;
+} memFunction_{{ model.name }};
 
 /*! ALLOCATION AND CREATION OF A MEMBER FUNCTION (A FUZZY SET):
  *		output		mf			Fuzzy Set to init
@@ -28,12 +28,12 @@ typedef struct {
  *
  *		return					Flag: -1 if error, 0 otherwise
  */
-int createMemFunction(memFunction * mf, char* name, memFuncShape ms, double* poi);
+int createMemFunction(memFunction_{{ model.name }} * mf, char* name, memFuncShape ms, double* poi);
 
 // /*! DEALLOCATION OF A MEMBER FUNCTION
 //  *			input		mf				Pointer to a Member Function
 //  */
-// void killMemFunction(memFunction * mf);
+// void killMemFunction(memFunction_{{ model.name }} * mf);
 
 /*! CALCULATION OF THE MEMBERSHIP TO A GIVEN FUZZY SET
  *			input		mf				Pointer to a Member Function
@@ -41,7 +41,7 @@ int createMemFunction(memFunction * mf, char* name, memFuncShape ms, double* poi
  *
  *			return		double			Return the % of membership to a Fuzzy set (mf) given as input inputValue
  */
-double getPercentage(memFunction * mf , double inputValue);
+double getPercentage(memFunction_{{ model.name }} * mf , double inputValue);
 
 /*! CALCULATION OF THE MEMBERSHIP TO A GIVEN FUZZY SET (No Pointer in Input)
  *			input		mf				A Member Function
@@ -49,6 +49,6 @@ double getPercentage(memFunction * mf , double inputValue);
  *
  *			return		double			Return the % of membership to a Fuzzy set (mf) given as input inputValue
  */
-double getPercentageNP(memFunction mf , double inputValue);
+double getPercentageNP(memFunction_{{ model.name }} mf , double inputValue);
 
 #endif
