@@ -1,5 +1,5 @@
 #include <string.h>
-#include "memFunc.h"
+#include "memFunc_{{ model.name }}.h"
 
 /*! ALLOCATION AND CREATION OF A MEMBER FUNCTION (A FUZZY SET):
  *		output		mf			Fuzzy Set to init
@@ -9,7 +9,7 @@
  *
  *		return					Flag: -1 if error, 0 otherwise
  */
-int createMemFunction(memFunction * mf, char* name, memFuncShape ms, double* poi) {
+int createMemFunction_{{ model.name }}(memFunction_{{ model.name }} * mf, char* name, memFuncShape ms, double* poi) {
 	if (mf == NULL) {
 		return -1;
 	}
@@ -33,7 +33,7 @@ int createMemFunction(memFunction * mf, char* name, memFuncShape ms, double* poi
  *
  *			return		double			Return the % of membership to a Fuzzy set (mf) given as input inputValue
  */
-double getPercentage(memFunction * mf , double inputValue)
+double getPercentage_{{ model.name }}(memFunction_{{ model.name }} * mf , double inputValue)
 {
 	double slope;
 
