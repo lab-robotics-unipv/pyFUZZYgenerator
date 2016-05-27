@@ -1,8 +1,7 @@
 import re
 # import logging
 # import numpy as np
-# import pytoml as toml
-#
+
 # from core.Variable import VariableFIND
 from core.Variable import VariableFis
 # from core.Membership import computeWeights
@@ -48,6 +47,20 @@ class Model:
 
 		return s
 
+	def getMaxNumberOfMFInput(self):
+		"""
+		Computes the maximum number of membership functions among all input the variables.
+		:return: Maximum number of membership functions.
+		"""
+		return max([len(vi.membership_functions) for vi in self.input_var])
+
+	def getMaxNumberOfMFOutput(self):
+		"""
+		Computes the maximum number of membership functions among all the output variables.
+		:return: Maximum number of membership functions.
+		"""
+		return max([len(vo.membership_functions) for vo in self.output_var])
+
 class ModelFis(Model):
 	def __init__(self, data):
 		super().__init__(data)
@@ -88,13 +101,6 @@ class ModelFis(Model):
 
 		return rules
 
-
-	# def getMaxNumberOfMF(self):
-	# 	"""
-	# 	Computes the maximum number of membership functions among all the variables.
-	# 	:return: Maximum number of membership functions.
-	# 	"""
-	# 	return max([len(v.membership_functions) for v in self.variables])
 
 	# def setInputValuesList(self, values):
 	# 	"""
