@@ -6,20 +6,20 @@ int newState(fuzzyLogic * fl) {
 	/*
 	 * INPUT VARIABLES
 	 */
-
+{#
 	int flag;
-	fuzzyInput fi[{{ model.ninput }}];
+	fuzzyInput fi[{{ model.input_var | length }}];
 
-	{% for i, vin in enumerate(model.variables) %}
+	{% for i, vin in enumerate(model.input_var) %}
 	// Input variable: {{ vin.name }}
 	{% if vin.description is defined %}
 	// {{ vin.description }}
 	{% endif %}
 
-	memFunction MF_{{ vin.name }}[{{ len(vin.mfs) }}];
+	memFunction MF_{{ vin.name }}[{{ len(vin.membership_function) }}];
 
-	{% for j, mf in enumerate(vin.mfs) %}
-	double poi_{{ vin.name }}_{{ mf.name }}[] = {{{ mf.poi | join(', ') }}};
+	{% for j, mf in enumerate(vin.membership_function) %}
+	{# TODO double poi_{{ vin.name }}_{{ mf.name }}[] = {{{ mf.parameters | join(', ') }}};#}		{# parameters.join non va bene #}
 	createMemFunction(&(MF_{{ vin.name }}[{{ j }}]), {{ mf.name }}, {{ mfDict[mf.type] }}, poi_{{ vin.name }}_{{ mf.name }});
 	{% endfor %}
 
@@ -73,6 +73,8 @@ int newState(fuzzyLogic * fl) {
 	rules[2].nThenRules = 1;
 	strcpy(rules[2].thenRules[0].name, "FORCE");
 	strcpy(rules[2].thenRules[0].mf, "NEG");
+
+#}
 
 	/*
 	 * LOGIC

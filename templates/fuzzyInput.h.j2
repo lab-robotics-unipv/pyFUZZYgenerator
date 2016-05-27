@@ -1,0 +1,63 @@
+#ifndef FUZZY_INPUT_H
+#define FUZZY_INPUT_H
+
+#include "definitions.h"
+#include "memFunc.h"
+
+#ifndef MAX_L_NAME
+#error "MAX_L_NAME not defined: check definitions.h"
+#endif
+
+#ifndef MAX_N_MF_INPUT
+#error "MAX_N_MF_INPUT not defined: check definitions.h"
+#endif
+
+//! FUZZY INPUT STRUCTURE
+typedef struct {
+	char name[MAX_L_NAME];		//!< Name of the input
+	memFunction mf[MAX_N_MF_INPUT];	//!< List of Member Functions
+	int nMF;					//!< Number of MF
+	double minValue;			//!< Minimum value of the Fuzzy Input
+	double maxValue;			//!< Maximum value of the Fuzzy Input
+} fuzzyInput;
+
+/*! INIT OF A FUZZY INPUT
+ *		output		fi			Fuzzy input to init
+ *		input		name		Label of the Fuzzy input
+ *		input		MFs			Array of membership functions
+ *		input 		nMF			Number of membership functions to be included
+ * 		input		min			Minimum value of the Fuzzy Input
+ * 		input 		max			Maximum value of the Fuzzy Input
+ *
+ *		return					Flag: -1 if error, 0 otherwise
+ */
+int createInput(fuzzyInput * fi, char* name, memFunction * MFs, int nMF, double min, double max);
+
+// /*! DEALLOCATION OF A FUZZY INPUT
+//  *		input		fuzzy_input		Pointer to a Member Function
+//  */
+// void killInput(fuzzyInput * fuzzy_input);
+
+// /*! ADD A FUZZY SET TO A FUZZY INPUT
+//  *		input		fuzzy_input		Pointer to a Fuzzy Input struct
+//  *		input		memb_funct		Pointer to a Fuzzy Set struct
+//  */
+// void addFuzzySetInput(fuzzyInput * fuzzy_input , memFunction * memb_funct);
+
+/*! FIND MF GIVEN NAME
+ *		input		fuzzy_input		Pointer to the Fuzzy Input struct
+ *		input		name			Name of the MF
+ *
+ *		return						Index of the MF or -1 if not found
+ */
+int getInputMFFromName(fuzzyInput * fuzzy_input, char * name);
+
+/*! CALCULATION OF THE MEMBERSHIP TO A GIVEN FUZZY INPUT
+ *			input		fuzzy_input		A Fuzzy Input
+ *			input 		inputValue		Value of the input
+ * 
+ * 			output		output			The % of membership to a Fuzzy Input given an input value		
+ */
+void getPercentageFromInput(fuzzyInput * fuzzy_input, double inputValue, double * output);
+
+#endif

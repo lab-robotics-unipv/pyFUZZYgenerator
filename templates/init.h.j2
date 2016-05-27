@@ -1,0 +1,89 @@
+#include "definitions.h"
+#include "fuzzyLogic.h"
+
+int newState(fuzzyLogic * fl) {
+
+	/*
+	 * INPUT VARIABLES
+	 */
+{#
+	int flag;
+	fuzzyInput fi[{{ model.input_var | length }}];
+
+	{% for i, vin in enumerate(model.input_var) %}
+	// Input variable: {{ vin.name }}
+	{% if vin.description is defined %}
+	// {{ vin.description }}
+	{% endif %}
+
+	memFunction MF_{{ vin.name }}[{{ len(vin.membership_function) }}];
+
+	{% for j, mf in enumerate(vin.membership_function) %}
+	{# TODO double poi_{{ vin.name }}_{{ mf.name }}[] = {{{ mf.parameters | join(', ') }}};#}		{# parameters.join non va bene #}
+	createMemFunction(&(MF_{{ vin.name }}[{{ j }}]), {{ mf.name }}, {{ mfDict[mf.type] }}, poi_{{ vin.name }}_{{ mf.name }});
+	{% endfor %}
+
+	flag = createInput(&(fi[{{ i }}]), {{ vin.name }}, MF_{{ vin.name }}, {{ len(vin.mfs) }});
+	if (flag < 0) {
+		return 1;
+	}
+	{% endfor %}
+
+	// A three MF output for force
+	memFunction MF_force[3];
+	double poi_force_neg[4] = {-1, -1, -0.5, 0};
+	createMemFunction(&(MF_force[0]), "NEG", TRAP_MF, poi_force_neg);
+
+	double poi_force_0[3] = {-0.5, 0, 0.5};
+	createMemFunction(&(MF_force[1]), "ZERO", TRI_MF, poi_force_0);
+
+	double poi_force_pos[4] = {0, 0.5, 1, 1};
+	createMemFunction(&(MF_force[2]), "POS", TRAP_MF, poi_force_pos);
+
+	fuzzyOutput fo;
+	flag = createOutput(&fo, "FORCE", MF_pos, 3);
+	if (flag < 0) {
+		printf("ERRORE 2\n");
+		return 2;
+	}
+
+	// Create rules
+	rule rules[N_RULES];
+
+	rules[0].nIfRules = 1;
+	strcpy(rules[0].ifRules[0].name, "POS");
+	strcpy(rules[0].ifRules[0].mf, "NEG");
+	rules[0].thenValue = 1;
+	rules[0].nThenRules = 1;
+	strcpy(rules[0].thenRules[0].name, "FORCE");
+	strcpy(rules[0].thenRules[0].mf, "POS");
+
+	rules[1].nIfRules = 1;
+	strcpy(rules[1].ifRules[0].name, "POS");
+	strcpy(rules[1].ifRules[0].mf, "ZERO");
+	rules[1].thenValue = 1;
+	rules[1].nThenRules = 1;
+	strcpy(rules[1].thenRules[0].name, "FORCE");
+	strcpy(rules[1].thenRules[0].mf, "ZERO");
+
+	rules[2].nIfRules = 1;
+	strcpy(rules[2].ifRules[0].name, "POS");
+	strcpy(rules[2].ifRules[0].mf, "POS");
+	rules[2].thenValue = 1;
+	rules[2].nThenRules = 1;
+	strcpy(rules[2].thenRules[0].name, "FORCE");
+	strcpy(rules[2].thenRules[0].mf, "NEG");
+
+#}
+
+	/*
+	 * LOGIC
+	 */
+
+	flag = createLogic(fl, &fi, &fo, rules);
+	if ( flag < 0 ) {
+		return 3;
+	}
+
+	return 0;
+}

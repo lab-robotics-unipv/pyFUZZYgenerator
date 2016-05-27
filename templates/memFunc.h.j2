@@ -1,0 +1,71 @@
+#ifndef MEMBERSHIP_FUNCTION_H
+#define MEMBERSHIP_FUNCTION_H
+
+#include "definitions.h"
+
+#ifndef MAX_L_NAME
+#error "MAX_L_NAME not defined: check definitions.h"
+#endif
+
+#ifndef MAX_N_POI
+#error "MAX_N_POI not defined: check definitions.h"
+#endif
+
+//! TYPES OF SHAPE FOR THE MEMBER FUNCTIONS
+typedef enum memFuncShape {
+	TRAP_MF,			 //!< Trapezoidal shape
+	TRI_MF, 			 //!< Triangular shape
+	SPIKE_MF,			 //!< Spike shape
+} memFuncShape;
+
+//! TYPES OF SHAPE FOR THE MEMBER FUNCTIONS
+typedef struct {
+	char name[MAX_L_NAME];		//!< Name of the Fuzzy Set
+	memFuncShape ms;			//!< Shape of the Fuzzy Set
+	double poi[MAX_N_POI];		//!< Points of interest of the Fuzzy Set
+	int lPoi;					//!< Numbers of POI
+} memFunction;
+
+/*! ALLOCATION AND CREATION OF A MEMBER FUNCTION (A FUZZY SET):
+ *		output		mf			Fuzzy Set to init
+ *		input		name		Label of the Fuzzy set
+ *		input		ms			Member Function shape
+ *		input		poi			Array containing the points of interest of the shape
+ *
+ *		return					Flag: -1 if error, 0 otherwise
+ */
+int createMemFunction(memFunction * mf, char* name, memFuncShape ms, double* poi);
+
+// /*! DEALLOCATION OF A MEMBER FUNCTION
+//  *			input		mf				Pointer to a Member Function
+//  */
+// void killMemFunction(memFunction * mf);
+
+/*! CALCULATION OF THE MEMBERSHIP TO A GIVEN FUZZY SET
+ *			input		mf				Pointer to a Member Function
+ *			input 		inputValue		Value of the input
+ *
+ *			return		double			Return the % of membership to a Fuzzy set (mf) given as input inputValue
+ */
+double getPercentage(memFunction * mf , double inputValue);
+
+/*! CALCULATION OF THE MEMBERSHIP TO A GIVEN FUZZY SET (No Pointer in Input)
+ *			input		mf				A Member Function
+ *			input 		inputValue		Value of the input
+ *
+ *			return		double			Return the % of membership to a Fuzzy set (mf) given as input inputValue
+ */
+double getPercentageNP(memFunction mf , double inputValue);
+
+/*! INFORMATION ABOUT THE NUMBER OF THE POINTS OF INTEREST
+ *			input		ms				Type of the shape (Triangular, Trapezoidal, Spyke)
+ *
+ *			return		int				Return the number of the points of interest
+ */
+int getMFPoiNum(memFuncShape ms);
+
+
+
+
+
+#endif
