@@ -1,23 +1,20 @@
-#ifndef FUZZY_LOGIC_H
-#define FUZZY_LOGIC_H
+#ifndef FUZZY_LOGIC_{{ model.name }}_H
+#define FUZZY_LOGIC_{{ model.name }}_H
 
-#include "definitions.h"
+#include "definitions_{{ model.name }}.h"
 
-#include "rules.h"
-#include "fuzzyInput.h"
-#include "fuzzyOutput.h"
-
-#define MIN(x, y) (x < y ? x : y)
-#define MAX(x, y) (x > y ? x : y)
+#include "rules_{{ model.name }}.h"
+#include "fuzzyInput_{{ model.name }}.h"
+#include "fuzzyOutput_{{ model.name }}.h"
 
 //! FUZZY LOGIC STRUCTURE
 typedef struct {
-	fuzzyInput fInput[N_INPUT];
-	fuzzyOutput fOutput[N_OUTPUT];
-	builtRule rules[N_RULES];
-	double fuzzified[N_INPUT * MAX_N_MF];
-	double evaluated[N_OUTPUT * MAX_N_MF];
-} fuzzyLogic;
+	fuzzyInput fInput[N_INPUT_{{ model.name }}];
+	fuzzyOutput fOutput[N_OUTPUT_{{ model.name }}];
+	builtRule rules[N_RULES_{{ model.name }}];
+	double fuzzified[N_INPUT_{{ model.name }} * MAX_N_MF_{{ model.name }}];
+	double evaluated[N_OUTPUT_{{ model.name }} * MAX_N_MF_{{ model.name }}];
+} fuzzyLogic_{{ model.name }};
 
 /*! CONSTRUCTOR OF THE FUZZY LOGIC
  *		output			fl			Fuzzy logic to init
@@ -27,33 +24,20 @@ typedef struct {
  *
  *		return						Flag: -1 if error, 0 otherwise
  */
-int createLogic(fuzzyLogic * fl, fuzzyInput * inputs, fuzzyOutput * outputs, rule * r);
-
-// /*! DEALLOCATION OF A MEMBER FUNCTION
-//  *			input		fl				Fuzzy logic
-//  */
-// void killLogic(fuzzyLogic * fl);
-//
-// /*! ADD RULES TO THE FUZZY LOGIC
-//  *		input/output	fl			Fuzzy logic
-//  *		input			r			Vector of rules to add
-//  *
-//  *		return						-1 if smtg went wrong, else 0
-//  */
-// int addRules(fuzzyLogic * fl, rule * r);
+int createLogic_{{ model.name }}(fuzzyLogic_{{ model.name }} * fl, fuzzyInput_{{ model.name }} * inputs, fuzzyOutput_{{ model.name }} * outputs, rule_{{ model.name }} * r);
 
 /*! FUZZIFY THE INPUTS
  *		input/output	fl					Fuzzy logic
  *		input			inputs				Inputs of the fuzzy logic			
  */
-void fuzzify(fuzzyLogic * fl, double * inputs);
+void fuzzify_{{ model.name }}(fuzzyLogic_{{ model.name }} * fl, double * inputs);
 
 /*! EVALUATE THE RULES GIVEN THE FUZZIFIED INPUTS
  *		input/output		fl			Fuzzy logic
  *
  *		return							-1 if smtg went wrong, 0 otherwise
  */
-int evaluateRules(fuzzyLogic * fl);
+int evaluateRules_{{ model.name }}(fuzzyLogic_{{ model.name }} * fl);
 
 /*! DEFUZZIFY THE EVALUATED RULES
  *		input			fl				Fuzzy logic
@@ -61,7 +45,7 @@ int evaluateRules(fuzzyLogic * fl);
  *
  *		return							-1 if smtg went wrong, 0 otherwise
  */
-int defuzzify(fuzzyLogic * fl, double * outputs);
+int defuzzify_{{ model.name }}(fuzzyLogic_{{ model.name }} * fl, double * outputs);
 
 /*! FIND INPUT INDEX GIVEN NAME
  *		input			fl				Fuzzy logic
@@ -69,7 +53,7 @@ int defuzzify(fuzzyLogic * fl, double * outputs);
  *
  *		return							Index of the input or -1 if not found
  */
-int getInputFromName(fuzzyLogic * fl, char * name);
+int getInputFromName_{{ model.name }}(fuzzyLogic_{{ model.name }} * fl, char * name);
 
 /*! FIND OUTPUT INDEX GIVEN NAME
  *		input			fl				Fuzzy logic
@@ -77,6 +61,6 @@ int getInputFromName(fuzzyLogic * fl, char * name);
  *
  *		return							Index of the output or -1 if not found
  */
-int getOutputFromName(fuzzyLogic * fl, char * name);
+int getOutputFromName_{{ model.name }}(fuzzyLogic_{{ model.name }} * fl, char * name);
 
 #endif
