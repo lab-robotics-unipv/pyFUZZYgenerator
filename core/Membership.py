@@ -294,6 +294,9 @@ class MembershipFunction(object):
 		self.type = data['type']
 		self.centroid_x = None
 
+	def __str__(self):
+		return self.name
+
 	@property
 	def type(self):
 		return self.__type

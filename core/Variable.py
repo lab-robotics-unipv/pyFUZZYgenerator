@@ -37,38 +37,12 @@ class Variable:
 		"""
 		return max([mf.getMaxX() for mf in self.membership_functions])
 
+	def __str__(self):
+		return self.name + ': ' + ', '.join([str(mf) for mf in self.membership_functions])
+
 class VariableFis(Variable):
 	def __init__(self, data):
 		super().__init__(data)
-
-# 	def __str__(self):
-# 		s = str(self.name) + ': '
-# 		for mf in self.membership_functions:
-# 			if mf is None:
-# 				s += ' None'
-# 			else:
-# 				s += ' ' + mf.name
-# 				return s
-#
-#
-# 	def getMinX(self):
-# 		"""
-# 		Returns the minimum X value among all the membership functions belonging to the variable.
-#
-# 		:return: a floating point value.
-# 		"""
-# 		return min([mf.getMinX() for mf in self.membership_functions])
-#
-#
-# 	def getMaxX(self):
-# 		"""
-# 		Returns the maximum X value among all the membership functions belonging to the variable.
-#
-# 		:return: a floating point value.
-# 		"""
-# 		max_x_values = [mf.getMaxX() for mf in self.membership_functions]
-# 		logging.debug(max_x_values)
-# 		return max(max_x_values)
 
 
 # class VariableFIND(Variable):

@@ -36,6 +36,18 @@ class Model:
 			n_rules *= len(iv.membership_functions)
 		return n_rules
 
+	def __str__(self):
+		s = self.name + '\n'
+		s += 'Inputs\n'
+		for vi in self.input_var:
+			s += '\t' + str(vi) + '\n'
+
+		s += 'Outputs\n'
+		for vo in self.output_var:
+			s += '\t' + str(vo) + '\n'
+
+		return s
+
 class ModelFis(Model):
 	def __init__(self, data):
 		super().__init__(data)
