@@ -2,6 +2,7 @@
 #define MEMBERSHIP_FUNCTION_H
 
 #include "definitions.h"
+#include "MFShapes.h"
 
 #ifndef MAX_L_NAME
 #error "MAX_L_NAME not defined: check definitions.h"
@@ -11,14 +12,7 @@
 #error "MAX_N_POI not defined: check definitions.h"
 #endif
 
-//! TYPES OF SHAPE FOR THE MEMBER FUNCTIONS
-typedef enum memFuncShape {
-	TRAP_MF,			 //!< Trapezoidal shape
-	TRI_MF, 			 //!< Triangular shape
-	SPIKE_MF,			 //!< Spike shape
-} memFuncShape;
-
-//! TYPES OF SHAPE FOR THE MEMBER FUNCTIONS
+//! MEMBER FUNCTIONS
 typedef struct {
 	char name[MAX_L_NAME];		//!< Name of the Fuzzy Set
 	memFuncShape ms;			//!< Shape of the Fuzzy Set
@@ -56,16 +50,5 @@ double getPercentage(memFunction * mf , double inputValue);
  *			return		double			Return the % of membership to a Fuzzy set (mf) given as input inputValue
  */
 double getPercentageNP(memFunction mf , double inputValue);
-
-/*! INFORMATION ABOUT THE NUMBER OF THE POINTS OF INTEREST
- *			input		ms				Type of the shape (Triangular, Trapezoidal, Spyke)
- *
- *			return		int				Return the number of the points of interest
- */
-int getMFPoiNum(memFuncShape ms);
-
-
-
-
 
 #endif
