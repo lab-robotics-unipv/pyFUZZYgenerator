@@ -44,6 +44,24 @@ class VariableFis(Variable):
 	def __init__(self, data):
 		super().__init__(data)
 
+class VariableFeq(Variable):
+	def __init__(self, data, input=True):
+		super().__init__(data)
+		self.equilibrium = data['equilibrium']
+		self.rules = data.get('rules', None)
+		if self.rules == None and input:
+			raise ValueError("{} is input but does not contain the rules!".format(self.name))
+
+	@property
+	def equilibrium(self):
+		return self.__equilibrium
+
+	@equilibrium.setter
+	def equilibrium(self, eq):
+		equil = next((mf for mf in self.membership_functions if mf.name == eq), None)
+		if equil is None:
+			raise ValueError("{} not contained in variable {}".format(eq, self.name))
+		self.__equilibrium = equil
 
 class VariableFind(Variable):
 	def __init__(self, name=None, data=None):

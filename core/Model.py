@@ -2,7 +2,7 @@ import re
 # import logging
 # import numpy as np
 
-from core.Variable import VariableFis, VariableFIND
+from core.Variable import VariableFis, VariableFind, VariableFeq
 # from core.Membership import computeWeights
 
 
@@ -61,6 +61,25 @@ class Model:
 		:return: Maximum number of membership functions.
 		"""
 		return max([len(vo.membership_functions) for vo in self.output_var])
+
+class ModelFeq(Model):
+	def __init__(self, data):
+		super().__init__(data)
+
+		for iv in self._input_var:
+			self.input_var.append(VariableFeq(iv))
+
+		for ov in self._output_var:
+			self.output_var.append(VariableFeq(ov, False))
+
+		self.checkRules()
+		self.createRules()
+
+	def createRules(self):
+		pass
+
+	def checkRules(self):
+		pass
 
 class ModelFis(Model):
 	def __init__(self, data):
