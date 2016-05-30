@@ -58,7 +58,7 @@ class VariableFeq(Variable):
 
 	@equilibrium.setter
 	def equilibrium(self, eq):
-		equil = next((mf for mf in self.membership_functions if mf.name == eq), None)
+		equil = next((i for i, mf in enumerate(self.membership_functions) if mf.name == eq), None)
 		if equil is None:
 			raise ValueError("{} not contained in variable {}".format(eq, self.name))
 		self.__equilibrium = equil
