@@ -80,7 +80,54 @@ class ModelFeq(Model):
 		self.createRules()
 
 	def createRules(self):
-		pass
+		self.rules = []
+		numRules = self.getCorrectNumRules()
+		ruleGen = self.iterate()
+		while len(self.rules) != numRules:
+			ifMFs = next(ruleGen)
+			thMFs = [0] * len(self.output_var)
+
+			ifRs = []
+			weight_sum = 0
+			for iv, mf in zip(self.input_var, ifMFs):
+				ifRs.append((iv.name, iv.membership_functions[mf].name))
+				for i, ov in enumerate(self.output_var):
+					r = next((rule for rule in iv.rules if rule['output'] == ov.name), None)
+					p = r['fact'] * r['weight'] * (mf - iv.equilibrium)
+					weight_sum += r['weight']
+					thMFs[i] += p
+
+			thRs = []
+			for i, ov in enumerate(self.output_var):
+				thMFs[i] = round(thMFs[i]/weight_sum)
+				thMFs[i] += ov.equilibrium
+				# import pdb; pdb.set_trace()
+				# thMFs[i] = thMFs[i]/weight_sum
+				if thMFs[i] < 0:
+					thMFs[i] = 0
+				elif thMFs[i] >= len(ov.membership_functions) - 1:
+					thMFs[i] = len(ov.membership_functions) - 1
+
+				thRs.append((ov.name, ov.membership_functions[thMFs[i]].name))
+
+			self.rules.append((list(ifRs), list(thRs), 1))
+
+		for r in self.rules:
+			print(r)
+		print("")
+
+		#round(sum(fatt))
+
+	def iterate(self):
+		num = [0]*len(self.input_var)
+		stop = [len(i.membership_functions) for i in self.input_var]
+		while num[0] < stop[0]:
+			yield num
+			num[-1] += 1
+			for i in reversed(range(1, len(self.input_var))):
+				if num[i] == stop[i]:
+					num[i] = 0
+					num[i-1] += 1
 
 	def checkRules(self):
 		for iv in self.input_var:
