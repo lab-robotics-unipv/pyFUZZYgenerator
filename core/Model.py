@@ -1,10 +1,8 @@
 import re
 # import logging
 # import numpy as np
-# import pytoml as toml
-#
-# from core.Variable import VariableFIND
-from core.Variable import VariableFis
+
+from core.Variable import VariableFis, VariableFind, VariableFeq
 # from core.Membership import computeWeights
 
 
@@ -24,6 +22,8 @@ class Model:
 			raise
 
 		self._rules = data.get('rules', None)
+		self.andFn = self._rules.get('and', 'min')
+		self.thenFn = self._rules.get('then', 'max')
 
 	def getCorrectNumRules(self):
 		"""
@@ -48,6 +48,97 @@ class Model:
 
 		return s
 
+	def getMaxNumberOfMFInput(self):
+		"""
+		Computes the maximum number of membership functions among all input the variables.
+		:return: Maximum number of membership functions.
+		"""
+		return max([len(vi.membership_functions) for vi in self.input_var])
+
+	def getMaxNumberOfMFOutput(self):
+		"""
+		Computes the maximum number of membership functions among all the output variables.
+		:return: Maximum number of membership functions.
+		"""
+		return max([len(vo.membership_functions) for vo in self.output_var])
+
+class ModelFeq(Model):
+	def __init__(self, data):
+		super().__init__(data)
+
+		for iv in self._input_var:
+			self.input_var.append(VariableFeq(iv))
+
+		for ov in self._output_var:
+			self.output_var.append(VariableFeq(ov, False))
+
+		try:
+			self.checkRules()
+		except:
+			raise
+
+		self.createRules()
+
+	def createRules(self):
+		self.rules = []
+		numRules = self.getCorrectNumRules()
+		ruleGen = self.iterate()
+		while len(self.rules) != numRules:
+			ifMFs = next(ruleGen)
+			thMFs = [0] * len(self.output_var)
+
+			ifRs = []
+			weight_sum = 0
+			for iv, mf in zip(self.input_var, ifMFs):
+				ifRs.append((iv.name, iv.membership_functions[mf].name))
+				for i, ov in enumerate(self.output_var):
+					r = next((rule for rule in iv.rules if rule['output'] == ov.name), None)
+					p = r['fact'] * r['weight'] * (mf - iv.equilibrium)
+					weight_sum += r['weight']
+					thMFs[i] += p
+
+			thRs = []
+			for i, ov in enumerate(self.output_var):
+				thMFs[i] = round(thMFs[i]/weight_sum)
+				thMFs[i] += ov.equilibrium
+				# import pdb; pdb.set_trace()
+				# thMFs[i] = thMFs[i]/weight_sum
+				if thMFs[i] < 0:
+					thMFs[i] = 0
+				elif thMFs[i] >= len(ov.membership_functions) - 1:
+					thMFs[i] = len(ov.membership_functions) - 1
+
+				thRs.append((ov.name, ov.membership_functions[thMFs[i]].name))
+
+			self.rules.append((list(ifRs), list(thRs), 1))
+
+		for r in self.rules:
+			print(r)
+		print("")
+
+		#round(sum(fatt))
+
+	def iterate(self):
+		num = [0]*len(self.input_var)
+		stop = [len(i.membership_functions) for i in self.input_var]
+		while num[0] < stop[0]:
+			yield num
+			num[-1] += 1
+			for i in reversed(range(1, len(self.input_var))):
+				if num[i] == stop[i]:
+					num[i] = 0
+					num[i-1] += 1
+
+	def checkRules(self):
+		for iv in self.input_var:
+			if len(iv.rules) > len(self.output_var):
+				raise ValueError("Too many rules for {}".format(iv.name))
+
+			for ov in self.output_var:
+				r = [n['output'] for n in iv.rules]
+				if ov.name not in r:
+					raise ValueError("{} not in rules for {}".format(ov.name, iv.name))
+
 class ModelFis(Model):
 	def __init__(self, data):
 		super().__init__(data)
@@ -61,9 +152,6 @@ class ModelFis(Model):
 		self.rules = self.parseRules()
 		if len(self.rules) != self.getCorrectNumRules():
 			raise Exception("Correct number of rules for model {name} is {num}".format(name=self.name, num=self.getCorrectNumRules()))
-
-		self.andFn = self._rules.get('and', 'min')
-		self.thenFn = self._rules.get('then', 'max')
 
 	def parseRules(self):
 		regexpGlobal = r'if (.*) then (.*) as (.*)'
@@ -89,13 +177,6 @@ class ModelFis(Model):
 		return rules
 
 
-	# def getMaxNumberOfMF(self):
-	# 	"""
-	# 	Computes the maximum number of membership functions among all the variables.
-	# 	:return: Maximum number of membership functions.
-	# 	"""
-	# 	return max([len(v.membership_functions) for v in self.variables])
-
 	# def setInputValuesList(self, values):
 	# 	"""
 	# 	Assign the input value to each input variable taking values from a list.
@@ -107,38 +188,14 @@ class ModelFis(Model):
 	# 		var.input = values[i]
 
 
-# class ModelFIND(Model):
-# 	def load(self, infile):
-# 		with open(infile, 'rb') as f:
-# 			data = toml.load(f)
-# 			if 'model' not in data:
-# 				raise ValueError("Missing 'model' section")
-# 		if 'fuzzify' not in data['model']:
-# 			raise ValueError("Missing 'fuzzify' section in model section")
-# 		if 'defuzzify' not in data['model']:
-# 			raise ValueError("Missing 'defuzzify' section in model section")
-# 		if len(data['model']['fuzzify']) < 1:
-# 			raise ValueError("At least 1 input variable required")
-#
-# 		for var_name in data['model']['fuzzify']:
-# 			var = VariableFIND(name=var_name, data=data[var_name])
-#
-# 			if 'best' not in data[var_name]:
-# 				raise ValueError("Missing 'best' field in {} variable.".format(var_name))
-# 			# should also check that best/worst are valid function names (must find an elegant way to do it)
-# 			var.best = data[var_name]['best']
-#
-# 			if 'worst' not in data[var_name]:
-# 				raise ValueError("Missing 'worst' field in {} variable.".format(var_name))
-# 			# should also check that best/worst are valid function names (must find an elegant way to do it)
-# 			var.worst = data[var_name]['worst']
-#
-# 			self.variables.append(var)
-# 			logging.debug(str(var))
-#
-# 		output_function_name = data['model']['defuzzify']
-# 		self.defuzzify = VariableFIND(name=output_function_name, data=data[output_function_name])
-# 		return data
+class ModelFIND(Model):
+	def __init__(self, data):
+		super().__init__(data)
+		for iv in self._input_var:
+			self.input_var.append(VariableFind(iv))
+
+		for ov in self._output_var:
+			self.output_var.append(VariableFind(ov))
 #
 # 	def calcIndex(self):
 # 		"""

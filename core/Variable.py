@@ -44,19 +44,38 @@ class VariableFis(Variable):
 	def __init__(self, data):
 		super().__init__(data)
 
+class VariableFeq(Variable):
+	def __init__(self, data, input=True):
+		super().__init__(data)
+		self.equilibrium = data['equilibrium']
+		self.rules = data.get('rules', None)
+		if self.rules == None and input:
+			raise ValueError("{} is input but does not contain the rules!".format(self.name))
 
-class VariableFIND(Variable):
+	@property
+	def equilibrium(self):
+		return self.__equilibrium
+
+	@equilibrium.setter
+	def equilibrium(self, eq):
+		equil = next((i for i, mf in enumerate(self.membership_functions) if mf.name == eq), None)
+		if equil is None:
+			raise ValueError("{} not contained in variable {}".format(eq, self.name))
+		self.__equilibrium = equil
+
+class VariableFind(Variable):
 	def __init__(self, name=None, data=None):
 		super().__init__(name, data)
-		self.weight = data.get('weight', None)
-		self.best = None
-		self.worst = None
+		try:
+			self.weight = data['weight']
+			self.best = data['best']
+			self.worst = data['worst']
+		except:
+			raise
 
 	@property
 	def best(self):
-		if self.__best:
-			return self.__best
-		raise ValueError("Best not set yet")
+		return self.__best
 
 	@best.setter
 	def best(self, bst):
@@ -69,9 +88,7 @@ class VariableFIND(Variable):
 
 	@property
 	def worst(self):
-		if self.__worst:
-			return self.__worst
-		raise ValueError("Worst not set yet")
+		return self.__worst
 
 	@worst.setter
 	def worst(self, wst):
