@@ -22,6 +22,8 @@ class Model:
 			raise
 
 		self._rules = data.get('rules', None)
+		self.andFn = self._rules.get('and', 'min')
+		self.thenFn = self._rules.get('then', 'max')
 
 	def getCorrectNumRules(self):
 		"""
@@ -74,9 +76,6 @@ class ModelFis(Model):
 		if len(self.rules) != self.getCorrectNumRules():
 			raise Exception("Correct number of rules for model {name} is {num}".format(name=self.name, num=self.getCorrectNumRules()))
 
-		self.andFn = self._rules.get('and', 'min')
-		self.thenFn = self._rules.get('then', 'max')
-
 	def parseRules(self):
 		regexpGlobal = r'if (.*) then (.*) as (.*)'
 		rules = []
@@ -116,10 +115,10 @@ class ModelFIND(Model):
 	def __init__(self, data):
 		super().__init__(data)
 		for iv in self._input_var:
-			self.input_var.append(VariableFIND(iv))
+			self.input_var.append(VariableFind(iv))
 
 		for ov in self._output_var:
-			self.output_var.append(VariableFIND(ov))
+			self.output_var.append(VariableFind(ov))
 #
 # 	def calcIndex(self):
 # 		"""

@@ -45,7 +45,7 @@ class VariableFis(Variable):
 		super().__init__(data)
 
 
-class VariableFIND(Variable):
+class VariableFind(Variable):
 	def __init__(self, name=None, data=None):
 		super().__init__(name, data)
 		try:
