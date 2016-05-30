@@ -72,14 +72,25 @@ class ModelFeq(Model):
 		for ov in self._output_var:
 			self.output_var.append(VariableFeq(ov, False))
 
-		self.checkRules()
+		try:
+			self.checkRules()
+		except:
+			raise
+
 		self.createRules()
 
 	def createRules(self):
 		pass
 
 	def checkRules(self):
-		pass
+		for iv in self.input_var:
+			if len(iv.rules) > len(self.output_var):
+				raise ValueError("Too many rules for {}".format(iv.name))
+
+			for ov in self.output_var:
+				r = [n['output'] for n in iv.rules]
+				if ov.name not in r:
+					raise ValueError("{} not in rules for {}".format(ov.name, iv.name))
 
 class ModelFis(Model):
 	def __init__(self, data):
