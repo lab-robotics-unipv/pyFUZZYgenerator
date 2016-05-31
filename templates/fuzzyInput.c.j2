@@ -11,7 +11,7 @@
  *
  *		return					Flag: -1 if error, 0 otherwise
  */
-int createInput_{{ model.name }}(fuzzyInput_{{ model.name }} * fi, char* name, memFunction * MFs, int nMF, double min, double max) {
+int createInput_{{ model.name }}(fuzzyInput_{{ model.name }} * fi, char* name, memFunction_{{ model.name }} * MFs, int nMF, double min, double max) {
 	if (fi == NULL) {
 		return -1;
 	}

@@ -15,7 +15,7 @@
 //! FUZZY INPUT STRUCTURE
 typedef struct {
 	char name[MAX_L_NAME_{{ model.name }}];		//!< Name of the input
-	memFunction mf[MAX_N_MF_INPUT_{{ model.name }}];	//!< List of Member Functions
+	memFunction_{{ model.name }} mf[MAX_N_MF_INPUT_{{ model.name }}];	//!< List of Member Functions
 	int nMF;					//!< Number of MF
 	double minValue;			//!< Minimum value of the Fuzzy Input
 	double maxValue;			//!< Maximum value of the Fuzzy Input
