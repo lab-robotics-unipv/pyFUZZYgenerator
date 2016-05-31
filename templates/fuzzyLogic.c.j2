@@ -139,8 +139,8 @@ int getInputFromName_{{ model.name }}(fuzzyLogic_{{ model.name }} * fl, char * n
 		if (strcmp(fl->fInput[i].name, name) == 0) {
 			return i;
 		}
-		return -1;
 	}
+	return -1;
 }
 
 /*! FIND OUTPUT INDEX GIVEN NAME
@@ -155,8 +155,8 @@ int getOutputFromName_{{ model.name }}(fuzzyLogic_{{ model.name }} * fl, char * 
 		if (strcmp(fl->fOutput[i].name, name) == 0) {
 			return i;
 		}
-		return -1;
 	}
+	return -1;
 }
 
 
