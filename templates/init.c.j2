@@ -1,3 +1,5 @@
+#include <string.h>
+
 #include "definitions_{{ model.name }}.h"
 #include "fuzzyLogic_{{ model.name }}.h"
 
@@ -8,21 +10,21 @@ int newState_{{ model.name }}(fuzzyLogic_{{ model.name }} * fl) {
 	 */
 
 	int flag;
-	fuzzyInput_{{ model.name }} fi[NINPUT_{{ model.name }}];
+	fuzzyInput_{{ model.name }} fi[N_INPUT_{{ model.name }}];
 
 	{% for vin in model.input_var %}
 	// Input variable: {{ vin.name }}
 	{% if vin.description is defined %}
 	// {{ vin.description }}
 	{% endif %}
-	memFunction MF_{{ vin.name }}[{{ vin.membership_functions | length }}];
+	memFunction_{{ model.name }} MF_{{ vin.name }}[{{ vin.membership_functions | length }}];
 
 	{% for mf in vin.membership_functions %}
 	double poi_{{ vin.name }}_{{ mf.name }}[] = { {% for p in mf.parameters recursive %}{% if p is iterable %}{{ loop(p) }}{% else %}{{ p }}{% endif %}{% if not loop.last %}, {% endif %}{% endfor %} };
-	createMemFunction(&(MF_{{ vin.name }}[{{ loop.index0 }}]), "{{ mf.name }}", {{ mfDict.get(mf.type) }}, poi_{{ vin.name }}_{{ mf.name }});
+	createMemFunction_{{ model.name }}(&(MF_{{ vin.name }}[{{ loop.index0 }}]), "{{ mf.name }}", {{ mfDict.get(mf.type) }}, poi_{{ vin.name }}_{{ mf.name }});
 	{% endfor %}
 
-	flag = createInput(&(fi[{{ loop.index0 }}]), {{ vin.name }}, MF_{{ vin.name }}, {{ vin.membership_functions | length }}, {{ vin.getMinX() }}, {{ vin.getMaxX() }});
+	flag = createInput_{{ model.name }}(&(fi[{{ loop.index0 }}]), "{{ vin.name }}", MF_{{ vin.name }}, {{ vin.membership_functions | length }}, {{ vin.getMinX() }}, {{ vin.getMaxX() }});
 	if (flag < 0) {
 		return 1;
 	}
@@ -33,21 +35,21 @@ int newState_{{ model.name }}(fuzzyLogic_{{ model.name }} * fl) {
 	 * OUTPUT VARIABLES
 	 */
 
-	fuzzyOutput{{ model.name }} fo[NOUTPUT_{{ model.name }}];
+	fuzzyOutput_{{ model.name }} fo[N_OUTPUT_{{ model.name }}];
 
 	{% for vo in model.output_var %}
 	// Output variable: {{ vo.name }}
 	{% if vo.description is defined %}
 	// {{ vo.description }}
 	{% endif %}
-	memFunction MF_{{ vo.name }}[{{ vo.membership_functions | length }}];
+	memFunction_{{ model.name }} MF_{{ vo.name }}[{{ vo.membership_functions | length }}];
 
 	{% for mf in vo.membership_functions %}
 	double poi_{{ vo.name }}_{{ mf.name }}[] = { {% for p in mf.parameters recursive %}{% if p is iterable %}{{ loop(p) }}{% else %}{{ p }}{% endif %}{% if not loop.last %}, {% endif %}{% endfor %} };
-	createMemFunction(&(MF_{{ vo.name }}[{{ loop.index0 }}]), "{{ mf.name }}", {{ mfDict.get(mf.type) }}, poi_{{ vo.name }}_{{ mf.name }});
+	createMemFunction_{{ model.name }}(&(MF_{{ vo.name }}[{{ loop.index0 }}]), "{{ mf.name }}", {{ mfDict.get(mf.type) }}, poi_{{ vo.name }}_{{ mf.name }});
 	{% endfor %}
 
-	flag = createOutput(&(fo[{{ loop.index0 }}]), {{ vo.name }}, MF_{{ vo.name }}, {{ vo.membership_functions | length }}, {{ vo.getMinX() }}, {{ vo.getMaxX() }});
+	flag = createOutput_{{ model.name }}(&(fo[{{ loop.index0 }}]), "{{ vo.name }}", MF_{{ vo.name }}, {{ vo.membership_functions | length }});
 	if (flag < 0) {
 		return 1;
 	}
@@ -58,7 +60,7 @@ int newState_{{ model.name }}(fuzzyLogic_{{ model.name }} * fl) {
 	 * RULES
 	 */
 
-	rule rules[N_RULES_{{ model.name }}];
+	rule_{{ model.name }} rules[N_RULES_{{ model.name }}];
 
 	{% for r in model.rules %}{% set outerLoop = loop %}
 	rules[{{ loop.index0 }}].nIfRules = {{ r[0] | length }};
@@ -83,7 +85,7 @@ int newState_{{ model.name }}(fuzzyLogic_{{ model.name }} * fl) {
 	 * LOGIC
 	 */
 
-	flag = createLogic_{{ model.name }}(fl, &fi, &fo, rules);
+	flag = createLogic_{{ model.name }}(fl, fi, fo, rules);
 	if ( flag < 0 ) {
 		return 3;
 	}

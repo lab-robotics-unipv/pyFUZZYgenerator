@@ -15,7 +15,7 @@
 //! FUZZY OUTPUT STRUCTURE
 typedef struct {
 	char name[MAX_L_NAME_{{ model.name }}];		//!< Name of the output
-	memFunction mf[MAX_N_MF_OUTPUT_{{ model.name }}];	//!< List of the Member Functions
+	memFunction_{{ model.name }} mf[MAX_N_MF_OUTPUT_{{ model.name }}];	//!< List of the Member Functions
 	int nMF;					//!< Number of MF
 } fuzzyOutput_{{ model.name }};
 

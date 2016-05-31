@@ -9,11 +9,11 @@
 
 //! FUZZY LOGIC STRUCTURE
 typedef struct {
-	fuzzyInput fInput[N_INPUT_{{ model.name }}];
-	fuzzyOutput fOutput[N_OUTPUT_{{ model.name }}];
-	builtRule rules[N_RULES_{{ model.name }}];
-	double fuzzified[N_INPUT_{{ model.name }} * MAX_N_MF_{{ model.name }}];
-	double evaluated[N_OUTPUT_{{ model.name }} * MAX_N_MF_{{ model.name }}];
+	fuzzyInput_{{ model.name }} fInput[N_INPUT_{{ model.name }}];
+	fuzzyOutput_{{ model.name }} fOutput[N_OUTPUT_{{ model.name }}];
+	builtRule_{{ model.name }} rules[N_RULES_{{ model.name }}];
+	double fuzzified[N_INPUT_{{ model.name }} * MAX_N_MF_INPUT_{{ model.name }}];
+	double evaluated[N_OUTPUT_{{ model.name }} * MAX_N_MF_OUTPUT_{{ model.name }}];
 } fuzzyLogic_{{ model.name }};
 
 /*! CONSTRUCTOR OF THE FUZZY LOGIC
