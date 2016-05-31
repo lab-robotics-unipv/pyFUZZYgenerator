@@ -1,5 +1,8 @@
 import jinja2 as j2
 import os
+import pytoml
+
+from core import Model
 
 mfDict = {
 	# 'pairwise-linear': ,
@@ -27,6 +30,11 @@ templateList = [
 	"rules.h.j2",
 ]
 
+commonFileList = [
+	"MFShape.h.js",
+	"MFShape.c.js",
+]
+
 class templateRenderer(object):
 	def __init__(self, model, directory=os.getcwd()):
 		loader = j2.FileSystemLoader(directory)
@@ -42,8 +50,19 @@ class templateRenderer(object):
 			fo.write(self.render(template))
 
 class fuzzyCreator(object):
-	def __init__(self, models, tmplDir=os.getcwd(), outDir=os.getcwd()):
-		self.models = models
+	def __init__(self, modelFile, tmplDir=os.getcwd(), outDir=os.getcwd()):
+		with open(modelFile, 'r') as mf:
+			conf = pytoml.loads(mf.read())
+
+		self.models = []
+		for m in conf['model']:
+			if m['type'].upper() == 'F-IND':
+				self.models.append(Model.ModelFind(m))
+			if m['type'].upper() == 'FEQ':
+				self.models.append(Model.ModelFeq(m))
+			else:
+				self.models.append(Model.ModelFis(m))
+
 		self.tmplDir = tmplDir
 		self.outDir = outDir
 
