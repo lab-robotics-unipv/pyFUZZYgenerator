@@ -120,7 +120,8 @@ int defuzzify_y_displ(fuzzyLogic_y_displ * fl, double * outputs) {
 			sum = sum + fl->evaluated[i * MAX_N_MF_OUTPUT_y_displ + j];
 			aux = aux + (fl->fOutput[i].mf[j].poi[0]) * (fl->evaluated[i * MAX_N_MF_OUTPUT_y_displ + j]);
 		}
-		outputs[i] = aux/sum;
+		if (sum != 0)
+			outputs[i] = aux/sum;
 		aux = 0;
 		sum = 0;
 	}
