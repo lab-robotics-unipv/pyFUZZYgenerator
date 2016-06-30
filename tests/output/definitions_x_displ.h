@@ -2,7 +2,7 @@
 #define DEFINITIONS_H_x_displ
 
 #define N_INPUT_x_displ 2
-#define N_OUTPUT_x_displ 2
+#define N_OUTPUT_x_displ 4
 #define N_RULES_x_displ 9
 
 #define MAX_N_MF_INPUT_x_displ 3

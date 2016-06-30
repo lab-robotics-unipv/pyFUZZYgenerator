@@ -60,19 +60,19 @@ void control(void* state, double* x, double* theta, double* v, double* w, double
 	evaluateRules_yaw(&(s->fl_yaw));
 	defuzzify_yaw(&(s->fl_yaw), out_yaw);
 
-	p[0] = 0;
-	p[1] = 0;
-	p[2] = 0;
-	p[3] = 0;
+	p[0] = 0;	// z[0], pitch[0]
+	p[1] = 0;	// z[1], roll[0]
+	p[2] = 0;	// z[2], pitch[1]
+	p[3] = 0;	// z[3], roll[1]
 
-	a[0] = 0;
-	a[1] = 0;
-	a[2] = 0;
-	a[3] = 0;
+	a[0] = 0;	// y[2], yaw[0]
+	a[1] = 0;	// x[2], yaw[1]
+	a[2] = 0;	// y[3], yaw[2]
+	a[3] = 0;	// x[3], yaw[3]
 
-	b[0] = 0;
-	b[1] = 0;
-	b[2] = 0;
-	b[3] = 0;
+	b[0] = 0;	// x[0]
+	b[1] = 0;	// y[0]
+	b[2] = 0;	// x[1]
+	b[3] = 0;	// y[1]
 
 }

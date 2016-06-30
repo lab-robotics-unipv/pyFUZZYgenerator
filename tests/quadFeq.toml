@@ -11,7 +11,9 @@
 
 		rules = [
 			{ output = "front_beta_angle" , fact = 1 , weight = 0.4 },
-			{ output = "rear_beta_angle" , fact = -1 , weight = 0.4 }
+			{ output = "rear_beta_angle" , fact = -1 , weight = 0.4 },
+			{ output = "left_alpha_angle" , fact = 1 , weight = 0.4 },
+			{ output = "right_alpha_angle" , fact = -1 , weight = 0.4 }
 		]
 
 		equilibrium = "zero"
@@ -37,7 +39,9 @@
 
 		rules = [
 			{ output = "front_beta_angle" , fact = 1 , weight = 0.2 },
-			{ output = "rear_beta_angle" , fact = -1 , weight = 0.2 }
+			{ output = "rear_beta_angle" , fact = -1 , weight = 0.2 },
+			{ output = "left_alpha_angle" , fact = 1 , weight = 0.2 },
+			{ output = "right_alpha_angle" , fact = -1 , weight = 0.2 }
 		]
 
 		equilibrium = "zero"
@@ -99,6 +103,48 @@
 			type = "triangle"
 			parameters = [0.0, 1.0, 1.0]
 	
+	[[model.output_var]]
+		name = "left_alpha_angle"
+		description = "Derivative of the alpha angle on the left propeller"
+
+		equilibrium = "zero"
+
+		[[model.output_var.mf]]
+			name = "neg"
+			type = "triangle"
+			parameters = [-1.0, -1.0, 0.0]
+
+		[[model.output_var.mf]]
+			name = "zero"
+			type = "triangle"
+			parameters = [-1.0, 0.0, 1.0]
+
+		[[model.output_var.mf]]
+			name = "pos"
+			type = "triangle"
+			parameters = [0.0, 1.0, 1.0]
+
+	[[model.output_var]]
+		name = "right_alpha_angle"
+		description = "Derivative of the angle angle on the right propeller"
+
+		equilibrium = "zero"
+
+		[[model.output_var.mf]]
+			name = "neg"
+			type = "triangle"
+			parameters = [-1.0, -1.0, 0.0]
+
+		[[model.output_var.mf]]
+			name = "zero"
+			type = "triangle"
+			parameters = [-1.0, 0.0, 1.0]
+
+		[[model.output_var.mf]]
+			name = "pos"
+			type = "triangle"
+			parameters = [0.0, 1.0, 1.0]
+
 	[model.rules]
 		and = "multiply"
 		then = "max"
@@ -115,8 +161,10 @@
 		description = "Difference between the actual and desired y value"
 
 		rules = [
+			{ output = "left_beta_angle" , fact = -1 , weight = 0.4 },
 			{ output = "right_beta_angle" , fact = 1 , weight = 0.4 },
-			{ output = "left_beta_angle" , fact = -1 , weight = 0.4 }
+			{ output = "front_alpha_angle" , fact = -1 , weight = 0.4 },
+			{ output = "rear_alpha_angle" , fact = 1 , weight = 0.4 }
 		]
 
 		equilibrium = "zero"
@@ -141,8 +189,10 @@
 		description = "Difference between the actual and desired x velocity"
 
 		rules = [
+			{ output = "left_beta_angle" , fact = -1 , weight = 0.2 },
 			{ output = "right_beta_angle" , fact = 1 , weight = 0.2 },
-			{ output = "left_beta_angle" , fact = -1 , weight = 0.2 }
+			{ output = "front_alpha_angle" , fact = -1 , weight = 0.2 },
+			{ output = "rear_alpha_angle" , fact = 1 , weight = 0.2 }
 		]
 
 		equilibrium = "zero"
@@ -158,6 +208,27 @@
 			parameters = [-1.0, 0.0, 1.0]
 
 		[[model.input_var.mf]]
+			name = "pos"
+			type = "triangle"
+			parameters = [0.0, 1.0, 1.0]
+
+	[[model.output_var]]
+		name = "left_beta_angle"
+		description = "Derivative of the beta angle on the left propeller"
+
+		equilibrium = "zero"
+
+		[[model.output_var.mf]]
+			name = "neg"
+			type = "triangle"
+			parameters = [-1.0, -1.0, 0.0]
+
+		[[model.output_var.mf]]
+			name = "zero"
+			type = "triangle"
+			parameters = [-1.0, 0.0, 1.0]
+
+		[[model.output_var.mf]]
 			name = "pos"
 			type = "triangle"
 			parameters = [0.0, 1.0, 1.0]
@@ -184,8 +255,29 @@
 			parameters = [0.0, 1.0, 1.0]
 
 	[[model.output_var]]
-		name = "left_beta_angle"
-		description = "Derivative of the beta angle on the left propeller"
+		name = "front_alpha_angle"
+		description = "Derivative of the alpha angle on the front propeller"
+
+		equilibrium = "zero"
+
+		[[model.output_var.mf]]
+			name = "neg"
+			type = "triangle"
+			parameters = [-1.0, -1.0, 0.0]
+
+		[[model.output_var.mf]]
+			name = "zero"
+			type = "triangle"
+			parameters = [-1.0, 0.0, 1.0]
+
+		[[model.output_var.mf]]
+			name = "pos"
+			type = "triangle"
+			parameters = [0.0, 1.0, 1.0]
+
+	[[model.output_var]]
+		name = "rear_alpha_angle"
+		description = "Derivative of the alpha angle on the rear propeller"
 
 		equilibrium = "zero"
 

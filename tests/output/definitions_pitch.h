@@ -2,7 +2,7 @@
 #define DEFINITIONS_H_pitch
 
 #define N_INPUT_pitch 2
-#define N_OUTPUT_pitch 4
+#define N_OUTPUT_pitch 2
 #define N_RULES_pitch 9
 
 #define MAX_N_MF_INPUT_pitch 3
