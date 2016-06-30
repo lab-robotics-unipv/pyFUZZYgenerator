@@ -10,7 +10,7 @@
 		description = "Difference between the actual and desired x value"
 
 		rules = [
-			{ output = "front_beta_angle" , fact = 1 , weight = 0.4 }
+			{ output = "front_beta_angle" , fact = 1 , weight = 0.4 },
 			{ output = "rear_beta_angle" , fact = -1 , weight = 0.4 }
 		]
 
@@ -36,7 +36,7 @@
 		description = "Difference between the actual and desired x velocity"
 
 		rules = [
-			{ output = "front_beta_angle" , fact = 1 , weight = 0.2 }
+			{ output = "front_beta_angle" , fact = 1 , weight = 0.2 },
 			{ output = "rear_beta_angle" , fact = -1 , weight = 0.2 }
 		]
 
@@ -115,7 +115,7 @@
 		description = "Difference between the actual and desired y value"
 
 		rules = [
-			{ output = "right_beta_angle" , fact = 1 , weight = 0.4 }
+			{ output = "right_beta_angle" , fact = 1 , weight = 0.4 },
 			{ output = "left_beta_angle" , fact = -1 , weight = 0.4 }
 		]
 
@@ -141,7 +141,7 @@
 		description = "Difference between the actual and desired x velocity"
 
 		rules = [
-			{ output = "right_beta_angle" , fact = 1 , weight = 0.2 }
+			{ output = "right_beta_angle" , fact = 1 , weight = 0.2 },
 			{ output = "left_beta_angle" , fact = -1 , weight = 0.2 }
 		]
 
@@ -220,9 +220,9 @@
 		description = "Difference between the actual and desired roll yaw"
 
 		rules = [
-			{ output = "front_prop" , fact = -1 , weight = 0.4 }
-			{ output = "left_prop" , fact = -1 , weight = 0.4 }
-			{ output = "rear_prop" , fact = -1 , weight = 0.4 }
+			{ output = "front_prop" , fact = -1 , weight = 0.4 },
+			{ output = "left_prop" , fact = -1 , weight = 0.4 },
+			{ output = "rear_prop" , fact = -1 , weight = 0.4 },
 			{ output = "right_prop" , fact = -1 , weight = 0.4 }
 		]
 
@@ -248,9 +248,9 @@
 		description = "Difference between the actual and desired z velocity"
 
 		rules = [
-			{ output = "front_prop" , fact = -1 , weight = 0.2 }
-			{ output = "left_prop" , fact = -1 , weight = 0.2 }
-			{ output = "rear_prop" , fact = -1 , weight = 0.2 }
+			{ output = "front_prop" , fact = -1 , weight = 0.2 },
+			{ output = "left_prop" , fact = -1 , weight = 0.2 },
+			{ output = "rear_prop" , fact = -1 , weight = 0.2 },
 			{ output = "right_prop" , fact = -1 , weight = 0.2 }
 		]
 
@@ -371,7 +371,7 @@
 		description = "Difference between the actual and desired pitch value"
 
 		rules = [
-			{ output = "front_prop_diff" , fact = -1 , weight = 0.4 }
+			{ output = "front_prop_diff" , fact = -1 , weight = 0.4 },
 			{ output = "rear_prop_diff" , fact = 1 , weight = 0.4 }
 		]
 
@@ -397,7 +397,7 @@
 		description = "Difference between the actual and desired pitch velocity"
 
 		rules = [
-			{ output = "front_prop_diff" , fact = -1 , weight = 0.2 }
+			{ output = "front_prop_diff" , fact = -1 , weight = 0.2 },
 			{ output = "rear_prop_diff" , fact = 1 , weight = 0.2 }
 		]
 
@@ -476,7 +476,7 @@
 		description = "Difference between the actual and desired roll value"
 
 		rules = [
-			{ output = "left_prop_diff" , fact = 1 , weight = 0.4 }
+			{ output = "left_prop_diff" , fact = 1 , weight = 0.4 },
 			{ output = "right_prop_diff" , fact = -1 , weight = 0.4 }
 		]
 
@@ -502,7 +502,7 @@
 		description = "Difference between the actual and desired roll velocity"
 
 		rules = [
-			{ output = "left_prop_diff" , fact = 1 , weight = 0.2 }
+			{ output = "left_prop_diff" , fact = 1 , weight = 0.2 },
 			{ output = "right_prop_diff" , fact = -1 , weight = 0.2 }
 		]
 
@@ -581,9 +581,9 @@
 		description = "Difference between the actual and desired roll yaw"
 
 		rules = [
-			{ output = "front_alpha_angle" , fact = -1 , weight = 0.4 }
-			{ output = "left_alpha_angle" , fact = -1 , weight = 0.4 }
-			{ output = "rear_alpha_angle" , fact = -1 , weight = 0.4 }
+			{ output = "front_alpha_angle" , fact = -1 , weight = 0.4 },
+			{ output = "left_alpha_angle" , fact = -1 , weight = 0.4 },
+			{ output = "rear_alpha_angle" , fact = -1 , weight = 0.4 },
 			{ output = "right_alpha_angle" , fact = -1 , weight = 0.4 }
 		]
 
@@ -609,9 +609,9 @@
 		description = "Difference between the actual and desired roll velocity"
 
 		rules = [
-			{ output = "front_alpha_angle" , fact = -1 , weight = 0.2 }
-			{ output = "left_alpha_angle" , fact = -1 , weight = 0.2 }
-			{ output = "rear_alpha_angle" , fact = -1 , weight = 0.2 }
+			{ output = "front_alpha_angle" , fact = -1 , weight = 0.2 },
+			{ output = "left_alpha_angle" , fact = -1 , weight = 0.2 },
+			{ output = "rear_alpha_angle" , fact = -1 , weight = 0.2 },
 			{ output = "right_alpha_angle" , fact = -1 , weight = 0.2 }
 		]
 
