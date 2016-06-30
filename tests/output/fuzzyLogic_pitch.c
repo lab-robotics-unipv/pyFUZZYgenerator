@@ -151,7 +151,7 @@ int getInputFromName_pitch(fuzzyLogic_pitch * fl, char * name) {
  */
 int getOutputFromName_pitch(fuzzyLogic_pitch * fl, char * name) {
 	int i;
-	for ( i = 0 ; i < N_INPUT_pitch; i++) {
+	for ( i = 0 ; i < N_OUTPUT_pitch; i++) {
 		if (strcmp(fl->fOutput[i].name, name) == 0) {
 			return i;
 		}

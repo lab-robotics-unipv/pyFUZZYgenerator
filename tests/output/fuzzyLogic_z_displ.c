@@ -151,7 +151,7 @@ int getInputFromName_z_displ(fuzzyLogic_z_displ * fl, char * name) {
  */
 int getOutputFromName_z_displ(fuzzyLogic_z_displ * fl, char * name) {
 	int i;
-	for ( i = 0 ; i < N_INPUT_z_displ; i++) {
+	for ( i = 0 ; i < N_OUTPUT_z_displ; i++) {
 		if (strcmp(fl->fOutput[i].name, name) == 0) {
 			return i;
 		}

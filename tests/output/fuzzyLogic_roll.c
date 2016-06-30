@@ -151,7 +151,7 @@ int getInputFromName_roll(fuzzyLogic_roll * fl, char * name) {
  */
 int getOutputFromName_roll(fuzzyLogic_roll * fl, char * name) {
 	int i;
-	for ( i = 0 ; i < N_INPUT_roll; i++) {
+	for ( i = 0 ; i < N_OUTPUT_roll; i++) {
 		if (strcmp(fl->fOutput[i].name, name) == 0) {
 			return i;
 		}

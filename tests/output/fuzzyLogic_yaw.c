@@ -151,7 +151,7 @@ int getInputFromName_yaw(fuzzyLogic_yaw * fl, char * name) {
  */
 int getOutputFromName_yaw(fuzzyLogic_yaw * fl, char * name) {
 	int i;
-	for ( i = 0 ; i < N_INPUT_yaw; i++) {
+	for ( i = 0 ; i < N_OUTPUT_yaw; i++) {
 		if (strcmp(fl->fOutput[i].name, name) == 0) {
 			return i;
 		}
