@@ -35,30 +35,30 @@ void control(void* state, double* x, double* theta, double* v, double* w, double
 	evaluateRules_x_displ(&(s->fl_x));
 	defuzzify_x_displ(&(s->fl_x), out_x);
 
-	// double out_y[N_INPUT_y_displ];
-	// fuzzify_(&(s->fl_));
-	// evaluateRules_(&(s->fl_));
-	// defuzzify_(&(s->fl_));
+	double out_y[N_INPUT_y_displ];
+	fuzzify_y_displ(&(s->fl_y), &(x[1]));
+	evaluateRules_y_displ(&(s->fl_y));
+	defuzzify_y_displ(&(s->fl_y), out_y);
 
-	// double out_z[N_INPUT_z_displ];
-	// fuzzify_(&(s->fl_));
-	// evaluateRules_(&(s->fl_));
-	// defuzzify_(&(s->fl_));
+	double out_z[N_INPUT_z_displ];
+	fuzzify_z_displ(&(s->fl_z), &(x[2]));
+	evaluateRules_z_displ(&(s->fl_z));
+	defuzzify_z_displ(&(s->fl_z), out_z);
 
-	// double out_roll[N_INPUT_roll];
-	// fuzzify_(&(s->fl_));
-	// evaluateRules_(&(s->fl_));
-	// defuzzify_(&(s->fl_));
+	double out_roll[N_INPUT_roll];
+	fuzzify_roll(&(s->fl_roll), &(theta[0]));
+	evaluateRules_roll(&(s->fl_roll));
+	defuzzify_roll(&(s->fl_roll), out_roll);
 
-	// double out_pitch[N_INPUT_pitch];
-	// fuzzify_(&(s->fl_));
-	// evaluateRules_(&(s->fl_));
-	// defuzzify_(&(s->fl_));
+	double out_pitch[N_INPUT_pitch];
+	fuzzify_pitch(&(s->fl_pitch), &(theta[1]));
+	evaluateRules_pitch(&(s->fl_pitch));
+	defuzzify_pitch(&(s->fl_pitch), out_pitch);
 
-	// double out_yaw[N_INPUT_yaw];
-	// fuzzify_(&(s->fl_));
-	// evaluateRules_(&(s->fl_));
-	// defuzzify_(&(s->fl_));
+	double out_yaw[N_INPUT_yaw];
+	fuzzify_yaw(&(s->fl_yaw), &(theta[2]));
+	evaluateRules_yaw(&(s->fl_yaw));
+	defuzzify_yaw(&(s->fl_yaw), out_yaw);
 
 	p[0] = 0;
 	p[1] = 0;
