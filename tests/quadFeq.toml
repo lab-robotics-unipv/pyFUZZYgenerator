@@ -1,4 +1,365 @@
 [[model]]
+	name = "x_displ"
+	description = "Fuzzy Logic for the longitudinal dynamics of a quadcopter"
+	version = "1.0alpha"
+	type = "feq"
+	# for the longitudinal controller we change only the beta angles on the front and rear propellers
+
+	[[model.input_var]]
+		name = "diff"
+		description = "Difference between the actual and desired x value"
+
+		rules = [
+			{ output = "front_beta_angle" , fact = 1 , weight = 0.4 }
+			{ output = "rear_beta_angle" , fact = -1 , weight = 0.4 }
+		]
+
+		equilibrium = "zero"
+
+		[[model.input_var.mf]]
+			name = "neg"
+			type = "triangle"
+			parameters = [-0.5, -0.5, 0.0]
+
+		[[model.input_var.mf]]
+			name = "zero"
+			type = "triangle"
+			parameters = [-0.5, 0.0, 0.5]
+
+		[[model.input_var.mf]]
+			name = "pos"
+			type = "triangle"
+			parameters = [0.0, 0.5, 0.5]
+
+	[[model.input_var]]
+		name = "x_diffVel"
+		description = "Difference between the actual and desired x velocity"
+
+		rules = [
+			{ output = "front_beta_angle" , fact = 1 , weight = 0.2 }
+			{ output = "rear_beta_angle" , fact = -1 , weight = 0.2 }
+		]
+
+		equilibrium = "zero"
+
+		[[model.input_var.mf]]
+			name = "neg"
+			type = "triangle"
+			parameters = [-1.0, -1.0, 0.0]
+
+		[[model.input_var.mf]]
+			name = "zero"
+			type = "triangle"
+			parameters = [-1.0, 0.0, 1.0]
+
+		[[model.input_var.mf]]
+			name = "pos"
+			type = "triangle"
+			parameters = [0.0, 1.0, 1.0]
+
+	[[model.output_var]]
+		name = "front_beta_angle"
+		description = "Derivative of the beta angle on the front propeller"
+
+		equilibrium = "zero"
+
+		[[model.output_var.mf]]
+			name = "neg"
+			type = "triangle"
+			parameters = [-1.0, -1.0, 0.0]
+
+		[[model.output_var.mf]]
+			name = "zero"
+			type = "triangle"
+			parameters = [-1.0, 0.0, 1.0]
+
+		[[model.output_var.mf]]
+			name = "pos"
+			type = "triangle"
+			parameters = [0.0, 1.0, 1.0]
+
+	[[model.output_var]]
+		name = "rear_beta_angle"
+		description = "Derivative of the beta angle on the rear propeller"
+
+		equilibrium = "zero"
+
+		[[model.output_var.mf]]
+			name = "neg"
+			type = "triangle"
+			parameters = [-1.0, -1.0, 0.0]
+
+		[[model.output_var.mf]]
+			name = "zero"
+			type = "triangle"
+			parameters = [-1.0, 0.0, 1.0]
+
+		[[model.output_var.mf]]
+			name = "pos"
+			type = "triangle"
+			parameters = [0.0, 1.0, 1.0]
+	
+	[model.rules]
+		and = "multiply"
+		then = "max"
+
+[[model]]
+	name = "y_displ"
+	description = "Fuzzy Logic for the lateral dynamics of a quadcopter"
+	version = "1.0alpha"
+	type = "feq"
+	# for the lateral controller we change only the beta angles on the left and right propellers
+
+	[[model.input_var]]
+		name = "diff"
+		description = "Difference between the actual and desired y value"
+
+		rules = [
+			{ output = "right_beta_angle" , fact = 1 , weight = 0.4 }
+			{ output = "left_beta_angle" , fact = -1 , weight = 0.4 }
+		]
+
+		equilibrium = "zero"
+
+		[[model.input_var.mf]]
+			name = "neg"
+			type = "triangle"
+			parameters = [-0.5, -0.5, 0.0]
+
+		[[model.input_var.mf]]
+			name = "zero"
+			type = "triangle"
+			parameters = [-0.5, 0.0, 0.5]
+
+		[[model.input_var.mf]]
+			name = "pos"
+			type = "triangle"
+			parameters = [0.0, 0.5, 0.5]
+
+	[[model.input_var]]
+		name = "y_diffVel"
+		description = "Difference between the actual and desired x velocity"
+
+		rules = [
+			{ output = "right_beta_angle" , fact = 1 , weight = 0.2 }
+			{ output = "left_beta_angle" , fact = -1 , weight = 0.2 }
+		]
+
+		equilibrium = "zero"
+
+		[[model.input_var.mf]]
+			name = "neg"
+			type = "triangle"
+			parameters = [-1.0, -1.0, 0.0]
+
+		[[model.input_var.mf]]
+			name = "zero"
+			type = "triangle"
+			parameters = [-1.0, 0.0, 1.0]
+
+		[[model.input_var.mf]]
+			name = "pos"
+			type = "triangle"
+			parameters = [0.0, 1.0, 1.0]
+
+	[[model.output_var]]
+		name = "right_beta_angle"
+		description = "Derivative of the beta angle on the right propeller"
+
+		equilibrium = "zero"
+
+		[[model.output_var.mf]]
+			name = "neg"
+			type = "triangle"
+			parameters = [-1.0, -1.0, 0.0]
+
+		[[model.output_var.mf]]
+			name = "zero"
+			type = "triangle"
+			parameters = [-1.0, 0.0, 1.0]
+
+		[[model.output_var.mf]]
+			name = "pos"
+			type = "triangle"
+			parameters = [0.0, 1.0, 1.0]
+
+	[[model.output_var]]
+		name = "left_beta_angle"
+		description = "Derivative of the beta angle on the left propeller"
+
+		equilibrium = "zero"
+
+		[[model.output_var.mf]]
+			name = "neg"
+			type = "triangle"
+			parameters = [-1.0, -1.0, 0.0]
+
+		[[model.output_var.mf]]
+			name = "zero"
+			type = "triangle"
+			parameters = [-1.0, 0.0, 1.0]
+
+		[[model.output_var.mf]]
+			name = "pos"
+			type = "triangle"
+			parameters = [0.0, 1.0, 1.0]
+	
+	[model.rules]
+		and = "multiply"
+		then = "max"
+
+[[model]]
+	name = "z_displ"
+	description = "Fuzzy Logic for the vertical dynamics of a quadcopter"
+	version = "1.0alpha"
+	type = "feq"
+	# for the vertical controller we change only the propeller voltages
+
+	[[model.input_var]]
+		name = "z_displ"
+		description = "Difference between the actual and desired roll yaw"
+
+		rules = [
+			{ output = "front_prop" , fact = -1 , weight = 0.4 }
+			{ output = "left_prop" , fact = -1 , weight = 0.4 }
+			{ output = "rear_prop" , fact = -1 , weight = 0.4 }
+			{ output = "right_prop" , fact = -1 , weight = 0.4 }
+		]
+
+		equilibrium = "zero"
+
+		[[model.input_var.mf]]
+			name = "neg"
+			type = "triangle"
+			parameters = [-5.0, -5.0, 0.0]
+
+		[[model.input_var.mf]]
+			name = "zero"
+			type = "triangle"
+			parameters = [-5.0, 0.0, 5.0]
+
+		[[model.input_var.mf]]
+			name = "pos"
+			type = "triangle"
+			parameters = [0.0, 5.0, 5.0]
+
+	[[model.input_var]]
+		name = "z_diffVel"
+		description = "Difference between the actual and desired z velocity"
+
+		rules = [
+			{ output = "front_prop" , fact = -1 , weight = 0.2 }
+			{ output = "left_prop" , fact = -1 , weight = 0.2 }
+			{ output = "rear_prop" , fact = -1 , weight = 0.2 }
+			{ output = "right_prop" , fact = -1 , weight = 0.2 }
+		]
+
+		equilibrium = "zero"
+
+		[[model.input_var.mf]]
+			name = "neg"
+			type = "triangle"
+			parameters = [-1.0, -1.0, 0.0]
+
+		[[model.input_var.mf]]
+			name = "zero"
+			type = "triangle"
+			parameters = [-1.0, 0.0, 1.0]
+
+		[[model.input_var.mf]]
+			name = "pos"
+			type = "triangle"
+			parameters = [0.0, 1.0, 1.0]
+
+	[[model.output_var]]
+		name = "front_prop"
+		description = "Derivative of the alpha angle on the front propeller"
+
+		equilibrium = "zero"
+
+		[[model.output_var.mf]]
+			name = "neg"
+			type = "triangle"
+			parameters = [-0.5, -0.5, 0.0]
+
+		[[model.output_var.mf]]
+			name = "zero"
+			type = "triangle"
+			parameters = [-0.5, 0.0, 0.5]
+
+		[[model.output_var.mf]]
+			name = "pos"
+			type = "triangle"
+			parameters = [0.0, 0.5, 0.5]
+
+	[[model.output_var]]
+		name = "left_prop"
+		description = "Derivative of the alpha angle on the left propeller"
+
+		equilibrium = "zero"
+
+		[[model.output_var.mf]]
+			name = "neg"
+			type = "triangle"
+			parameters = [-0.5, -0.5, 0.0]
+
+		[[model.output_var.mf]]
+			name = "zero"
+			type = "triangle"
+			parameters = [-0.5, 0.0, 0.5]
+
+		[[model.output_var.mf]]
+			name = "pos"
+			type = "triangle"
+			parameters = [0.0, 0.5, 0.5]
+
+	[[model.output_var]]
+		name = "rear_prop"
+		description = "Derivative of the alpha angle on the rear propeller"
+
+		equilibrium = "zero"
+
+		[[model.output_var.mf]]
+			name = "neg"
+			type = "triangle"
+			parameters = [-0.5, -0.5, 0.0]
+
+		[[model.output_var.mf]]
+			name = "zero"
+			type = "triangle"
+			parameters = [-0.5, 0.0, 0.5]
+
+		[[model.output_var.mf]]
+			name = "pos"
+			type = "triangle"
+			parameters = [0.0, 0.5, 0.5]
+
+	[[model.output_var]]
+		name = "right_prop"
+		description = "Derivative of the alpha angle on the right propeller"
+
+		equilibrium = "zero"
+
+		[[model.output_var.mf]]
+			name = "neg"
+			type = "triangle"
+			parameters = [-0.5, -0.5, 0.0]
+
+		[[model.output_var.mf]]
+			name = "zero"
+			type = "triangle"
+			parameters = [-0.5, 0.0, 0.5]
+
+		[[model.output_var.mf]]
+			name = "pos"
+			type = "triangle"
+			parameters = [0.0, 0.5, 0.5]
+
+	[model.rules]
+		and = "multiply"
+		then = "max"
+
+[[model]]
 	name = "pitch"
 	description = "Fuzzy Logic for the pitch dynamics of a quadcopter"
 	version = "1.0alpha"
@@ -10,8 +371,8 @@
 		description = "Difference between the actual and desired pitch value"
 
 		rules = [
-			{ output = "front_prop" , fact = -1 , weight = 0.4 }
-			{ output = "rear_prop" , fact = 1 , weight = 0.4 }
+			{ output = "front_prop_diff" , fact = -1 , weight = 0.4 }
+			{ output = "rear_prop_diff" , fact = 1 , weight = 0.4 }
 		]
 
 		equilibrium = "zero"
@@ -36,8 +397,8 @@
 		description = "Difference between the actual and desired pitch velocity"
 
 		rules = [
-			{ output = "front_prop" , fact = -1 , weight = 0.2 }
-			{ output = "rear_prop" , fact = 1 , weight = 0.2 }
+			{ output = "front_prop_diff" , fact = -1 , weight = 0.2 }
+			{ output = "rear_prop_diff" , fact = 1 , weight = 0.2 }
 		]
 
 		equilibrium = "zero"
@@ -58,7 +419,7 @@
 			parameters = [0.0, 1.0, 1.0]
 
 	[[model.output_var]]
-		name = "front_prop"
+		name = "front_prop_diff"
 		description = "Derivative of the voltage on the front propeller"
 
 		equilibrium = "zero"
@@ -79,7 +440,7 @@
 			parameters = [0.0, 0.5, 0.5]
 
 	[[model.output_var]]
-		name = "rear_prop"
+		name = "rear_prop_diff"
 		description = "Derivative of the voltage on the rear propeller"
 
 		equilibrium = "zero"
@@ -115,8 +476,8 @@
 		description = "Difference between the actual and desired roll value"
 
 		rules = [
-			{ output = "left_prop" , fact = 1 , weight = 0.4 }
-			{ output = "right_prop" , fact = -1 , weight = 0.4 }
+			{ output = "left_prop_diff" , fact = 1 , weight = 0.4 }
+			{ output = "right_prop_diff" , fact = -1 , weight = 0.4 }
 		]
 
 		equilibrium = "zero"
@@ -141,8 +502,8 @@
 		description = "Difference between the actual and desired roll velocity"
 
 		rules = [
-			{ output = "left_prop" , fact = 1 , weight = 0.2 }
-			{ output = "right_prop" , fact = -1 , weight = 0.2 }
+			{ output = "left_prop_diff" , fact = 1 , weight = 0.2 }
+			{ output = "right_prop_diff" , fact = -1 , weight = 0.2 }
 		]
 
 		equilibrium = "zero"
@@ -163,7 +524,7 @@
 			parameters = [0.0, 1.0, 1.0]
 
 	[[model.output_var]]
-		name = "left_prop"
+		name = "left_prop_diff"
 		description = "Derivative of the voltage on the left propeller"
 
 		equilibrium = "zero"
@@ -184,7 +545,7 @@
 			parameters = [0.0, 0.5, 0.5]
 
 	[[model.output_var]]
-		name = "right_prop"
+		name = "right_prop_diff"
 		description = "Derivative of the voltage on the right propeller"
 
 		equilibrium = "zero"
