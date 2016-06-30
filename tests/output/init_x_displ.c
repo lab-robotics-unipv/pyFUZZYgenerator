@@ -134,13 +134,13 @@ int newState_x_displ(fuzzyLogic_x_displ * fl) {
 	rules[0].nThenRules = 4;
 
 	strcpy(rules[0].thenRules[0].name, "front_beta_angle");
-	strcpy(rules[0].thenRules[0].mf, "zero");
+	strcpy(rules[0].thenRules[0].mf, "pos");
 	strcpy(rules[0].thenRules[1].name, "rear_beta_angle");
-	strcpy(rules[0].thenRules[1].mf, "zero");
+	strcpy(rules[0].thenRules[1].mf, "neg");
 	strcpy(rules[0].thenRules[2].name, "left_alpha_angle");
-	strcpy(rules[0].thenRules[2].mf, "zero");
+	strcpy(rules[0].thenRules[2].mf, "pos");
 	strcpy(rules[0].thenRules[3].name, "right_alpha_angle");
-	strcpy(rules[0].thenRules[3].mf, "zero");
+	strcpy(rules[0].thenRules[3].mf, "neg");
 
 	rules[1].nIfRules = 2;
 
@@ -154,13 +154,13 @@ int newState_x_displ(fuzzyLogic_x_displ * fl) {
 	rules[1].nThenRules = 4;
 
 	strcpy(rules[1].thenRules[0].name, "front_beta_angle");
-	strcpy(rules[1].thenRules[0].mf, "zero");
+	strcpy(rules[1].thenRules[0].mf, "pos");
 	strcpy(rules[1].thenRules[1].name, "rear_beta_angle");
-	strcpy(rules[1].thenRules[1].mf, "zero");
+	strcpy(rules[1].thenRules[1].mf, "neg");
 	strcpy(rules[1].thenRules[2].name, "left_alpha_angle");
-	strcpy(rules[1].thenRules[2].mf, "zero");
+	strcpy(rules[1].thenRules[2].mf, "pos");
 	strcpy(rules[1].thenRules[3].name, "right_alpha_angle");
-	strcpy(rules[1].thenRules[3].mf, "zero");
+	strcpy(rules[1].thenRules[3].mf, "neg");
 
 	rules[2].nIfRules = 2;
 
@@ -174,9 +174,9 @@ int newState_x_displ(fuzzyLogic_x_displ * fl) {
 	rules[2].nThenRules = 4;
 
 	strcpy(rules[2].thenRules[0].name, "front_beta_angle");
-	strcpy(rules[2].thenRules[0].mf, "zero");
+	strcpy(rules[2].thenRules[0].mf, "pos");
 	strcpy(rules[2].thenRules[1].name, "rear_beta_angle");
-	strcpy(rules[2].thenRules[1].mf, "zero");
+	strcpy(rules[2].thenRules[1].mf, "neg");
 	strcpy(rules[2].thenRules[2].name, "left_alpha_angle");
 	strcpy(rules[2].thenRules[2].mf, "zero");
 	strcpy(rules[2].thenRules[3].name, "right_alpha_angle");
@@ -194,9 +194,9 @@ int newState_x_displ(fuzzyLogic_x_displ * fl) {
 	rules[3].nThenRules = 4;
 
 	strcpy(rules[3].thenRules[0].name, "front_beta_angle");
-	strcpy(rules[3].thenRules[0].mf, "zero");
+	strcpy(rules[3].thenRules[0].mf, "pos");
 	strcpy(rules[3].thenRules[1].name, "rear_beta_angle");
-	strcpy(rules[3].thenRules[1].mf, "zero");
+	strcpy(rules[3].thenRules[1].mf, "neg");
 	strcpy(rules[3].thenRules[2].name, "left_alpha_angle");
 	strcpy(rules[3].thenRules[2].mf, "zero");
 	strcpy(rules[3].thenRules[3].name, "right_alpha_angle");
@@ -234,9 +234,9 @@ int newState_x_displ(fuzzyLogic_x_displ * fl) {
 	rules[5].nThenRules = 4;
 
 	strcpy(rules[5].thenRules[0].name, "front_beta_angle");
-	strcpy(rules[5].thenRules[0].mf, "zero");
+	strcpy(rules[5].thenRules[0].mf, "neg");
 	strcpy(rules[5].thenRules[1].name, "rear_beta_angle");
-	strcpy(rules[5].thenRules[1].mf, "zero");
+	strcpy(rules[5].thenRules[1].mf, "pos");
 	strcpy(rules[5].thenRules[2].name, "left_alpha_angle");
 	strcpy(rules[5].thenRules[2].mf, "zero");
 	strcpy(rules[5].thenRules[3].name, "right_alpha_angle");
@@ -254,13 +254,13 @@ int newState_x_displ(fuzzyLogic_x_displ * fl) {
 	rules[6].nThenRules = 4;
 
 	strcpy(rules[6].thenRules[0].name, "front_beta_angle");
-	strcpy(rules[6].thenRules[0].mf, "zero");
+	strcpy(rules[6].thenRules[0].mf, "pos");
 	strcpy(rules[6].thenRules[1].name, "rear_beta_angle");
-	strcpy(rules[6].thenRules[1].mf, "zero");
+	strcpy(rules[6].thenRules[1].mf, "neg");
 	strcpy(rules[6].thenRules[2].name, "left_alpha_angle");
-	strcpy(rules[6].thenRules[2].mf, "zero");
+	strcpy(rules[6].thenRules[2].mf, "pos");
 	strcpy(rules[6].thenRules[3].name, "right_alpha_angle");
-	strcpy(rules[6].thenRules[3].mf, "zero");
+	strcpy(rules[6].thenRules[3].mf, "neg");
 
 	rules[7].nIfRules = 2;
 
@@ -274,13 +274,13 @@ int newState_x_displ(fuzzyLogic_x_displ * fl) {
 	rules[7].nThenRules = 4;
 
 	strcpy(rules[7].thenRules[0].name, "front_beta_angle");
-	strcpy(rules[7].thenRules[0].mf, "zero");
+	strcpy(rules[7].thenRules[0].mf, "pos");
 	strcpy(rules[7].thenRules[1].name, "rear_beta_angle");
-	strcpy(rules[7].thenRules[1].mf, "zero");
+	strcpy(rules[7].thenRules[1].mf, "neg");
 	strcpy(rules[7].thenRules[2].name, "left_alpha_angle");
-	strcpy(rules[7].thenRules[2].mf, "zero");
+	strcpy(rules[7].thenRules[2].mf, "pos");
 	strcpy(rules[7].thenRules[3].name, "right_alpha_angle");
-	strcpy(rules[7].thenRules[3].mf, "zero");
+	strcpy(rules[7].thenRules[3].mf, "neg");
 
 	rules[8].nIfRules = 2;
 
@@ -294,13 +294,13 @@ int newState_x_displ(fuzzyLogic_x_displ * fl) {
 	rules[8].nThenRules = 4;
 
 	strcpy(rules[8].thenRules[0].name, "front_beta_angle");
-	strcpy(rules[8].thenRules[0].mf, "zero");
+	strcpy(rules[8].thenRules[0].mf, "pos");
 	strcpy(rules[8].thenRules[1].name, "rear_beta_angle");
-	strcpy(rules[8].thenRules[1].mf, "zero");
+	strcpy(rules[8].thenRules[1].mf, "neg");
 	strcpy(rules[8].thenRules[2].name, "left_alpha_angle");
-	strcpy(rules[8].thenRules[2].mf, "zero");
+	strcpy(rules[8].thenRules[2].mf, "pos");
 	strcpy(rules[8].thenRules[3].name, "right_alpha_angle");
-	strcpy(rules[8].thenRules[3].mf, "zero");
+	strcpy(rules[8].thenRules[3].mf, "neg");
 
 
 	/*
