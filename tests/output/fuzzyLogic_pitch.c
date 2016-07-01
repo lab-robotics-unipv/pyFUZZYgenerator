@@ -86,19 +86,19 @@ int evaluateRules_pitch(fuzzyLogic_pitch * fl) {
 
 	double minValue;
 	for ( i = 0; i < N_RULES_pitch; i++) {
-		minValue = 2;	//!< The values are always less than 1
+		minValue = 1;	//!< The values are always less than 1
 		builtRule_pitch * r = &(fl->rules[i]);
 		for ( j = 0; j < r->nIfRules; j++) {
 			// TODO: possibility to choose the function
-			minValue = MIN(minValue, fl->fuzzified[(r->ifRulesIndex[j]) * MAX_N_MF_INPUT_pitch + r->ifRulesMFIndex[j]]);
+			minValue *= fl->fuzzified[(r->ifRulesIndex[j]) * MAX_N_MF_INPUT_pitch + r->ifRulesMFIndex[j]];
 		}
 
-		minValue = MIN(minValue, r->thenValue);
+		minValue *= r->thenValue;
 		
 		double * e;
 		for ( j = 0; j < r->nThenRules; j++) {
 			e = &(fl->evaluated[(r->thenRulesIndex[j]) * MAX_N_MF_OUTPUT_pitch + r->thenRulesMFIndex[j]]);
-			*e = *e == 0 ? minValue : MIN(minValue, *e);
+			*e *= minvalue;//*e == 0 ? minValue : MIN(minValue, *e);
 		}
 	}
 	return 0;
