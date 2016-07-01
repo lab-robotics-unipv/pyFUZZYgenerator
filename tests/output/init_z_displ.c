@@ -174,13 +174,13 @@ int newState_z_displ(fuzzyLogic_z_displ * fl) {
 	rules[2].nThenRules = 4;
 
 	strcpy(rules[2].thenRules[0].name, "front_prop");
-	strcpy(rules[2].thenRules[0].mf, "zero");
+	strcpy(rules[2].thenRules[0].mf, "neg");
 	strcpy(rules[2].thenRules[1].name, "left_prop");
-	strcpy(rules[2].thenRules[1].mf, "zero");
+	strcpy(rules[2].thenRules[1].mf, "neg");
 	strcpy(rules[2].thenRules[2].name, "rear_prop");
-	strcpy(rules[2].thenRules[2].mf, "zero");
+	strcpy(rules[2].thenRules[2].mf, "neg");
 	strcpy(rules[2].thenRules[3].name, "right_prop");
-	strcpy(rules[2].thenRules[3].mf, "zero");
+	strcpy(rules[2].thenRules[3].mf, "neg");
 
 	rules[3].nIfRules = 2;
 
@@ -254,13 +254,13 @@ int newState_z_displ(fuzzyLogic_z_displ * fl) {
 	rules[6].nThenRules = 4;
 
 	strcpy(rules[6].thenRules[0].name, "front_prop");
-	strcpy(rules[6].thenRules[0].mf, "zero");
+	strcpy(rules[6].thenRules[0].mf, "pos");
 	strcpy(rules[6].thenRules[1].name, "left_prop");
-	strcpy(rules[6].thenRules[1].mf, "zero");
+	strcpy(rules[6].thenRules[1].mf, "pos");
 	strcpy(rules[6].thenRules[2].name, "rear_prop");
-	strcpy(rules[6].thenRules[2].mf, "zero");
+	strcpy(rules[6].thenRules[2].mf, "pos");
 	strcpy(rules[6].thenRules[3].name, "right_prop");
-	strcpy(rules[6].thenRules[3].mf, "zero");
+	strcpy(rules[6].thenRules[3].mf, "pos");
 
 	rules[7].nIfRules = 2;
 

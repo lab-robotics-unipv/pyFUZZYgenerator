@@ -431,11 +431,11 @@
 		rules = [
 			"if (z_diff is neg) and (z_diffVel is neg) then (front_prop is neg) and (left_prop is neg) and (rear_prop is neg) and (right_prop is neg) as 1",
 			"if (z_diff is neg) and (z_diffVel is zero) then (front_prop is neg) and (left_prop is neg) and (rear_prop is neg) and (right_prop is neg) as 1",
-			"if (z_diff is neg) and (z_diffVel is pos) then (front_prop is zero) and (left_prop is zero) and (rear_prop is zero) and (right_prop is zero) as 1",
+			"if (z_diff is neg) and (z_diffVel is pos) then (front_prop is neg) and (left_prop is neg) and (rear_prop is neg) and (right_prop is neg) as 1",
 			"if (z_diff is zero) and (z_diffVel is neg) then (front_prop is neg) and (left_prop is neg) and (rear_prop is neg) and (right_prop is neg) as 1",
 			"if (z_diff is zero) and (z_diffVel is zero) then (front_prop is zero) and (left_prop is zero) and (rear_prop is zero) and (right_prop is zero) as 1",
 			"if (z_diff is zero) and (z_diffVel is pos) then (front_prop is pos) and (left_prop is pos) and (rear_prop is pos) and (right_prop is pos) as 1",
-			"if (z_diff is pos) and (z_diffVel is neg) then (front_prop is zero) and (left_prop is zero) and (rear_prop is zero) and (right_prop is zero) as 1",
+			"if (z_diff is pos) and (z_diffVel is neg) then (front_prop is pos) and (left_prop is pos) and (rear_prop is pos) and (right_prop is pos) as 1",
 			"if (z_diff is pos) and (z_diffVel is zero) then (front_prop is pos) and (left_prop is pos) and (rear_prop is pos) and (right_prop is pos) as 1",
 			"if (z_diff is pos) and (z_diffVel is pos) then (front_prop is pos) and (left_prop is pos) and (rear_prop is pos) and (right_prop is pos) as 1"
 		]
