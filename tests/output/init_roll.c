@@ -55,12 +55,12 @@ int newState_roll(fuzzyLogic_roll * fl) {
 	// Derivative of the voltage on the left propeller
 	memFunction_roll MF_left_prop_diff[3];
 
-	double poi_left_prop_diff_neg[] = { -0.5, -0.5, 0.0 };
-	createMemFunction_roll(&(MF_left_prop_diff[0]), "neg", TRI_MF, poi_left_prop_diff_neg);
-	double poi_left_prop_diff_zero[] = { -0.5, 0.0, 0.5 };
-	createMemFunction_roll(&(MF_left_prop_diff[1]), "zero", TRI_MF, poi_left_prop_diff_zero);
-	double poi_left_prop_diff_pos[] = { 0.0, 0.5, 0.5 };
-	createMemFunction_roll(&(MF_left_prop_diff[2]), "pos", TRI_MF, poi_left_prop_diff_pos);
+	double poi_left_prop_diff_neg[] = { -0.5 };
+	createMemFunction_roll(&(MF_left_prop_diff[0]), "neg", SPIKE_MF, poi_left_prop_diff_neg);
+	double poi_left_prop_diff_zero[] = { 0.0 };
+	createMemFunction_roll(&(MF_left_prop_diff[1]), "zero", SPIKE_MF, poi_left_prop_diff_zero);
+	double poi_left_prop_diff_pos[] = { 0.5 };
+	createMemFunction_roll(&(MF_left_prop_diff[2]), "pos", SPIKE_MF, poi_left_prop_diff_pos);
 
 	flag = createOutput_roll(&(fo[0]), "left_prop_diff", MF_left_prop_diff, 3);
 	if (flag < 0) {
@@ -71,12 +71,12 @@ int newState_roll(fuzzyLogic_roll * fl) {
 	// Derivative of the voltage on the right propeller
 	memFunction_roll MF_right_prop_diff[3];
 
-	double poi_right_prop_diff_neg[] = { -0.5, -0.5, 0.0 };
-	createMemFunction_roll(&(MF_right_prop_diff[0]), "neg", TRI_MF, poi_right_prop_diff_neg);
-	double poi_right_prop_diff_zero[] = { -0.5, 0.0, 0.5 };
-	createMemFunction_roll(&(MF_right_prop_diff[1]), "zero", TRI_MF, poi_right_prop_diff_zero);
-	double poi_right_prop_diff_pos[] = { 0.0, 0.5, 0.5 };
-	createMemFunction_roll(&(MF_right_prop_diff[2]), "pos", TRI_MF, poi_right_prop_diff_pos);
+	double poi_right_prop_diff_neg[] = { -0.5 };
+	createMemFunction_roll(&(MF_right_prop_diff[0]), "neg", SPIKE_MF, poi_right_prop_diff_neg);
+	double poi_right_prop_diff_zero[] = { 0.0 };
+	createMemFunction_roll(&(MF_right_prop_diff[1]), "zero", SPIKE_MF, poi_right_prop_diff_zero);
+	double poi_right_prop_diff_pos[] = { 0.5 };
+	createMemFunction_roll(&(MF_right_prop_diff[2]), "pos", SPIKE_MF, poi_right_prop_diff_pos);
 
 	flag = createOutput_roll(&(fo[1]), "right_prop_diff", MF_right_prop_diff, 3);
 	if (flag < 0) {

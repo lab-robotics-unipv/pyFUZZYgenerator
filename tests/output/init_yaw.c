@@ -55,12 +55,12 @@ int newState_yaw(fuzzyLogic_yaw * fl) {
 	// Derivative of the alpha angle on the front propeller
 	memFunction_yaw MF_front_alpha_angle[3];
 
-	double poi_front_alpha_angle_neg[] = { -1.0, -1.0, 0.0 };
-	createMemFunction_yaw(&(MF_front_alpha_angle[0]), "neg", TRI_MF, poi_front_alpha_angle_neg);
-	double poi_front_alpha_angle_zero[] = { -1.0, 0.0, 1.0 };
-	createMemFunction_yaw(&(MF_front_alpha_angle[1]), "zero", TRI_MF, poi_front_alpha_angle_zero);
-	double poi_front_alpha_angle_pos[] = { 0.0, 1.0, 1.0 };
-	createMemFunction_yaw(&(MF_front_alpha_angle[2]), "pos", TRI_MF, poi_front_alpha_angle_pos);
+	double poi_front_alpha_angle_neg[] = { -1.0 };
+	createMemFunction_yaw(&(MF_front_alpha_angle[0]), "neg", SPIKE_MF, poi_front_alpha_angle_neg);
+	double poi_front_alpha_angle_zero[] = { 0.0 };
+	createMemFunction_yaw(&(MF_front_alpha_angle[1]), "zero", SPIKE_MF, poi_front_alpha_angle_zero);
+	double poi_front_alpha_angle_pos[] = { 1.0 };
+	createMemFunction_yaw(&(MF_front_alpha_angle[2]), "pos", SPIKE_MF, poi_front_alpha_angle_pos);
 
 	flag = createOutput_yaw(&(fo[0]), "front_alpha_angle", MF_front_alpha_angle, 3);
 	if (flag < 0) {
@@ -71,12 +71,12 @@ int newState_yaw(fuzzyLogic_yaw * fl) {
 	// Derivative of the alpha angle on the left propeller
 	memFunction_yaw MF_left_alpha_angle[3];
 
-	double poi_left_alpha_angle_neg[] = { -1.0, -1.0, 0.0 };
-	createMemFunction_yaw(&(MF_left_alpha_angle[0]), "neg", TRI_MF, poi_left_alpha_angle_neg);
-	double poi_left_alpha_angle_zero[] = { -1.0, 0.0, 1.0 };
-	createMemFunction_yaw(&(MF_left_alpha_angle[1]), "zero", TRI_MF, poi_left_alpha_angle_zero);
-	double poi_left_alpha_angle_pos[] = { 0.0, 1.0, 1.0 };
-	createMemFunction_yaw(&(MF_left_alpha_angle[2]), "pos", TRI_MF, poi_left_alpha_angle_pos);
+	double poi_left_alpha_angle_neg[] = { -1.0 };
+	createMemFunction_yaw(&(MF_left_alpha_angle[0]), "neg", SPIKE_MF, poi_left_alpha_angle_neg);
+	double poi_left_alpha_angle_zero[] = { 0.0 };
+	createMemFunction_yaw(&(MF_left_alpha_angle[1]), "zero", SPIKE_MF, poi_left_alpha_angle_zero);
+	double poi_left_alpha_angle_pos[] = { 1.0 };
+	createMemFunction_yaw(&(MF_left_alpha_angle[2]), "pos", SPIKE_MF, poi_left_alpha_angle_pos);
 
 	flag = createOutput_yaw(&(fo[1]), "left_alpha_angle", MF_left_alpha_angle, 3);
 	if (flag < 0) {
@@ -87,12 +87,12 @@ int newState_yaw(fuzzyLogic_yaw * fl) {
 	// Derivative of the alpha angle on the rear propeller
 	memFunction_yaw MF_rear_alpha_angle[3];
 
-	double poi_rear_alpha_angle_neg[] = { -1.0, -1.0, 0.0 };
-	createMemFunction_yaw(&(MF_rear_alpha_angle[0]), "neg", TRI_MF, poi_rear_alpha_angle_neg);
-	double poi_rear_alpha_angle_zero[] = { -1.0, 0.0, 1.0 };
-	createMemFunction_yaw(&(MF_rear_alpha_angle[1]), "zero", TRI_MF, poi_rear_alpha_angle_zero);
-	double poi_rear_alpha_angle_pos[] = { 0.0, 1.0, 1.0 };
-	createMemFunction_yaw(&(MF_rear_alpha_angle[2]), "pos", TRI_MF, poi_rear_alpha_angle_pos);
+	double poi_rear_alpha_angle_neg[] = { -1.0 };
+	createMemFunction_yaw(&(MF_rear_alpha_angle[0]), "neg", SPIKE_MF, poi_rear_alpha_angle_neg);
+	double poi_rear_alpha_angle_zero[] = { 0.0 };
+	createMemFunction_yaw(&(MF_rear_alpha_angle[1]), "zero", SPIKE_MF, poi_rear_alpha_angle_zero);
+	double poi_rear_alpha_angle_pos[] = { 1.0 };
+	createMemFunction_yaw(&(MF_rear_alpha_angle[2]), "pos", SPIKE_MF, poi_rear_alpha_angle_pos);
 
 	flag = createOutput_yaw(&(fo[2]), "rear_alpha_angle", MF_rear_alpha_angle, 3);
 	if (flag < 0) {
@@ -103,12 +103,12 @@ int newState_yaw(fuzzyLogic_yaw * fl) {
 	// Derivative of the alpha angle on the right propeller
 	memFunction_yaw MF_right_alpha_angle[3];
 
-	double poi_right_alpha_angle_neg[] = { -1.0, -1.0, 0.0 };
-	createMemFunction_yaw(&(MF_right_alpha_angle[0]), "neg", TRI_MF, poi_right_alpha_angle_neg);
-	double poi_right_alpha_angle_zero[] = { -1.0, 0.0, 1.0 };
-	createMemFunction_yaw(&(MF_right_alpha_angle[1]), "zero", TRI_MF, poi_right_alpha_angle_zero);
-	double poi_right_alpha_angle_pos[] = { 0.0, 1.0, 1.0 };
-	createMemFunction_yaw(&(MF_right_alpha_angle[2]), "pos", TRI_MF, poi_right_alpha_angle_pos);
+	double poi_right_alpha_angle_neg[] = { -1.0 };
+	createMemFunction_yaw(&(MF_right_alpha_angle[0]), "neg", SPIKE_MF, poi_right_alpha_angle_neg);
+	double poi_right_alpha_angle_zero[] = { 0.0 };
+	createMemFunction_yaw(&(MF_right_alpha_angle[1]), "zero", SPIKE_MF, poi_right_alpha_angle_zero);
+	double poi_right_alpha_angle_pos[] = { 1.0 };
+	createMemFunction_yaw(&(MF_right_alpha_angle[2]), "pos", SPIKE_MF, poi_right_alpha_angle_pos);
 
 	flag = createOutput_yaw(&(fo[3]), "right_alpha_angle", MF_right_alpha_angle, 3);
 	if (flag < 0) {

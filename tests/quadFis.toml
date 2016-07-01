@@ -55,18 +55,18 @@
 
 		[[model.output_var.mf]]
 			name = "neg"
-			type = "triangle"
-			parameters = [-1.0, -1.0, 0.0]
+			type = "singleton"
+			parameters = -1.0
 
 		[[model.output_var.mf]]
 			name = "zero"
-			type = "triangle"
-			parameters = [-1.0, 0.0, 1.0]
+			type = "singleton"
+			parameters = 0.0
 
 		[[model.output_var.mf]]
 			name = "pos"
-			type = "triangle"
-			parameters = [0.0, 1.0, 1.0]
+			type = "singleton"
+			parameters = 1.0
 
 	[[model.output_var]]
 		name = "rear_beta_angle"
@@ -76,18 +76,18 @@
 
 		[[model.output_var.mf]]
 			name = "neg"
-			type = "triangle"
-			parameters = [-1.0, -1.0, 0.0]
+			type = "singleton"
+			parameters = -1.0
 
 		[[model.output_var.mf]]
 			name = "zero"
-			type = "triangle"
-			parameters = [-1.0, 0.0, 1.0]
+			type = "singleton"
+			parameters = 0.0
 
 		[[model.output_var.mf]]
 			name = "pos"
-			type = "triangle"
-			parameters = [0.0, 1.0, 1.0]
+			type = "singleton"
+			parameters = 1.0
 
 	[[model.output_var]]
 		name = "left_alpha_angle"
@@ -97,18 +97,18 @@
 
 		[[model.output_var.mf]]
 			name = "neg"
-			type = "triangle"
-			parameters = [-1.0, -1.0, 0.0]
+			type = "singleton"
+			parameters = -1.0
 
 		[[model.output_var.mf]]
 			name = "zero"
-			type = "triangle"
-			parameters = [-1.0, 0.0, 1.0]
+			type = "singleton"
+			parameters = 0.0
 
 		[[model.output_var.mf]]
 			name = "pos"
-			type = "triangle"
-			parameters = [0.0, 1.0, 1.0]
+			type = "singleton"
+			parameters = 1.0
 
 	[[model.output_var]]
 		name = "right_alpha_angle"
@@ -118,18 +118,18 @@
 
 		[[model.output_var.mf]]
 			name = "neg"
-			type = "triangle"
-			parameters = [-1.0, -1.0, 0.0]
+			type = "singleton"
+			parameters = -1.0
 
 		[[model.output_var.mf]]
 			name = "zero"
-			type = "triangle"
-			parameters = [-1.0, 0.0, 1.0]
+			type = "singleton"
+			parameters = 0.0
 
 		[[model.output_var.mf]]
 			name = "pos"
-			type = "triangle"
-			parameters = [0.0, 1.0, 1.0]
+			type = "singleton"
+			parameters = 1.0
 
 	[model.rules]
 		rules = [
@@ -203,18 +203,18 @@
 
 		[[model.output_var.mf]]
 			name = "neg"
-			type = "triangle"
-			parameters = [-1.0, -1.0, 0.0]
+			type = "singleton"
+			parameters = -1.0
 
 		[[model.output_var.mf]]
 			name = "zero"
-			type = "triangle"
-			parameters = [-1.0, 0.0, 1.0]
+			type = "singleton"
+			parameters = 0.0
 
 		[[model.output_var.mf]]
 			name = "pos"
-			type = "triangle"
-			parameters = [0.0, 1.0, 1.0]
+			type = "singleton"
+			parameters = 1.0
 
 	[[model.output_var]]
 		name = "right_beta_angle"
@@ -224,18 +224,18 @@
 
 		[[model.output_var.mf]]
 			name = "neg"
-			type = "triangle"
-			parameters = [-1.0, -1.0, 0.0]
+			type = "singleton"
+			parameters = -1.0
 
 		[[model.output_var.mf]]
 			name = "zero"
-			type = "triangle"
-			parameters = [-1.0, 0.0, 1.0]
+			type = "singleton"
+			parameters = 0.0
 
 		[[model.output_var.mf]]
 			name = "pos"
-			type = "triangle"
-			parameters = [0.0, 1.0, 1.0]
+			type = "singleton"
+			parameters = 1.0
 
 	[[model.output_var]]
 		name = "front_alpha_angle"
@@ -245,18 +245,18 @@
 
 		[[model.output_var.mf]]
 			name = "neg"
-			type = "triangle"
-			parameters = [-1.0, -1.0, 0.0]
+			type = "singleton"
+			parameters = -1.0
 
 		[[model.output_var.mf]]
 			name = "zero"
-			type = "triangle"
-			parameters = [-1.0, 0.0, 1.0]
+			type = "singleton"
+			parameters = 0.0
 
 		[[model.output_var.mf]]
 			name = "pos"
-			type = "triangle"
-			parameters = [0.0, 1.0, 1.0]
+			type = "singleton"
+			parameters = 1.0
 
 	[[model.output_var]]
 		name = "rear_alpha_angle"
@@ -266,18 +266,18 @@
 
 		[[model.output_var.mf]]
 			name = "neg"
-			type = "triangle"
-			parameters = [-1.0, -1.0, 0.0]
+			type = "singleton"
+			parameters = -1.0
 
 		[[model.output_var.mf]]
 			name = "zero"
-			type = "triangle"
-			parameters = [-1.0, 0.0, 1.0]
+			type = "singleton"
+			parameters = 0.0
 
 		[[model.output_var.mf]]
 			name = "pos"
-			type = "triangle"
-			parameters = [0.0, 1.0, 1.0]
+			type = "singleton"
+			parameters = 1.0
 	
 	[model.rules]
 		rules = [
@@ -351,18 +351,18 @@
 
 		[[model.output_var.mf]]
 			name = "neg"
-			type = "triangle"
-			parameters = [-0.5, -0.5, 0.0]
+			type = "singleton"
+			parameters = -0.5
 
 		[[model.output_var.mf]]
 			name = "zero"
-			type = "triangle"
-			parameters = [-0.5, 0.0, 0.5]
+			type = "singleton"
+			parameters = 0.0
 
 		[[model.output_var.mf]]
 			name = "pos"
-			type = "triangle"
-			parameters = [0.0, 0.5, 0.5]
+			type = "singleton"
+			parameters = 0.5
 
 	[[model.output_var]]
 		name = "left_prop"
@@ -372,18 +372,18 @@
 
 		[[model.output_var.mf]]
 			name = "neg"
-			type = "triangle"
-			parameters = [-0.5, -0.5, 0.0]
+			type = "singleton"
+			parameters = -0.5
 
 		[[model.output_var.mf]]
 			name = "zero"
-			type = "triangle"
-			parameters = [-0.5, 0.0, 0.5]
+			type = "singleton"
+			parameters = 0.0
 
 		[[model.output_var.mf]]
 			name = "pos"
-			type = "triangle"
-			parameters = [0.0, 0.5, 0.5]
+			type = "singleton"
+			parameters = 0.5
 
 	[[model.output_var]]
 		name = "rear_prop"
@@ -393,18 +393,18 @@
 
 		[[model.output_var.mf]]
 			name = "neg"
-			type = "triangle"
-			parameters = [-0.5, -0.5, 0.0]
+			type = "singleton"
+			parameters = -0.5
 
 		[[model.output_var.mf]]
 			name = "zero"
-			type = "triangle"
-			parameters = [-0.5, 0.0, 0.5]
+			type = "singleton"
+			parameters = 0.0
 
 		[[model.output_var.mf]]
 			name = "pos"
-			type = "triangle"
-			parameters = [0.0, 0.5, 0.5]
+			type = "singleton"
+			parameters = 0.5
 
 	[[model.output_var]]
 		name = "right_prop"
@@ -414,18 +414,18 @@
 
 		[[model.output_var.mf]]
 			name = "neg"
-			type = "triangle"
-			parameters = [-0.5, -0.5, 0.0]
+			type = "singleton"
+			parameters = -0.5
 
 		[[model.output_var.mf]]
 			name = "zero"
-			type = "triangle"
-			parameters = [-0.5, 0.0, 0.5]
+			type = "singleton"
+			parameters = 0.0
 
 		[[model.output_var.mf]]
 			name = "pos"
-			type = "triangle"
-			parameters = [0.0, 0.5, 0.5]
+			type = "singleton"
+			parameters = 0.5
 
 	[model.rules]
 		rules = [
@@ -499,18 +499,18 @@
 
 		[[model.output_var.mf]]
 			name = "neg"
-			type = "triangle"
-			parameters = [-0.5, -0.5, 0.0]
+			type = "singleton"
+			parameters = -0.5
 
 		[[model.output_var.mf]]
 			name = "zero"
-			type = "triangle"
-			parameters = [-0.5, 0.0, 0.5]
+			type = "singleton"
+			parameters = 0.0
 
 		[[model.output_var.mf]]
 			name = "pos"
-			type = "triangle"
-			parameters = [0.0, 0.5, 0.5]
+			type = "singleton"
+			parameters = 0.5
 
 	[[model.output_var]]
 		name = "right_prop_diff"
@@ -520,18 +520,18 @@
 
 		[[model.output_var.mf]]
 			name = "neg"
-			type = "triangle"
-			parameters = [-0.5, -0.5, 0.0]
+			type = "singleton"
+			parameters = -0.5
 
 		[[model.output_var.mf]]
 			name = "zero"
-			type = "triangle"
-			parameters = [-0.5, 0.0, 0.5]
+			type = "singleton"
+			parameters = 0.0
 
 		[[model.output_var.mf]]
 			name = "pos"
-			type = "triangle"
-			parameters = [0.0, 0.5, 0.5]
+			type = "singleton"
+			parameters = 0.5
 
 	[model.rules]
 		rules = [
@@ -605,18 +605,18 @@
 
 		[[model.output_var.mf]]
 			name = "neg"
-			type = "triangle"
-			parameters = [-0.5, -0.5, 0.0]
+			type = "singleton"
+			parameters = -0.5
 
 		[[model.output_var.mf]]
 			name = "zero"
-			type = "triangle"
-			parameters = [-0.5, 0.0, 0.5]
+			type = "singleton"
+			parameters = 0.0
 
 		[[model.output_var.mf]]
 			name = "pos"
-			type = "triangle"
-			parameters = [0.0, 0.5, 0.5]
+			type = "singleton"
+			parameters = 0.5
 
 	[[model.output_var]]
 		name = "rear_prop_diff"
@@ -626,18 +626,18 @@
 
 		[[model.output_var.mf]]
 			name = "neg"
-			type = "triangle"
-			parameters = [-0.5, -0.5, 0.0]
+			type = "singleton"
+			parameters = -0.5
 
 		[[model.output_var.mf]]
 			name = "zero"
-			type = "triangle"
-			parameters = [-0.5, 0.0, 0.5]
+			type = "singleton"
+			parameters = 0.0
 
 		[[model.output_var.mf]]
 			name = "pos"
-			type = "triangle"
-			parameters = [0.0, 0.5, 0.5]
+			type = "singleton"
+			parameters = 0.5
 	
 	[model.rules]
 		rules = [
@@ -665,13 +665,6 @@
 		name = "yaw_diff"
 		description = "Difference between the actual and desired roll yaw"
 
-		rules = [
-			{ output = "front_alpha_angle" , fact = -1 , weight = 0.4 },
-			{ output = "left_alpha_angle" , fact = -1 , weight = 0.4 },
-			{ output = "rear_alpha_angle" , fact = -1 , weight = 0.4 },
-			{ output = "right_alpha_angle" , fact = -1 , weight = 0.4 }
-		]
-
 		equilibrium = "zero"
 
 		[[model.input_var.mf]]
@@ -692,13 +685,6 @@
 	[[model.input_var]]
 		name = "yaw_diffVel"
 		description = "Difference between the actual and desired roll velocity"
-
-		rules = [
-			{ output = "front_alpha_angle" , fact = -1 , weight = 0.2 },
-			{ output = "left_alpha_angle" , fact = -1 , weight = 0.2 },
-			{ output = "rear_alpha_angle" , fact = -1 , weight = 0.2 },
-			{ output = "right_alpha_angle" , fact = -1 , weight = 0.2 }
-		]
 
 		equilibrium = "zero"
 
@@ -725,18 +711,18 @@
 
 		[[model.output_var.mf]]
 			name = "neg"
-			type = "triangle"
-			parameters = [-1.0, -1.0, 0.0]
+			type = "singleton"
+			parameters = -1.0
 
 		[[model.output_var.mf]]
 			name = "zero"
-			type = "triangle"
-			parameters = [-1.0, 0.0, 1.0]
+			type = "singleton"
+			parameters = 0.0
 
 		[[model.output_var.mf]]
 			name = "pos"
-			type = "triangle"
-			parameters = [0.0, 1.0, 1.0]
+			type = "singleton"
+			parameters = 1.0
 
 	[[model.output_var]]
 		name = "left_alpha_angle"
@@ -746,18 +732,18 @@
 
 		[[model.output_var.mf]]
 			name = "neg"
-			type = "triangle"
-			parameters = [-1.0, -1.0, 0.0]
+			type = "singleton"
+			parameters = -1.0
 
 		[[model.output_var.mf]]
 			name = "zero"
-			type = "triangle"
-			parameters = [-1.0, 0.0, 1.0]
+			type = "singleton"
+			parameters = 0.0
 
 		[[model.output_var.mf]]
 			name = "pos"
-			type = "triangle"
-			parameters = [0.0, 1.0, 1.0]
+			type = "singleton"
+			parameters = 1.0
 
 	[[model.output_var]]
 		name = "rear_alpha_angle"
@@ -767,18 +753,18 @@
 
 		[[model.output_var.mf]]
 			name = "neg"
-			type = "triangle"
-			parameters = [-1.0, -1.0, 0.0]
+			type = "singleton"
+			parameters = -1.0
 
 		[[model.output_var.mf]]
 			name = "zero"
-			type = "triangle"
-			parameters = [-1.0, 0.0, 1.0]
+			type = "singleton"
+			parameters = 0.0
 
 		[[model.output_var.mf]]
 			name = "pos"
-			type = "triangle"
-			parameters = [0.0, 1.0, 1.0]
+			type = "singleton"
+			parameters = 1.0
 
 	[[model.output_var]]
 		name = "right_alpha_angle"
@@ -788,18 +774,18 @@
 
 		[[model.output_var.mf]]
 			name = "neg"
-			type = "triangle"
-			parameters = [-1.0, -1.0, 0.0]
+			type = "singleton"
+			parameters = -1.0
 
 		[[model.output_var.mf]]
 			name = "zero"
-			type = "triangle"
-			parameters = [-1.0, 0.0, 1.0]
+			type = "singleton"
+			parameters = 0.0
 
 		[[model.output_var.mf]]
 			name = "pos"
-			type = "triangle"
-			parameters = [0.0, 1.0, 1.0]
+			type = "singleton"
+			parameters = 1.0
 
 	[model.rules]
 		rules = [

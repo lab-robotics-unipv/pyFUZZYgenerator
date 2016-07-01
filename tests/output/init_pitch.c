@@ -55,12 +55,12 @@ int newState_pitch(fuzzyLogic_pitch * fl) {
 	// Derivative of the voltage on the front propeller
 	memFunction_pitch MF_front_prop_diff[3];
 
-	double poi_front_prop_diff_neg[] = { -0.5, -0.5, 0.0 };
-	createMemFunction_pitch(&(MF_front_prop_diff[0]), "neg", TRI_MF, poi_front_prop_diff_neg);
-	double poi_front_prop_diff_zero[] = { -0.5, 0.0, 0.5 };
-	createMemFunction_pitch(&(MF_front_prop_diff[1]), "zero", TRI_MF, poi_front_prop_diff_zero);
-	double poi_front_prop_diff_pos[] = { 0.0, 0.5, 0.5 };
-	createMemFunction_pitch(&(MF_front_prop_diff[2]), "pos", TRI_MF, poi_front_prop_diff_pos);
+	double poi_front_prop_diff_neg[] = { -0.5 };
+	createMemFunction_pitch(&(MF_front_prop_diff[0]), "neg", SPIKE_MF, poi_front_prop_diff_neg);
+	double poi_front_prop_diff_zero[] = { 0.0 };
+	createMemFunction_pitch(&(MF_front_prop_diff[1]), "zero", SPIKE_MF, poi_front_prop_diff_zero);
+	double poi_front_prop_diff_pos[] = { 0.5 };
+	createMemFunction_pitch(&(MF_front_prop_diff[2]), "pos", SPIKE_MF, poi_front_prop_diff_pos);
 
 	flag = createOutput_pitch(&(fo[0]), "front_prop_diff", MF_front_prop_diff, 3);
 	if (flag < 0) {
@@ -71,12 +71,12 @@ int newState_pitch(fuzzyLogic_pitch * fl) {
 	// Derivative of the voltage on the rear propeller
 	memFunction_pitch MF_rear_prop_diff[3];
 
-	double poi_rear_prop_diff_neg[] = { -0.5, -0.5, 0.0 };
-	createMemFunction_pitch(&(MF_rear_prop_diff[0]), "neg", TRI_MF, poi_rear_prop_diff_neg);
-	double poi_rear_prop_diff_zero[] = { -0.5, 0.0, 0.5 };
-	createMemFunction_pitch(&(MF_rear_prop_diff[1]), "zero", TRI_MF, poi_rear_prop_diff_zero);
-	double poi_rear_prop_diff_pos[] = { 0.0, 0.5, 0.5 };
-	createMemFunction_pitch(&(MF_rear_prop_diff[2]), "pos", TRI_MF, poi_rear_prop_diff_pos);
+	double poi_rear_prop_diff_neg[] = { -0.5 };
+	createMemFunction_pitch(&(MF_rear_prop_diff[0]), "neg", SPIKE_MF, poi_rear_prop_diff_neg);
+	double poi_rear_prop_diff_zero[] = { 0.0 };
+	createMemFunction_pitch(&(MF_rear_prop_diff[1]), "zero", SPIKE_MF, poi_rear_prop_diff_zero);
+	double poi_rear_prop_diff_pos[] = { 0.5 };
+	createMemFunction_pitch(&(MF_rear_prop_diff[2]), "pos", SPIKE_MF, poi_rear_prop_diff_pos);
 
 	flag = createOutput_pitch(&(fo[1]), "rear_prop_diff", MF_rear_prop_diff, 3);
 	if (flag < 0) {
