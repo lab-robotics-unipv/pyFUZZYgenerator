@@ -13,7 +13,7 @@ int newState_z_displ(fuzzyLogic_z_displ * fl) {
 	fuzzyInput_z_displ fi[N_INPUT_z_displ];
 
 	// Input variable: z_displ
-	// Difference between the actual and desired roll yaw
+	// Difference between the actual and desired z
 	memFunction_z_displ MF_z_displ[3];
 
 	double poi_z_displ_neg[] = { -5.0, -5.0, 0.0 };
@@ -124,7 +124,7 @@ int newState_z_displ(fuzzyLogic_z_displ * fl) {
 
 	rules[0].nIfRules = 2;
 
-	strcpy(rules[0].ifRules[0].name, "z_displ");
+	strcpy(rules[0].ifRules[0].name, "z_diff");
 	strcpy(rules[0].ifRules[0].mf, "neg");
 	strcpy(rules[0].ifRules[1].name, "z_diffVel");
 	strcpy(rules[0].ifRules[1].mf, "neg");
@@ -134,17 +134,17 @@ int newState_z_displ(fuzzyLogic_z_displ * fl) {
 	rules[0].nThenRules = 4;
 
 	strcpy(rules[0].thenRules[0].name, "front_prop");
-	strcpy(rules[0].thenRules[0].mf, "zero");
+	strcpy(rules[0].thenRules[0].mf, "neg");
 	strcpy(rules[0].thenRules[1].name, "left_prop");
-	strcpy(rules[0].thenRules[1].mf, "zero");
+	strcpy(rules[0].thenRules[1].mf, "neg");
 	strcpy(rules[0].thenRules[2].name, "rear_prop");
-	strcpy(rules[0].thenRules[2].mf, "zero");
+	strcpy(rules[0].thenRules[2].mf, "neg");
 	strcpy(rules[0].thenRules[3].name, "right_prop");
-	strcpy(rules[0].thenRules[3].mf, "zero");
+	strcpy(rules[0].thenRules[3].mf, "neg");
 
 	rules[1].nIfRules = 2;
 
-	strcpy(rules[1].ifRules[0].name, "z_displ");
+	strcpy(rules[1].ifRules[0].name, "z_diff");
 	strcpy(rules[1].ifRules[0].mf, "neg");
 	strcpy(rules[1].ifRules[1].name, "z_diffVel");
 	strcpy(rules[1].ifRules[1].mf, "zero");
@@ -154,17 +154,17 @@ int newState_z_displ(fuzzyLogic_z_displ * fl) {
 	rules[1].nThenRules = 4;
 
 	strcpy(rules[1].thenRules[0].name, "front_prop");
-	strcpy(rules[1].thenRules[0].mf, "zero");
+	strcpy(rules[1].thenRules[0].mf, "neg");
 	strcpy(rules[1].thenRules[1].name, "left_prop");
-	strcpy(rules[1].thenRules[1].mf, "zero");
+	strcpy(rules[1].thenRules[1].mf, "neg");
 	strcpy(rules[1].thenRules[2].name, "rear_prop");
-	strcpy(rules[1].thenRules[2].mf, "zero");
+	strcpy(rules[1].thenRules[2].mf, "neg");
 	strcpy(rules[1].thenRules[3].name, "right_prop");
-	strcpy(rules[1].thenRules[3].mf, "zero");
+	strcpy(rules[1].thenRules[3].mf, "neg");
 
 	rules[2].nIfRules = 2;
 
-	strcpy(rules[2].ifRules[0].name, "z_displ");
+	strcpy(rules[2].ifRules[0].name, "z_diff");
 	strcpy(rules[2].ifRules[0].mf, "neg");
 	strcpy(rules[2].ifRules[1].name, "z_diffVel");
 	strcpy(rules[2].ifRules[1].mf, "pos");
@@ -184,7 +184,7 @@ int newState_z_displ(fuzzyLogic_z_displ * fl) {
 
 	rules[3].nIfRules = 2;
 
-	strcpy(rules[3].ifRules[0].name, "z_displ");
+	strcpy(rules[3].ifRules[0].name, "z_diff");
 	strcpy(rules[3].ifRules[0].mf, "zero");
 	strcpy(rules[3].ifRules[1].name, "z_diffVel");
 	strcpy(rules[3].ifRules[1].mf, "neg");
@@ -194,17 +194,17 @@ int newState_z_displ(fuzzyLogic_z_displ * fl) {
 	rules[3].nThenRules = 4;
 
 	strcpy(rules[3].thenRules[0].name, "front_prop");
-	strcpy(rules[3].thenRules[0].mf, "zero");
+	strcpy(rules[3].thenRules[0].mf, "neg");
 	strcpy(rules[3].thenRules[1].name, "left_prop");
-	strcpy(rules[3].thenRules[1].mf, "zero");
+	strcpy(rules[3].thenRules[1].mf, "neg");
 	strcpy(rules[3].thenRules[2].name, "rear_prop");
-	strcpy(rules[3].thenRules[2].mf, "zero");
+	strcpy(rules[3].thenRules[2].mf, "neg");
 	strcpy(rules[3].thenRules[3].name, "right_prop");
-	strcpy(rules[3].thenRules[3].mf, "zero");
+	strcpy(rules[3].thenRules[3].mf, "neg");
 
 	rules[4].nIfRules = 2;
 
-	strcpy(rules[4].ifRules[0].name, "z_displ");
+	strcpy(rules[4].ifRules[0].name, "z_diff");
 	strcpy(rules[4].ifRules[0].mf, "zero");
 	strcpy(rules[4].ifRules[1].name, "z_diffVel");
 	strcpy(rules[4].ifRules[1].mf, "zero");
@@ -224,7 +224,7 @@ int newState_z_displ(fuzzyLogic_z_displ * fl) {
 
 	rules[5].nIfRules = 2;
 
-	strcpy(rules[5].ifRules[0].name, "z_displ");
+	strcpy(rules[5].ifRules[0].name, "z_diff");
 	strcpy(rules[5].ifRules[0].mf, "zero");
 	strcpy(rules[5].ifRules[1].name, "z_diffVel");
 	strcpy(rules[5].ifRules[1].mf, "pos");
@@ -234,17 +234,17 @@ int newState_z_displ(fuzzyLogic_z_displ * fl) {
 	rules[5].nThenRules = 4;
 
 	strcpy(rules[5].thenRules[0].name, "front_prop");
-	strcpy(rules[5].thenRules[0].mf, "zero");
+	strcpy(rules[5].thenRules[0].mf, "pos");
 	strcpy(rules[5].thenRules[1].name, "left_prop");
-	strcpy(rules[5].thenRules[1].mf, "zero");
+	strcpy(rules[5].thenRules[1].mf, "pos");
 	strcpy(rules[5].thenRules[2].name, "rear_prop");
-	strcpy(rules[5].thenRules[2].mf, "zero");
+	strcpy(rules[5].thenRules[2].mf, "pos");
 	strcpy(rules[5].thenRules[3].name, "right_prop");
-	strcpy(rules[5].thenRules[3].mf, "zero");
+	strcpy(rules[5].thenRules[3].mf, "pos");
 
 	rules[6].nIfRules = 2;
 
-	strcpy(rules[6].ifRules[0].name, "z_displ");
+	strcpy(rules[6].ifRules[0].name, "z_diff");
 	strcpy(rules[6].ifRules[0].mf, "pos");
 	strcpy(rules[6].ifRules[1].name, "z_diffVel");
 	strcpy(rules[6].ifRules[1].mf, "neg");
@@ -264,7 +264,7 @@ int newState_z_displ(fuzzyLogic_z_displ * fl) {
 
 	rules[7].nIfRules = 2;
 
-	strcpy(rules[7].ifRules[0].name, "z_displ");
+	strcpy(rules[7].ifRules[0].name, "z_diff");
 	strcpy(rules[7].ifRules[0].mf, "pos");
 	strcpy(rules[7].ifRules[1].name, "z_diffVel");
 	strcpy(rules[7].ifRules[1].mf, "zero");
@@ -274,17 +274,17 @@ int newState_z_displ(fuzzyLogic_z_displ * fl) {
 	rules[7].nThenRules = 4;
 
 	strcpy(rules[7].thenRules[0].name, "front_prop");
-	strcpy(rules[7].thenRules[0].mf, "zero");
+	strcpy(rules[7].thenRules[0].mf, "pos");
 	strcpy(rules[7].thenRules[1].name, "left_prop");
-	strcpy(rules[7].thenRules[1].mf, "zero");
+	strcpy(rules[7].thenRules[1].mf, "pos");
 	strcpy(rules[7].thenRules[2].name, "rear_prop");
-	strcpy(rules[7].thenRules[2].mf, "zero");
+	strcpy(rules[7].thenRules[2].mf, "pos");
 	strcpy(rules[7].thenRules[3].name, "right_prop");
-	strcpy(rules[7].thenRules[3].mf, "zero");
+	strcpy(rules[7].thenRules[3].mf, "pos");
 
 	rules[8].nIfRules = 2;
 
-	strcpy(rules[8].ifRules[0].name, "z_displ");
+	strcpy(rules[8].ifRules[0].name, "z_diff");
 	strcpy(rules[8].ifRules[0].mf, "pos");
 	strcpy(rules[8].ifRules[1].name, "z_diffVel");
 	strcpy(rules[8].ifRules[1].mf, "pos");
@@ -294,13 +294,13 @@ int newState_z_displ(fuzzyLogic_z_displ * fl) {
 	rules[8].nThenRules = 4;
 
 	strcpy(rules[8].thenRules[0].name, "front_prop");
-	strcpy(rules[8].thenRules[0].mf, "zero");
+	strcpy(rules[8].thenRules[0].mf, "pos");
 	strcpy(rules[8].thenRules[1].name, "left_prop");
-	strcpy(rules[8].thenRules[1].mf, "zero");
+	strcpy(rules[8].thenRules[1].mf, "pos");
 	strcpy(rules[8].thenRules[2].name, "rear_prop");
-	strcpy(rules[8].thenRules[2].mf, "zero");
+	strcpy(rules[8].thenRules[2].mf, "pos");
 	strcpy(rules[8].thenRules[3].name, "right_prop");
-	strcpy(rules[8].thenRules[3].mf, "zero");
+	strcpy(rules[8].thenRules[3].mf, "pos");
 
 
 	/*
