@@ -2,19 +2,12 @@
 	name = "x_displ"
 	description = "Fuzzy Logic for the longitudinal dynamics of a quadcopter"
 	version = "1.0alpha"
-	type = "feq"
+	type = "fis"
 	# for the longitudinal controller we change only the beta angles on the front and rear propellers
 
 	[[model.input_var]]
 		name = "diff"
 		description = "Difference between the actual and desired x value"
-
-		rules = [
-			{ output = "front_beta_angle" , fact = 1 , weight = 0.4 },
-			{ output = "rear_beta_angle" , fact = -1 , weight = 0.4 },
-			{ output = "left_alpha_angle" , fact = 1 , weight = 0.4 },
-			{ output = "right_alpha_angle" , fact = -1 , weight = 0.4 }
-		]
 
 		equilibrium = "zero"
 
@@ -36,13 +29,6 @@
 	[[model.input_var]]
 		name = "x_diffVel"
 		description = "Difference between the actual and desired x velocity"
-
-		rules = [
-			{ output = "front_beta_angle" , fact = 1 , weight = 0.2 },
-			{ output = "rear_beta_angle" , fact = -1 , weight = 0.2 },
-			{ output = "left_alpha_angle" , fact = 1 , weight = 0.2 },
-			{ output = "right_alpha_angle" , fact = -1 , weight = 0.2 }
-		]
 
 		equilibrium = "zero"
 
@@ -102,7 +88,7 @@
 			name = "pos"
 			type = "triangle"
 			parameters = [0.0, 1.0, 1.0]
-	
+
 	[[model.output_var]]
 		name = "left_alpha_angle"
 		description = "Derivative of the alpha angle on the left propeller"
@@ -146,6 +132,17 @@
 			parameters = [0.0, 1.0, 1.0]
 
 	[model.rules]
+		rules = [
+			"if (diff is neg) and (x_diffVel is neg) then (front_beta_angle is pos) and (rear_beta_angle is neg) and (left_alpha_angle is pos) and (right_alpha_angle is neg) as 1",
+			"if (diff is neg) and (x_diffVel is zero) then (front_beta_angle is pos) and (rear_beta_angle is neg) and (left_alpha_angle is pos) and (right_alpha_angle is neg) as 1",
+			"if (diff is neg) and (x_diffVel is pos) then (front_beta_angle is pos) and (rear_beta_angle is neg) and (left_alpha_angle is zero) and (right_alpha_angle is zero) as 1",
+			"if (diff is zero) and (x_diffVel is neg) then (front_beta_angle is pos) and (rear_beta_angle is neg) and (left_alpha_angle is zero) and (right_alpha_angle is zero) as 1",
+			"if (diff is zero) and (x_diffVel is zero) then (front_beta_angle is zero) and (rear_beta_angle is zero) and (left_alpha_angle is zero) and (right_alpha_angle is zero) as 1",
+			"if (diff is zero) and (x_diffVel is pos) then (front_beta_angle is neg) and (rear_beta_angle is pos) and (left_alpha_angle is zero) and (right_alpha_angle is zero) as 1",
+			"if (diff is pos) and (x_diffVel is neg) then (front_beta_angle is pos) and (rear_beta_angle is neg) and (left_alpha_angle is pos) and (right_alpha_angle is neg) as 1",
+			"if (diff is pos) and (x_diffVel is zero) then (front_beta_angle is pos) and (rear_beta_angle is neg) and (left_alpha_angle is pos) and (right_alpha_angle is neg) as 1",
+			"if (diff is pos) and (x_diffVel is pos) then (front_beta_angle is pos) and (rear_beta_angle is neg) and (left_alpha_angle is pos) and (right_alpha_angle is neg) as 1"
+		]
 		and = "multiply"
 		then = "max"
 
@@ -161,10 +158,10 @@
 		description = "Difference between the actual and desired y value"
 
 		rules = [
-			{ output = "left_beta_angle" , fact = -1 , weight = 0.4 },
-			{ output = "right_beta_angle" , fact = 1 , weight = 0.4 },
-			{ output = "front_alpha_angle" , fact = -1 , weight = 0.4 },
-			{ output = "rear_alpha_angle" , fact = 1 , weight = 0.4 }
+			{ output = "left_beta_angle" , fact = -1 , weight = 0.8 },
+			{ output = "right_beta_angle" , fact = 1 , weight = 0.8 },
+			{ output = "front_alpha_angle" , fact = -1 , weight = 0.8 },
+			{ output = "rear_alpha_angle" , fact = 1 , weight = 0.8 }
 		]
 
 		equilibrium = "zero"

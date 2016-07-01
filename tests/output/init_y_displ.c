@@ -55,12 +55,12 @@ int newState_y_displ(fuzzyLogic_y_displ * fl) {
 	// Derivative of the beta angle on the left propeller
 	memFunction_y_displ MF_left_beta_angle[3];
 
-	double poi_left_beta_angle_neg[] = { -1.0, -1.0, 0.0 };
-	createMemFunction_y_displ(&(MF_left_beta_angle[0]), "neg", TRI_MF, poi_left_beta_angle_neg);
-	double poi_left_beta_angle_zero[] = { -1.0, 0.0, 1.0 };
-	createMemFunction_y_displ(&(MF_left_beta_angle[1]), "zero", TRI_MF, poi_left_beta_angle_zero);
-	double poi_left_beta_angle_pos[] = { 0.0, 1.0, 1.0 };
-	createMemFunction_y_displ(&(MF_left_beta_angle[2]), "pos", TRI_MF, poi_left_beta_angle_pos);
+	double poi_left_beta_angle_neg[] = { -1.0 };
+	createMemFunction_y_displ(&(MF_left_beta_angle[0]), "neg", SPIKE_MF, poi_left_beta_angle_neg);
+	double poi_left_beta_angle_zero[] = { 0.0 };
+	createMemFunction_y_displ(&(MF_left_beta_angle[1]), "zero", SPIKE_MF, poi_left_beta_angle_zero);
+	double poi_left_beta_angle_pos[] = { 1.0 };
+	createMemFunction_y_displ(&(MF_left_beta_angle[2]), "pos", SPIKE_MF, poi_left_beta_angle_pos);
 
 	flag = createOutput_y_displ(&(fo[0]), "left_beta_angle", MF_left_beta_angle, 3);
 	if (flag < 0) {
@@ -71,12 +71,12 @@ int newState_y_displ(fuzzyLogic_y_displ * fl) {
 	// Derivative of the beta angle on the right propeller
 	memFunction_y_displ MF_right_beta_angle[3];
 
-	double poi_right_beta_angle_neg[] = { -1.0, -1.0, 0.0 };
-	createMemFunction_y_displ(&(MF_right_beta_angle[0]), "neg", TRI_MF, poi_right_beta_angle_neg);
-	double poi_right_beta_angle_zero[] = { -1.0, 0.0, 1.0 };
-	createMemFunction_y_displ(&(MF_right_beta_angle[1]), "zero", TRI_MF, poi_right_beta_angle_zero);
-	double poi_right_beta_angle_pos[] = { 0.0, 1.0, 1.0 };
-	createMemFunction_y_displ(&(MF_right_beta_angle[2]), "pos", TRI_MF, poi_right_beta_angle_pos);
+	double poi_right_beta_angle_neg[] = { -1.0 };
+	createMemFunction_y_displ(&(MF_right_beta_angle[0]), "neg", SPIKE_MF, poi_right_beta_angle_neg);
+	double poi_right_beta_angle_zero[] = { 0.0 };
+	createMemFunction_y_displ(&(MF_right_beta_angle[1]), "zero", SPIKE_MF, poi_right_beta_angle_zero);
+	double poi_right_beta_angle_pos[] = { 1.0 };
+	createMemFunction_y_displ(&(MF_right_beta_angle[2]), "pos", SPIKE_MF, poi_right_beta_angle_pos);
 
 	flag = createOutput_y_displ(&(fo[1]), "right_beta_angle", MF_right_beta_angle, 3);
 	if (flag < 0) {
@@ -87,12 +87,12 @@ int newState_y_displ(fuzzyLogic_y_displ * fl) {
 	// Derivative of the alpha angle on the front propeller
 	memFunction_y_displ MF_front_alpha_angle[3];
 
-	double poi_front_alpha_angle_neg[] = { -1.0, -1.0, 0.0 };
-	createMemFunction_y_displ(&(MF_front_alpha_angle[0]), "neg", TRI_MF, poi_front_alpha_angle_neg);
-	double poi_front_alpha_angle_zero[] = { -1.0, 0.0, 1.0 };
-	createMemFunction_y_displ(&(MF_front_alpha_angle[1]), "zero", TRI_MF, poi_front_alpha_angle_zero);
-	double poi_front_alpha_angle_pos[] = { 0.0, 1.0, 1.0 };
-	createMemFunction_y_displ(&(MF_front_alpha_angle[2]), "pos", TRI_MF, poi_front_alpha_angle_pos);
+	double poi_front_alpha_angle_neg[] = { -1.0 };
+	createMemFunction_y_displ(&(MF_front_alpha_angle[0]), "neg", SPIKE_MF, poi_front_alpha_angle_neg);
+	double poi_front_alpha_angle_zero[] = { 0.0 };
+	createMemFunction_y_displ(&(MF_front_alpha_angle[1]), "zero", SPIKE_MF, poi_front_alpha_angle_zero);
+	double poi_front_alpha_angle_pos[] = { 1.0 };
+	createMemFunction_y_displ(&(MF_front_alpha_angle[2]), "pos", SPIKE_MF, poi_front_alpha_angle_pos);
 
 	flag = createOutput_y_displ(&(fo[2]), "front_alpha_angle", MF_front_alpha_angle, 3);
 	if (flag < 0) {
@@ -103,12 +103,12 @@ int newState_y_displ(fuzzyLogic_y_displ * fl) {
 	// Derivative of the alpha angle on the rear propeller
 	memFunction_y_displ MF_rear_alpha_angle[3];
 
-	double poi_rear_alpha_angle_neg[] = { -1.0, -1.0, 0.0 };
-	createMemFunction_y_displ(&(MF_rear_alpha_angle[0]), "neg", TRI_MF, poi_rear_alpha_angle_neg);
-	double poi_rear_alpha_angle_zero[] = { -1.0, 0.0, 1.0 };
-	createMemFunction_y_displ(&(MF_rear_alpha_angle[1]), "zero", TRI_MF, poi_rear_alpha_angle_zero);
-	double poi_rear_alpha_angle_pos[] = { 0.0, 1.0, 1.0 };
-	createMemFunction_y_displ(&(MF_rear_alpha_angle[2]), "pos", TRI_MF, poi_rear_alpha_angle_pos);
+	double poi_rear_alpha_angle_neg[] = { -1.0 };
+	createMemFunction_y_displ(&(MF_rear_alpha_angle[0]), "neg", SPIKE_MF, poi_rear_alpha_angle_neg);
+	double poi_rear_alpha_angle_zero[] = { 0.0 };
+	createMemFunction_y_displ(&(MF_rear_alpha_angle[1]), "zero", SPIKE_MF, poi_rear_alpha_angle_zero);
+	double poi_rear_alpha_angle_pos[] = { 1.0 };
+	createMemFunction_y_displ(&(MF_rear_alpha_angle[2]), "pos", SPIKE_MF, poi_rear_alpha_angle_pos);
 
 	flag = createOutput_y_displ(&(fo[3]), "rear_alpha_angle", MF_rear_alpha_angle, 3);
 	if (flag < 0) {
