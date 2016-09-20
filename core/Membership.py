@@ -318,8 +318,9 @@ class MembershipFunction(object):
 																			  str(len(param)), str(param)))
 
 	def check_distinct_parameters(self, param):
-		if len(set(param)) != len(param):
-			raise ValueError('{} parameters must be distinct (given {})'.format(self.printable_type_name, str(param)))
+                pass
+		#if len(set(param)) != len(param):
+		#	raise ValueError('{} parameters must be distinct (given {})'.format(self.printable_type_name, str(param)))
 
 	def check_parameters_scalar_order(self, param):
 		ordered = sorted(param)
