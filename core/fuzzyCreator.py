@@ -66,13 +66,16 @@ class fuzzyCreator(object):
 		self.tmplDir = Path(__file__) / '..' / 'templates'
 		self.outDir = outDir
 
-	def render(self, inFolder=True):
+	def render(self, subfolder=True):
+		if not self.outDir.exists():
+			self.outDir.mkdir(parents=True)
+		
+		outDir = self.outDir
 		for model in self.models:
-			outDir = self.outDir
-
-			if inFolder:
-				outDir = os.path.join(outDir, model.name)
-				os.mkdir(outDir)
+			if subfolder:
+				outDir = self.outDir / model.name
+				if not outDir.exists():
+					outDir.mkdir()
 
 			renderer = templateRenderer(model, self.tmplDir)
 
