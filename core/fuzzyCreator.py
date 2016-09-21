@@ -47,10 +47,10 @@ class templateRenderer(object):
 
 	def render(self, template):
 		tmpl = self.env.get_template(template)
-		return tmpl.render(model=self.model, mfDict=mfDict)
+		return tmpl.render(model=str(self.model), mfDict=mfDict)
 
 	def write(self, fileOut, template):
-		with open(fileOut, 'w') as fo:
+		with fileOut.open('w') as fo:
 			fo.write(self.render(template))
 
 class fuzzyCreator(object):
@@ -79,9 +79,9 @@ class fuzzyCreator(object):
 				if not outDir.exists():
 					outDir.mkdir()
 
-			renderer = templateRenderer(model, self.tmplDir)
+			renderer = templateRenderer(model)
 
 			for tmpl in templateList:
 				tmplSplit = tmpl.split('.')
 				outfile = tmplSplit[0] + '_' + model.name + '.' + tmplSplit[1]
-				renderer.write(os.path.join(outDir, outfile), tmpl)
+				renderer.write(outDir / outfile, tmpl)
