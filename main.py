@@ -25,7 +25,7 @@ if __name__ == '__main__':
 	args = parser.parse_args()
 	
 	for toml in args.toml:
-		with open(toml, 'r') as t:
+		with toml.open('r') as t:
 			try:
 				fuzzyCreator(t.read(), './templates/', args.output_dir).render(args.no_subforlder)
 			except:
