@@ -1,6 +1,7 @@
 import jinja2 as j2
 import os
 import pytoml
+from pathlib import Path
 
 from core import Model
 
@@ -50,9 +51,8 @@ class templateRenderer(object):
 			fo.write(self.render(template))
 
 class fuzzyCreator(object):
-	def __init__(self, modelFile, tmplDir=os.getcwd(), outDir=os.getcwd()):
-		with open(modelFile, 'r') as mf:
-			conf = pytoml.loads(mf.read())
+	def __init__(self, modelString, outDir):
+		conf = pytoml.loads(modelString)
 
 		self.models = []
 		for m in conf['model']:
@@ -63,7 +63,7 @@ class fuzzyCreator(object):
 			else:
 				self.models.append(Model.ModelFis(m))
 
-		self.tmplDir = tmplDir
+		self.tmplDir = Path(__file__) / '..' / 'templates'
 		self.outDir = outDir
 
 	def render(self, inFolder=True):

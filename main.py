@@ -27,7 +27,7 @@ if __name__ == '__main__':
 	for toml in args.toml:
 		with toml.open('r') as t:
 			try:
-				fuzzyCreator(t.read(), './templates/', args.output_dir).render(args.no_subforlder)
+				fuzzyCreator(t.read(), args.output_dir).render(args.no_subforlder)
 			except:
 				raise
 
