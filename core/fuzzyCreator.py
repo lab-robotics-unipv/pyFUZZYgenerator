@@ -37,8 +37,11 @@ commonFileList = [
 ]
 
 class templateRenderer(object):
-	def __init__(self, model, directory=os.getcwd()):
-		loader = j2.FileSystemLoader(directory)
+	def __init__(self, model):
+		self.tmplDir = Path(__file__).parent / '..' / 'templates'
+		self.tmplDir.resolve()
+
+		loader = j2.FileSystemLoader(str(self.tmplDir))
 		self.env = j2.Environment(loader=loader, trim_blocks=True, lstrip_blocks=True)
 		self.model = model
 
@@ -63,13 +66,12 @@ class fuzzyCreator(object):
 			else:
 				self.models.append(Model.ModelFis(m))
 
-		self.tmplDir = Path(__file__) / '..' / 'templates'
 		self.outDir = outDir
 
 	def render(self, subfolder=True):
 		if not self.outDir.exists():
 			self.outDir.mkdir(parents=True)
-		
+
 		outDir = self.outDir
 		for model in self.models:
 			if subfolder:
