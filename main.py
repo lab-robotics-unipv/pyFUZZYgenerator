@@ -4,10 +4,11 @@ import os
 from pathlib import Path
 
 def tomlFile(string):
-		base, ext = os.path.splitext(string)
-		if ext != '.toml':
-			raise argparse.ArgumentTypeError("{} should have .toml extension".format(string))
-		return string
+	f = Path(string)
+	ext = f.suffix
+	if ext != '.toml':
+		raise argparse.ArgumentTypeError("{} should have .toml extension".format(string))
+	return f
 
 def outputDir(string):
 	p = Path(string)
