@@ -19,8 +19,5 @@ if __name__ == '__main__':
 
 	for toml in args.toml:
 		with open(toml, 'r') as t:
-			if args.nosubforlder:
-				fuzzyCreator(t.read(), './templates/', './output').render(False)
-			else:
-				fuzzyCreator(t.read(), './templates/', './output').render(False)
+			fuzzyCreator(t.read(), './templates/', './output').render(args.nosubforlder)
 
