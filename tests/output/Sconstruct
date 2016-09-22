@@ -1,7 +1,0 @@
-env = Environment()
-env['CFLAGS'] = '-ggdb3'
-
-sourceFile = Glob('./*.c')
-staticLib = env.StaticLibrary(target='control', source=sourceFile)
-env.NoClean(staticLib)
-

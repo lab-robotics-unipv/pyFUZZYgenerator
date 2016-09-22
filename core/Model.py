@@ -154,7 +154,7 @@ class ModelFis(Model):
 			raise Exception("Correct number of rules for model {name} is {num}".format(name=self.name, num=self.getCorrectNumRules()))
 
 	def parseRules(self):
-		regexpGlobal = r'if (.*) then (.*) as (.*)'
+		regexpGlobal = r'if (.*) then (.*) with (\d)'
 		rules = []
 		try:
 			for r in self._rules['rules']:

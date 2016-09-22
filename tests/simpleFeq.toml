@@ -1,4 +1,85 @@
 [[model]]
+	name = "Solar_follower_v"
+	description = "Fuzzy Logic for a solar follower"
+	version = "1.0alpha"
+	type = "feq"
+
+	[[model.input_var]]
+		name = "diff"
+		description = "Difference between the current in the horizontal line"
+
+		rules = [
+			{ output = "vel_ang" , fact = -1 , weight = 0.4 }
+		]
+
+		equilibrium = "zero"
+
+		[[model.input_var.mf]]
+			name = "neg"
+			type = "triangle"
+			parameters = [-5.0, -5.0, 0.0]
+
+		[[model.input_var.mf]]
+			name = "zero"
+			type = "triangle"
+			parameters = [-5.0, 0.0, 5.0]
+
+		[[model.input_var.mf]]
+			name = "pos"
+			type = "triangle"
+			parameters = [0.0, 5.0, 5.0]
+
+	[[model.input_var]]
+		name = "diffDer"
+		description = "Derivative of the difference of current in the horizontal line"
+
+		rules = [
+			{ output = "vel_ang" , fact = -1 , weight = 0.2 }
+		]
+
+		equilibrium = "zero"
+
+		[[model.input_var.mf]]
+			name = "neg"
+			type = "triangle"
+			parameters = [-1.0, -1.0, 0.0]
+
+		[[model.input_var.mf]]
+			name = "zero"
+			type = "triangle"
+			parameters = [-1.0, 0.0, 1.0]
+
+		[[model.input_var.mf]]
+			name = "pos"
+			type = "triangle"
+			parameters = [0.0, 1.0, 1.0]
+
+	[[model.output_var]]
+		name = "vel_ang"
+		description = "Angular velocity"
+
+		equilibrium = "zero"
+
+		[[model.output_var.mf]]
+			name = "neg"
+			type = "triangle"
+			parameters = [-1.0, -1.0, 0.0]
+
+		[[model.output_var.mf]]
+			name = "zero"
+			type = "triangle"
+			parameters = [-1.0, 0.0, 1.0]
+
+		[[model.output_var.mf]]
+			name = "pos"
+			type = "triangle"
+			parameters = [0.0, 1.0, 1.0]
+	
+	[model.rules]
+		and = "multiply"
+		then = "max"
+
+[[model]]
 	name = "Solar_follower_h"
 	description = "Fuzzy Logic for a solar follower"
 	version = "1.0alpha"
@@ -16,8 +97,8 @@
 
 		[[model.input_var.mf]]
 			name = "neg"
-			type = "pairwise-linear"
-			parameters = [[-5.0, 1.0], [0.0, 0.0]]
+			type = "triangle"
+			parameters = [-5.0, -5.0, 0.0]
 
 		[[model.input_var.mf]]
 			name = "zero"
@@ -26,8 +107,8 @@
 
 		[[model.input_var.mf]]
 			name = "pos"
-			type = "pairwise-linear"
-			parameters = [[0.0, 0.0], [5.0, 1.0]]
+			type = "triangle"
+			parameters = [0.0, 5.0, 5.0]
 
 	[[model.input_var]]
 		name = "diffDer"
@@ -41,8 +122,8 @@
 
 		[[model.input_var.mf]]
 			name = "neg"
-			type = "pairwise-linear"
-			parameters = [[-1.0, 1.0], [0.0, 0.0]]
+			type = "triangle"
+			parameters = [-1.0, -1.0, 0.0]
 
 		[[model.input_var.mf]]
 			name = "zero"
@@ -51,8 +132,8 @@
 
 		[[model.input_var.mf]]
 			name = "pos"
-			type = "pairwise-linear"
-			parameters = [[0.0, 0.0], [1.0, 1.0]]
+			type = "triangle"
+			parameters = [0.0, 1.0, 1.0]
 
 	[[model.output_var]]
 		name = "vel_ang"
@@ -62,8 +143,8 @@
 
 		[[model.output_var.mf]]
 			name = "neg"
-			type = "pairwise-linear"
-			parameters = [[-1.0, 1.0], [0.0, 0.0]]
+			type = "triangle"
+			parameters = [-1.0, -1.0, 0.0]
 
 		[[model.output_var.mf]]
 			name = "zero"
@@ -72,89 +153,8 @@
 
 		[[model.output_var.mf]]
 			name = "pos"
-			type = "pairwise-linear"
-			parameters = [[0.0, 0.0], [1.0, 1.0]]
-	
-	[model.rules]
-		and = "multiply"
-		then = "max"
-
-[[model]]
-	name = "Solar_follower_v"
-	description = "Fuzzy Logic for a solar follower"
-	version = "1.0alpha"
-	type = "feq"
-
-	[[model.input_var]]
-		name = "diff"
-		description = "Difference between the current in the vertical line"
-
-		rules = [
-			{ output = "vel_ang" , fact = -1 , weight = 0.2 }
-		]
-
-		equilibrium = "zero"
-
-		[[model.input_var.mf]]
-			name = "neg"
-			type = "pairwise-linear"
-			parameters = [[-5.0, 1.0], [0.0, 0.0]]
-
-		[[model.input_var.mf]]
-			name = "zero"
 			type = "triangle"
-			parameters = [-5.0, 0.0, 5.0]
-
-		[[model.input_var.mf]]
-			name = "pos"
-			type = "pairwise-linear"
-			parameters = [[0.0, 0.0], [5.0, 1.0]]
-
-	[[model.input_var]]
-		name = "diffDer"
-		description = "Derivative of the difference of current in the vertical line"
-
-		rules = [
-			{ output = "vel_ang" , fact = -1 , weight = 0.2 }
-		]
-
-		equilibrium = "zero"
-
-		[[model.input_var.mf]]
-			name = "neg"
-			type = "pairwise-linear"
-			parameters = [[-1.0, 1.0], [0.0, 0.0]]
-
-		[[model.input_var.mf]]
-			name = "zero"
-			type = "triangle"
-			parameters = [-1.0, 0.0, 1.0]
-
-		[[model.input_var.mf]]
-			name = "pos"
-			type = "pairwise-linear"
-			parameters = [[0.0, 0.0], [1.0, 1.0]]
-
-	[[model.output_var]]
-		name = "vel_ang"
-		description = "Angular velocity"
-
-		equilibrium = "zero"
-
-		[[model.output_var.mf]]
-			name = "neg"
-			type = "pairwise-linear"
-			parameters = [[-1.0, 1.0], [0.0, 0.0]]
-
-		[[model.output_var.mf]]
-			name = "zero"
-			type = "triangle"
-			parameters = [-1.0, 0.0, 1.0]
-
-		[[model.output_var.mf]]
-			name = "pos"
-			type = "pairwise-linear"
-			parameters = [[0.0, 0.0], [1.0, 1.0]]
+			parameters = [0.0, 1.0, 1.0]
 	
 	[model.rules]
 		and = "multiply"
