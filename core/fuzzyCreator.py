@@ -1,6 +1,7 @@
 import jinja2 as j2
 import os
 import pytoml
+from pathlib import Path
 
 from core import Model
 
@@ -36,8 +37,11 @@ commonFileList = [
 ]
 
 class templateRenderer(object):
-	def __init__(self, model, directory=os.getcwd()):
-		loader = j2.FileSystemLoader(directory)
+	def __init__(self, model):
+		self.tmplDir = Path(__file__).parent / '..' / 'templates'
+		self.tmplDir.resolve()
+
+		loader = j2.FileSystemLoader(str(self.tmplDir))
 		self.env = j2.Environment(loader=loader, trim_blocks=True, lstrip_blocks=True)
 		self.model = model
 
@@ -46,13 +50,12 @@ class templateRenderer(object):
 		return tmpl.render(model=self.model, mfDict=mfDict)
 
 	def write(self, fileOut, template):
-		with open(fileOut, 'w') as fo:
+		with fileOut.open('w') as fo:
 			fo.write(self.render(template))
 
 class fuzzyCreator(object):
-	def __init__(self, modelFile, tmplDir=os.getcwd(), outDir=os.getcwd()):
-		with open(modelFile, 'r') as mf:
-			conf = pytoml.loads(mf.read())
+	def __init__(self, modelString, outDir):
+		conf = pytoml.loads(modelString)
 
 		self.models = []
 		for m in conf['model']:
@@ -63,20 +66,22 @@ class fuzzyCreator(object):
 			else:
 				self.models.append(Model.ModelFis(m))
 
-		self.tmplDir = tmplDir
 		self.outDir = outDir
 
-	def render(self, inFolder=True):
+	def render(self, subfolder=True):
+		if not self.outDir.exists():
+			self.outDir.mkdir(parents=True)
+
+		outDir = self.outDir
 		for model in self.models:
-			outDir = self.outDir
+			if subfolder:
+				outDir = self.outDir / model.name
+				if not outDir.exists():
+					outDir.mkdir()
 
-			if inFolder:
-				outDir = os.path.join(outDir, model.name)
-				os.mkdir(outDir)
-
-			renderer = templateRenderer(model, self.tmplDir)
+			renderer = templateRenderer(model)
 
 			for tmpl in templateList:
 				tmplSplit = tmpl.split('.')
 				outfile = tmplSplit[0] + '_' + model.name + '.' + tmplSplit[1]
-				renderer.write(os.path.join(outDir, outfile), tmpl)
+				renderer.write(outDir / outfile, tmpl)
