@@ -66,8 +66,8 @@ class File():
 			models = [Model(m, self.models[m]) for m in self.models]
 			return models
 
-
-f = File(sys.argv[1])
-models = f.load()
-for m in models:
-	print(m)
+if __name__ == '__main__':
+	f = File(sys.argv[1])
+	models = f.load()
+	for m in models:
+		print(m)

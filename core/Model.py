@@ -112,9 +112,9 @@ class ModelFeq(Model):
 
 			self.rules.append((list(ifRs), list(thRs), 1))
 
-		for r in self.rules:
-			print(r)
-		print("")
+		# for r in self.rules:
+		# 	print(r)
+		# print("")
 
 		#round(sum(fatt))
 
