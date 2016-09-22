@@ -141,15 +141,15 @@
 	
 	[model.rules]
 		rules = [
-			"if (diff is neg) and (diffDer is neg) then (vel_ang is pos) as 1",
-			"if (diff is neg) and (diffDer is zero) then (vel_ang is pos) as 1",
-			"if (diff is neg) and (diffDer is pos) then (vel_ang is zero) as 1",
-			"if (diff is zero) and (diffDer is neg) then (vel_ang is pos) as 1",
-			"if (diff is zero) and (diffDer is zero) then (vel_ang is zero) as 1",
-			"if (diff is zero) and (diffDer is pos) then (vel_ang is neg) as 1",
-			"if (diff is pos) and (diffDer is neg) then (vel_ang is zero) as 1",
-			"if (diff is pos) and (diffDer is zero) then (vel_ang is neg) as 1",
-			"if (diff is pos) and (diffDer is pos) then (vel_ang is neg) as 1"
+			"if (diff is neg) and (diffDer is neg) then (vel_ang is pos) with 1",
+			"if (diff is neg) and (diffDer is zero) then (vel_ang is pos) with 1",
+			"if (diff is neg) and (diffDer is pos) then (vel_ang is zero) with 1",
+			"if (diff is zero) and (diffDer is neg) then (vel_ang is pos) with 1",
+			"if (diff is zero) and (diffDer is zero) then (vel_ang is zero) with 1",
+			"if (diff is zero) and (diffDer is pos) then (vel_ang is neg) with 1",
+			"if (diff is pos) and (diffDer is neg) then (vel_ang is zero) with 1",
+			"if (diff is pos) and (diffDer is zero) then (vel_ang is neg) with 1",
+			"if (diff is pos) and (diffDer is pos) then (vel_ang is neg) with 1"
 		]
 		and = "multiply"
 		then = "max"
