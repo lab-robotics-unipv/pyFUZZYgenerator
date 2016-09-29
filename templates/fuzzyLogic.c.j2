@@ -90,7 +90,8 @@ int evaluateRules_{{ model.name }}(fuzzyLogic_{{ model.name }} * fl) {
 		builtRule_{{ model.name }} * r = &(fl->rules[i]);
 		for ( j = 0; j < r->nIfRules; j++) {
 			// TODO: possibility to choose the function
-			minValue *= fl->fuzzified[(r->ifRulesIndex[j]) * MAX_N_MF_INPUT_{{ model.name }} + r->ifRulesMFIndex[j]];
+			//minValue *= fl->fuzzified[(r->ifRulesIndex[j]) * MAX_N_MF_INPUT_{{ model.name }} + r->ifRulesMFIndex[j]];
+			minValue = min(minValue, fl->fuzzified[(r->ifRulesIndex[j]) * MAX_N_MF_INPUT_{{ model.name }} + r->ifRulesMFIndex[j]]);
 		}
 
 		minValue *= r->thenValue;
@@ -98,7 +99,8 @@ int evaluateRules_{{ model.name }}(fuzzyLogic_{{ model.name }} * fl) {
 		double * e;
 		for ( j = 0; j < r->nThenRules; j++) {
 			e = &(fl->evaluated[(r->thenRulesIndex[j]) * MAX_N_MF_OUTPUT_{{ model.name }} + r->thenRulesMFIndex[j]]);
-			*e *= minvalue;//*e == 0 ? minValue : MIN(minValue, *e);
+			//*e *= minValue;//*e == 0 ? minValue : MIN(minValue, *e);
+			*e = *e == 0 ? minValue : max(minValue, *e);
 		}
 	}
 	return 0;
