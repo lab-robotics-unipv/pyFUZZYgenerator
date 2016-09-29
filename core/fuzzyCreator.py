@@ -29,6 +29,7 @@ templateList = [
 	"memFunc.c.j2",
 	"memFunc.h.j2",
 	"rules.h.j2",
+	"rules.c.j2",
 ]
 
 commonFileList = [
