@@ -1,6 +1,7 @@
 from core.fuzzyCreator import fuzzyCreator
 import argparse
 import os
+import sys
 from pathlib import Path
 
 def tomlFile(string):
@@ -17,7 +18,7 @@ def outputDir(string):
 	return p
 
 if __name__ == '__main__':
-	parser = argparse.ArgumentParser(description='Translate TOML files into ANSI C Fuzzy library', prog='fuzzyTranslator')
+	parser = argparse.ArgumentParser(description='Translate TOML files into ANSI C Fuzzy library', prog=sys.argv[0])
 	parser.add_argument(metavar='TOML', type=tomlFile, nargs='*', help='a TOML file to translate', dest='toml')
 	parser.add_argument('-n', '--no-subforlder', action='store_false', help='disable the subfolder division')
 	parser.add_argument('-d', '--output-dir', type=outputDir, default='./output', help='output directory')
