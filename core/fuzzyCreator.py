@@ -57,15 +57,15 @@ class templateRenderer(object):
 class fuzzyCreator(object):
 	def __init__(self, modelString, outDir):
 		conf = pytoml.loads(modelString)
-
+		
 		self.models = []
 		for m in conf['model']:
 			if m['type'].upper() == 'F-IND':
 				self.models.append(Model.ModelFind(m))
 			if m['type'].upper() == 'FEQ':
-				self.models.append(Model.ModelFeq(m))
-			else:
-				self.models.append(Model.ModelFis(m))
+					self.models.append(Model.ModelFeq(m))
+			if m['type'].upper() != 'F-IND' and m['type'].upper() != 'FEQ':
+					self.models.append(Model.ModelFis(m))
 
 		self.outDir = outDir
 
