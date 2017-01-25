@@ -2,7 +2,7 @@ import numpy as np
 import logging
 
 class MembershipFunction(object):
-	def __init__(self, name, data, index):
+	def __init__(self, name, data):
 		"""
 		This method is called by child classes to initialize name, description and type from provided data,
 		plus the index indicating the order, increasing from left to right.
@@ -11,7 +11,7 @@ class MembershipFunction(object):
 		self.description = data.get('description', '')
 		self.type = data['type']
 		self.centroid_x = None
-		self.index = index
+		self.index = data['index']
 
 	def __str__(self):
 		return self.name
@@ -110,7 +110,7 @@ class MembershipFunction(object):
 			return sum_xfx / sum_fx
 			
 	def getMFindex(self):
-		return self.index
+		return self.data['index']
 		
 
 
@@ -121,13 +121,13 @@ class Triangle(MembershipFunction):
 	The Triangle membership function is defined by exactly 3 parameters: the left lower corner (y = 0),
 	the middle corner (y = 1) and the right lower corner (y = 0).
 	"""
-	def __init__(self, name, data, index):
+	def __init__(self, name, data):
 		self.required_type = 'triangle'
 		self.printable_type_name = 'Triangle'
 		self.required_parameters_min_number = 3
 		self.required_parameters_max_number = 3
 		self.parameters = [float(x) for x in data['parameters']]
-		super().__init__(name, data, index)
+		super().__init__(name, data)
 
 	@property
 	def parameters(self):
@@ -178,13 +178,13 @@ class Trapezoid(MembershipFunction):
 	The Trapezoid membership function is defined by exactly 4 parameters: the left lower corner (y = 0),
 	the middle left corner (y = 1), the middle right corner (y = 1) and the right lower corner (y = 0).
 	"""
-	def __init__(self, name, data, index):
+	def __init__(self, name, data):
 		self.required_type = 'trapezoid'
 		self.printable_type_name = 'Trapezoid'
 		self.required_parameters_min_number = 4
 		self.required_parameters_max_number = 4
 		self.parameters = [float(x) for x in data['parameters']]
-		super().__init__(name, data, index)
+		super().__init__(name, data)
 
 	@property
 	def parameters(self):
@@ -232,13 +232,13 @@ class Trapezoid(MembershipFunction):
 # TODO: maybe a singleton type with variable height different from 1 may be of interest
 
 class Singleton(MembershipFunction):
-	def __init__(self, name, data, index):
+	def __init__(self, name, data):
 		self.required_type = 'singleton'
 		self.printable_type_name = 'Singleton'
 		self.required_parameters_min_number = 1
 		self.required_parameters_max_number = None
 		self.parameters = [data['parameters']]   # set as one-element list to allow iteration on checking
-		super().__init__(name, data, index)
+		super().__init__(name, data)
 
 	@property
 	def parameters(self):
@@ -271,13 +271,13 @@ class Singleton(MembershipFunction):
 
 
 class Sigmoid(MembershipFunction):
-	def __init__(self, name, data, index):
+	def __init__(self, name, data):
 		self.required_type = 'sigmoid'
 		self.printable_type_name = 'Sigmoid'
 		self.required_parameters_min_number = 2
 		self.required_parameters_max_number = 2
 		self.parameters = [float(x) for x in data['parameters']]
-		super().__init__(name, data, index)
+		super().__init__(name, data)
 
 	@property
 	def parameters(self):
@@ -306,13 +306,13 @@ class Sigmoid(MembershipFunction):
 
 
 class PairwiseLinear(MembershipFunction):
-	def __init__(self, name, data, index):
+	def __init__(self, name, data):
 		self.required_type = 'pairwise-linear'
 		self.printable_type_name = 'Pairwise-linear'
 		self.required_parameters_min_number = 2
 		self.required_parameters_max_number = None
 		self.parameters = data['parameters']
-		super().__init__(name, data, index)
+		super().__init__(name, data)
 
 	@property
 	def parameters(self):
@@ -352,6 +352,7 @@ class PairwiseLinear(MembershipFunction):
 class MembershipFactory():
 	def __init__(self, data):
 		self.data = data
+		
 		if self.data is None:
 			raise ValueError("data is None in MF {}".format(self.data['name']))
 
@@ -384,5 +385,7 @@ class MembershipFactory():
 		else:
 			raise ValueError("Invalid type {} in MF {}".format(type_name, self.name))
 		return mf
+	
+
 	
 
