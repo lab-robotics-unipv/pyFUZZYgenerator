@@ -113,6 +113,9 @@ class MembershipFunction(object):
 	def getMFindex(self):
 		return self.data['index']
 		
+	def setWeight(self, weight):
+		self.weight = weight
+		
 
 
 class Triangle(MembershipFunction):
