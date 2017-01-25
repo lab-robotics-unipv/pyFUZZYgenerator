@@ -12,6 +12,7 @@ class MembershipFunction(object):
 		self.type = data['type']
 		self.centroid_x = None
 		self.index = data['index']
+		self.weight = None
 
 	def __str__(self):
 		return self.name
