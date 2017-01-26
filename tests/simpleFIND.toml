@@ -1,0 +1,60 @@
+[[model]]
+	name = "Prova"
+	description = "Prova per un modello FIND"
+	version = "1.0alpha"
+	type = "f-ind"
+
+	[[model.input_var]]
+		name = "diff"
+		description = "Difference between the current in the horizontal line"
+		best = "neg"
+		worst = "pos"
+		
+		[[model.input_var.mf]]
+			name = "neg"
+			type = "pairwise-linear"
+			parameters = [[-5.0, 1.0], [0.0, 0.0]]
+			index = 0
+
+		[[model.input_var.mf]]
+			name = "zero"
+			type = "triangle"
+			parameters = [-5.0, 0.0, 5.0]
+			index = 1
+
+		[[model.input_var.mf]]
+			name = "pos"
+			type = "pairwise-linear"
+			parameters = [[0.0, 0.0], [5.0, 1.0]]
+			index = 2
+				
+	[[model.output_var]]
+		name = "vel_ang"
+		description = "Angular velocity"
+		best = "neg"
+		worst = "pos"
+				
+		[[model.output_var.mf]]
+			name = "neg"
+			type = "pairwise-linear"
+			parameters = [[-1.0, 1.0], [0.0, 0.0]]
+			index = 0
+
+		[[model.output_var.mf]]
+			name = "zero"
+			type = "triangle"
+			parameters = [-1.0, 0.0, 1.0]
+			index = 1
+
+		[[model.output_var.mf]]
+			name = "pos"
+			type = "pairwise-linear"
+			parameters = [[0.0, 0.0], [1.0, 1.0]]
+			index = 2
+				
+	[model.rules]
+		rules = []
+		and = "multiply"
+		then = "max"
+
+	
