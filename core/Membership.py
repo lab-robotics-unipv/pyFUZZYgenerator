@@ -13,6 +13,7 @@ class MembershipFunction(object):
 		self.centroid_x = None
 		self.index = data['index']
 		self.weight = None
+		self.nWeight = None
 
 	def __str__(self):
 		return self.name
@@ -115,6 +116,15 @@ class MembershipFunction(object):
 		
 	def setWeight(self, weight):
 		self.weight = weight
+	
+	def getWeight(self):
+		return self.weight
+	
+	def setNormalizedWeight(self,weight):
+		self.nWeight = weight
+	
+	def getNormalizedWeight(self):
+		return self.nWeight
 		
 
 
