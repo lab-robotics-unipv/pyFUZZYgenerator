@@ -10,7 +10,7 @@ class Variable:
 			raise
 
 		self.description = data.get('description', None)
-
+		
 		self.membership_functions = []
 		for mf in data['mf']:
 			self.add_membership_function(mf)
@@ -39,6 +39,24 @@ class Variable:
 
 	def __str__(self):
 		return self.name + ': ' + ', '.join([str(mf) for mf in self.membership_functions])
+	
+	#TODO: Controllare se questa funzione è necessaria.
+	
+	def getMFfromIndex(self, index):
+		"""
+		Return the MF corresponding to the index given as input
+		
+		input : index
+		
+		return: a MF
+		"""
+		for mf in self.membership_functions:
+			tmp_index = mf.index
+			if tmp_index == index:
+				return mf
+		
+		raise ValueError('{} is not a valid index, probably is mayor than the maximum one'.format(index))
+		
 
 class VariableFis(Variable):
 	def __init__(self, data):
@@ -64,10 +82,11 @@ class VariableFeq(Variable):
 		self.__equilibrium = equil
 
 class VariableFind(Variable):
-	def __init__(self, name=None, data=None):
-		super().__init__(name, data)
+	def __init__(self, data):
+		super().__init__(data)
+		
 		try:
-			self.weight = data['weight']
+			#self.weight = data['weight']
 			self.best = data['best']
 			self.worst = data['worst']
 		except:
@@ -104,3 +123,300 @@ class VariableFind(Variable):
 
 	def getWorstMF(self):
 		return self.membership_functions[self.worst]
+	
+	def getBestMFindex(self):
+		self.getBestMf.getMFindex()
+
+	def getWorstMFindex(self):
+		self.getWorstMf.getMFindex()
+				
+	#DA QUI CI SONO I MIEI CHANGES:
+	
+	def getExternalDiff(self, f1, f2, x_min, x_max, scale, step):
+		"""
+		Compute the "external" difference between f1 and f2.
+
+		The external difference goes from
+		x_min to x1 and from x2 to x_max, where x1 is the max x of f1 and x2 is
+		the min x of f2. The difference is computed as delta on the two functions y
+		coordinate values corresponding to the same x coordinate. Then all these differences are added
+		into sum1 starting from x_min to x1 and then from x2 to x_max in sum2.
+		Finally the integral is computed by multiplying the 2 sums by the 2
+		differentials dx1 and dx2.
+
+		IMPORTANT: membership function f1 MUST be on the left w.r.t. f2.
+
+		:param f1: membership function on the left
+		:param f2: membership function on the right
+		:param x_min: min x value from which the distance is computed
+		:param x_max: max x value from which the distance is computed
+		:param scale: scale factor that divides the final result
+		:param step: number of steps for the computation
+		:return: the external difference between f1 and f2
+		"""
+	
+		sum1 = 0.0
+		sum2 = 0.0
+
+		x1 = f1.getMaxX()
+		x2 = f2.getMinX()
+		dx1 = 0.5 * (x1 - x_min) / step
+		if dx1 > 0.0:
+			# for (x = x2; x < x_max; x += dx1):
+			for x in np.linspace(x2, x_max, step):
+				#sum1 += abs(f1.y(x) - f2.y(x))
+				sum1 += abs(f1.f(x) - f2.f(x))
+
+		dx2 = 0.5 * (x_max - x2) / step;
+		if dx2 > 0.0:
+			# for (x = x_min; x < x1; x += dx2):
+			for x in np.linspace(x_min, x1, step):
+				sum2 += abs(f1.f(x) - f2.f(x))
+
+		return ((sum1 * dx1) + (sum2 * dx2)) / scale
+	
+	def getInternalDiff(self, f1, f2, scale, step):
+		"""
+		Compute the "internal" difference between f1 and f2, which goes from x1
+		to x2, where x1 is the max x of f1 and x2 is the min x of f2. The
+		difference is computed as delta on the 2 function y coordinate on the
+		same x coordinate. Then all these differences are added into sum. Finally
+		the integral is computed by multiplying the sum by the differential dx.
+
+		IMPORTANT: membership function f1 MUST be on the left w.r.t. f2.
+
+		:param f1: membership function on the left
+		:param f2: membership function on the right
+		:param scale: scale factor that divides the final result
+		:param step: the number of steps for the computation
+		:return: the internal difference between f1 and f2
+		"""
+		sum = 0.0;
+
+		x1 = f1.getMinX()
+		x2 = f2.getMaxX()
+		dx = (x2 - x1) / step;
+		# for (x = x1; x <= x2; x += dx):
+		for x in np.linspace(x1, x2, step):
+			sum += abs(f1.f(x) - f2.f(x))
+			return (sum * dx) / scale
+
+	def getInternalHoleSize(self, f1, f2, scale, step):
+		"""
+		Compute the "internal" hole size between f1 and f2, which goes from x1 to
+		x2, where x1 is the top right x of f1 and x2 is the top left x of f2. A
+		difference is computed: 1-y of f1 and f2 starting from x1 and ending into
+		x2. This difference is added into sum and finally the integral is
+		computed by multiplying the sum by the differential dx.
+
+		IMPORTANT: membership function f1 MUST be on the left w.r.t. f2.
+
+		:param f1: membership function on the left
+		:param f2: membership function on the right
+		:param scale: scale factor that divides the final result
+		:param step: the number of steps for the computation
+		:return: the internal hole size between f1 and f2
+		"""
+		sum = 0.0
+
+		x1 = f1.getTopRightX()
+		x2 = f2.getTopLeftX()
+		dx = (x2 - x1) / step
+		if dx > 0.0:
+			# for (x = x1; x <= x2; x += dx):
+			for x in np.linspace(x1, x2, step):
+				y1 = f1.f(x)
+				y2 = f2.f(x)
+				if y1 > y2:
+					sum += 1.0 - y1
+				else:
+					sum += 1.0 - y2
+					return (sum * dx) / scale
+					
+	def getExternalHoleSize(self, f1, f2, x_min, x_max, scale, step):
+		"""
+		Compute the "external" hole size between f1 and f2, which goes from x_min
+		to x1 and from x2 to x_max, where x1 is the top left x of f1 and x2 is
+		the top right x of f2. 2 differences are computed: 1-y of f1 starting
+		from x_min and ending into x1 and 1-y of f2 starting from x2 and ending
+		into x_max. These 2 differences are added into sum1 and sum2 and finally
+		the integral is computed by multiplying the 2 sums by the 2 differentials
+		dx1 and dx2.
+
+		IMPORTANT: membership function f1 MUST be on the left w.r.t. f2
+
+		:param f1: membership function on the left
+		:param f2: membership function on the right
+		:param x_min :min value from which the distance is being computed
+		:param x_max: max value to which the distance is being computed
+		:param scale: scale factor that divides the final result
+		:param step: the number of steps for the computation
+		:return: the external hole size between f1 and f2
+		"""
+		sum1 = 0.0
+		sum2 = 0.0
+
+		x1 = f1.getTopLeftX()
+		x2 = f2.getTopRightX()
+		dx1 = (x1 - x_min) / step   # TODO: remove this
+		if dx1 > 0.0:
+			# for (x = x_min; x < x1; x += dx1):
+			for x in np.linspace(x1 - x_min, x1, step):
+				sum1 += 1.0 - f1.f(x)   # TODO: 1.0 - in the expression can be replaced by size(range) - integral(f)
+				dx2 = (x_max - x2) / step
+				if dx2 > 0.0:
+					# for (x = x2; x < x_max; x += dx2):
+					for x in np.linspace(x2, x_max, step):
+						sum2 += 1.0 - f2.f(x)
+						return ((sum1 * dx1) + (sum2 * dx2)) / scale
+	
+	def getExternalDistance(self,f1, f2, x_min, x_max, scale, step):
+		"""
+		Compute the external distance between f1 and f2 membership functions.
+
+		:param f1: membership function on the left
+		:param f2: membership function on the right
+		:param x_min :min value from which the distance is being computed
+		:param x_max: max value to which the distance is being computed
+		:param scale: scale factor that divides the final result
+		:param step: the number of steps for the computation
+		:return: the external distance between of f1 and f2 centroids
+		"""
+		return getExternalDiff(self, f1, f2, x_min, x_max, scale, step) + getExternalHoleSize(self, f1, f2, x_min, x_max, scale, step)
+	
+	def getInternalDistance(self, f1, f2, x_min, x_max, scale, step):
+		"""
+		Compute the internal distance between f1 and f2 membership functions.
+
+		:param f1: membership function on the left
+		:param f2: membership function on the right
+		:param x_min :min value from which the distance is being computed
+		:param x_max: max value to which the distance is being computed
+		:param scale: scale factor that divides the final result
+		:param step: the number of steps for the computation
+		:return: the internal distance between of f1 and f2 centroids
+		"""
+		return getInternalDiff(self, f1, f2, x_min, x_max, scale, step) + getInternalHoleSize(self, f1, f2, x_min, x_max, scale, step)
+
+	def sumVect(self, d, nf, worst, best, internal):
+		"""
+		Compute the sum of a vector from worst to best, i think it could me changed
+		
+		worst and best are passed as index of the respective MFs
+		"""
+		distance = 0.0
+		i = 0
+		
+		if worst == best:
+			return 0.0
+			
+		if (best < worst):
+			tmp = best
+			best = worst
+			worst = tmp
+		
+		if (internal):
+			while worst < best:
+				distance =+ d[worst]
+				worst =+ 1
+		else :
+			while best < (nf-1):
+				distance =+ d[best]
+				best =+ 1
+			while i < worst:
+				distance =+ d[worst]
+				i =+ 1
+
+		return distance;
+		
+	def computeWeights(self, step):
+		"""
+		/**
+		* Compute and assign a weight of every function. WORST has weight=0, BEST
+		* has weight=max and all the other functions have intermediate weights.
+		* Since the weight is computed as a distance and the distance between worst
+		* and best function must be the largest, if these 2 functions are not on
+		* the opposite sides, the external distance is used. All the other weights
+		* are computed imagining the intermediate function always between best and
+		* worst ones, so that the appropriate distance (internal or external) is
+		* used. Worst-best distance is a special case.
+		*
+		* @param step
+		*            the number of integration steps
+		*/
+		"""
+
+		d = []
+
+		# TODO: check if this is really required
+		# if (model.isCrisp()):
+		#     return
+		logging.debug(self)
+		logging.debug(self.best)
+		logging.debug(self.worst)
+		if (self.worst == self.best):
+			raise ValueError("{}: worst and best membership functions are the same.".format(self.name))
+
+		nf = len(self.membership_functions)
+		interval = self.getMaxX() - self.getMinX()
+		
+		#Indexes of the MFs of the worst and best
+		worstIndex = self.getWorstMFindex
+		bestIndex = self.getBestMFindex
+		
+		#TODO : verificare se funziona da qui in poi
+		i = 0
+		while i < (nf-2):
+			d.append(getInternalDistance(self, self.getMFfromIndex(i), self.getMFfromIndex(i+1), interval, step))
+			i =+ 1
+		d.append(getExternalDistance(self, self.getMFfromIndex(0), self.getMFfromIndex(nf - 1), getMinX(), getMaxX(), interval, step))
+		"""
+		for mf in self.membership_functions:    # TODO: fix since we need to address i-th and (i+1)-th mf
+			d.append(getInternalDistance(self, getMF(i), getMF(i + 1), interval, step))
+			d.append(getExternalDistance(self, getMF(0), getMF(nf - 1), getMinX(), getMaxX(), interval, step))
+		"""
+		self.getWorstMF().setWeight(0.0)
+		
+		#TODO : fare in modo furbo la somma di questi vettori
+		d1 = sumVect(d, nf, worstIndex, bestIndex, True)
+		d2 = sumVect(d, nf, worstIndex, bestIndex, False)
+
+		if (d1 > d2):
+			self.getBestMF().setWeight(d1)
+			internal = True
+		else:
+			self.getBestMF().setWeight(d2)
+			internal = False
+
+		# for (i = 0; i < nf; i++):
+		i = 0
+		while i < nf :
+			if (i != worstIndex) and (i != bestIndex):
+				d1 = sumVect(d, nf, worstIndex, i, True);
+				d2 = sumVect(d, nf, worstIndex, i, False);
+
+				# it seems independent from the value of the "internal" flag
+				if (internal):
+					if (worstIndex < bestIndex):
+						if (i < bestIndex):
+							self.getMFfromIndex(i).setWeight(d1)
+						else:
+							self.getMFfromIndex(i).setWeight(d2)
+					else:
+						if (i > bestIndex):
+							self.getMFfromIndex(i).setWeight(d1)
+						else:
+							self.getMFfromIndex(i).setWeight(d2)
+				else:
+					if (worstIndex < bestIndex):
+						if (i < bestIndex):
+							self.getMFfromIndex(i).setWeight(d1)
+						else:
+							self.getMFfromIndex(i).setWeight(d2)
+					else:
+						if (i > bestIndex):
+							self.getMFfromIndex(i).setWeight(d1)
+						else:
+							self.getMFfromIndex(i).setWeight(d2)
+		
+		i =+ 1
