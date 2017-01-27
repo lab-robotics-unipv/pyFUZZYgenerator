@@ -209,14 +209,20 @@ class VariableFind(Variable):
 		:return: the internal difference between f1 and f2
 		"""
 		sum = 0.0;
-
-		x1 = f1.getMinX()
-		x2 = f2.getMaxX()
+		mf1 = self.getMFfromIndex(f1)
+		mf2 = self.getMFfromIndex(f2)
+		x1 = mf1.getMinX()
+		x2 = mf2.getMaxX()
 		dx = (x2 - x1) / step;
-		# for (x = x1; x <= x2; x += dx):
-		for x in np.linspace(x1, x2, step):
-			sum += abs(f1.f(x) - f2.f(x))
-			return (sum * dx) / scale
+		#In linespace it is needed to put step+1 since we have to do this operation:
+		#for (x = x1; x <= x2; x += dx)
+		#TODO : Ask to Daniele
+		x = x1
+		while x <= x2:
+		#for x in np.linspace(x1, x2, step+1):
+			sum += abs(mf1.f(x) - mf2.f(x))
+			x = x + dx
+		return (sum * dx) / scale
 
 	def getInternalHoleSize(self, f1, f2, scale, step):
 		"""
