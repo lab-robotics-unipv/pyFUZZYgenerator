@@ -169,6 +169,14 @@ class Triangle(MembershipFunction):
 
 	def f(self, x):
 		p = self.parameters
+		
+		#Special case of Triangle with 2 equal points ( Triangle Rectangle ) 
+		if p[0] == p[1]:
+			if x == p[0]:
+				return 1
+		if p[1] == p[2]:
+			if x == p[1]:
+				 return 1
 		if x <= p[0]:
 			return 0
 		if x <= p[1]:
