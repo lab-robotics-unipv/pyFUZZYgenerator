@@ -1,4 +1,6 @@
 import logging
+import numpy as np
+import pdb
 
 from core.Membership import MembershipFactory
 
@@ -322,9 +324,9 @@ class VariableFind(Variable):
 		:param step: the number of steps for the computation
 		:return: the external distance between of f1 and f2 centroids
 		"""
-		return getExternalDiff(self, f1, f2, x_min, x_max, scale, step) + getExternalHoleSize(self, f1, f2, x_min, x_max, scale, step)
+		return self.getExternalDiff(f1, f2, x_min, x_max, scale, step) + self.getExternalHoleSize(f1, f2, x_min, x_max, scale, step)
 	
-	def getInternalDistance(self, f1, f2, x_min, x_max, scale, step):
+	def getInternalDistance(self, f1, f2, scale, step):
 		"""
 		Compute the internal distance between f1 and f2 membership functions.
 
@@ -336,7 +338,7 @@ class VariableFind(Variable):
 		:param step: the number of steps for the computation
 		:return: the internal distance between of f1 and f2 centroids
 		"""
-		return getInternalDiff(self, f1, f2, x_min, x_max, scale, step) + getInternalHoleSize(self, f1, f2, x_min, x_max, scale, step)
+		return self.getInternalDiff(f1, f2, scale, step) + self.getInternalHoleSize(f1, f2, scale, step)
 
 	def sumVect(self, d, nf, worst, best, internal):
 		"""
@@ -350,6 +352,7 @@ class VariableFind(Variable):
 		if worst == best:
 			return 0.0
 			
+		#Questo perchè vogliamo worst prima di best -> TODO: Controllare perchè
 		if (best < worst):
 			tmp = best
 			best = worst
@@ -357,15 +360,15 @@ class VariableFind(Variable):
 		
 		if (internal):
 			while worst < best:
-				distance =+ d[worst]
-				worst =+ 1
+				distance = distance + d[worst]
+				worst = worst + 1
 		else :
-			while best < (nf-1):
-				distance =+ d[best]
-				best =+ 1
+			while best < (nf): # TODO : Controllare se ci va nf - 1
+				distance = distance + d[best]
+				best = best + 1
 			while i < worst:
-				distance =+ d[worst]
-				i =+ 1
+				distance = distance + d[worst]
+				i = i + 1
 
 		return distance;
 		
@@ -385,9 +388,11 @@ class VariableFind(Variable):
 		*            the number of integration steps
 		*/
 		"""
-
+		
 		d = []
-
+		step = step
+		minX = self.getMinX()
+		maxX = self.getMaxX()
 		# TODO: check if this is really required
 		# if (model.isCrisp()):
 		#     return
@@ -398,28 +403,32 @@ class VariableFind(Variable):
 			raise ValueError("{}: worst and best membership functions are the same.".format(self.name))
 
 		nf = len(self.membership_functions)
-		interval = self.getMaxX() - self.getMinX()
+		interval = maxX - minX
 		
 		#Indexes of the MFs of the worst and best
-		worstIndex = self.getWorstMFindex
-		bestIndex = self.getBestMFindex
-		
+		worstIndex = self.getWorstMFindex()
+		bestIndex = self.getBestMFindex()
+		#pdb.set_trace()
 		#TODO : verificare se funziona da qui in poi
 		i = 0
-		while i < (nf-2):
-			d.append(getInternalDistance(self, self.getMFfromIndex(i), self.getMFfromIndex(i+1), interval, step))
-			i =+ 1
-		d.append(getExternalDistance(self, self.getMFfromIndex(0), self.getMFfromIndex(nf - 1), getMinX(), getMaxX(), interval, step))
+		while i < (nf-1):
+			f1 = self.getMFfromIndex(i)
+			f2 = self.getMFfromIndex(i+1)
+			d.append(self.getInternalDistance(f1.index, f2.index , interval, step))
+			i =i + 1
+		d.append(self.getExternalDistance(self.getMFfromIndex(0).index, self.getMFfromIndex(nf - 1).index, minX, maxX, interval, step))
 		"""
 		for mf in self.membership_functions:    # TODO: fix since we need to address i-th and (i+1)-th mf
 			d.append(getInternalDistance(self, getMF(i), getMF(i + 1), interval, step))
 			d.append(getExternalDistance(self, getMF(0), getMF(nf - 1), getMinX(), getMaxX(), interval, step))
 		"""
 		self.getWorstMF().setWeight(0.0)
-		
+		#pdb.set_trace()
 		#TODO : fare in modo furbo la somma di questi vettori
-		d1 = sumVect(d, nf, worstIndex, bestIndex, True)
-		d2 = sumVect(d, nf, worstIndex, bestIndex, False)
+		#Qua sto calcolando la distanza massima tra worst e best, sia nel caso interno che esterno
+		
+		d1 = self.sumVect(d, nf, worstIndex, bestIndex, True)
+		d2 = self.sumVect(d, nf, worstIndex, bestIndex, False)
 
 		if (d1 > d2):
 			self.getBestMF().setWeight(d1)
@@ -427,13 +436,13 @@ class VariableFind(Variable):
 		else:
 			self.getBestMF().setWeight(d2)
 			internal = False
-
+		
 		# for (i = 0; i < nf; i++):
 		i = 0
 		while i < nf :
 			if (i != worstIndex) and (i != bestIndex):
-				d1 = sumVect(d, nf, worstIndex, i, True);
-				d2 = sumVect(d, nf, worstIndex, i, False);
+				d1 = self.sumVect(d, nf, worstIndex, i, True);
+				d2 = self.sumVect(d, nf, worstIndex, i, False);
 
 				# it seems independent from the value of the "internal" flag
 				if (internal):
@@ -459,4 +468,6 @@ class VariableFind(Variable):
 						else:
 							self.getMFfromIndex(i).setWeight(d2)
 		
-		i =+ 1
+			i = i + 1
+		#pdb.set_trace()
+		
