@@ -167,21 +167,28 @@ class VariableFind(Variable):
 	
 		sum1 = 0.0
 		sum2 = 0.0
-
-		x1 = f1.getMaxX()
-		x2 = f2.getMinX()
+		
+		mf1 = self.getMFfromIndex(f1)
+		mf2 = self.getMFfromIndex(f2)
+		x1 = mf1.getMaxX()
+		x2 = mf2.getMinX()
 		dx1 = 0.5 * (x1 - x_min) / step
 		if dx1 > 0.0:
-			# for (x = x2; x < x_max; x += dx1):
-			for x in np.linspace(x2, x_max, step):
-				#sum1 += abs(f1.y(x) - f2.y(x))
-				sum1 += abs(f1.f(x) - f2.f(x))
+			x = x2
+			while x < x_max:
+				# for (x = x2; x < x_max; x += dx1):
+				#for x in np.linspace(x2, x_max, step):
+				sum1 += abs(mf1.f(x) - mf2.f(x))
+				x = x + dx1
 
 		dx2 = 0.5 * (x_max - x2) / step;
 		if dx2 > 0.0:
+			x = x_min
 			# for (x = x_min; x < x1; x += dx2):
-			for x in np.linspace(x_min, x1, step):
-				sum2 += abs(f1.f(x) - f2.f(x))
+			#for x in np.linspace(x_min, x1, step):
+			while x < x1:
+				sum2 += abs(mf1.f(x) - mf2.f(x))
+				x = x + dx2
 
 		return ((sum1 * dx1) + (sum2 * dx2)) / scale
 	
