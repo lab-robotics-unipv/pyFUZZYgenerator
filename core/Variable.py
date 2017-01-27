@@ -282,22 +282,33 @@ class VariableFind(Variable):
 		:param step: the number of steps for the computation
 		:return: the external hole size between f1 and f2
 		"""
+		
 		sum1 = 0.0
 		sum2 = 0.0
-
-		x1 = f1.getTopLeftX()
-		x2 = f2.getTopRightX()
+		mf1 = self.getMFfromIndex(f1)
+		mf2 = self.getMFfromIndex(f2)
+		x1 = mf1.getTopLeftX()
+		x2 = mf2.getTopRightX()
 		dx1 = (x1 - x_min) / step   # TODO: remove this
 		if dx1 > 0.0:
 			# for (x = x_min; x < x1; x += dx1):
-			for x in np.linspace(x1 - x_min, x1, step):
-				sum1 += 1.0 - f1.f(x)   # TODO: 1.0 - in the expression can be replaced by size(range) - integral(f)
-				dx2 = (x_max - x2) / step
-				if dx2 > 0.0:
-					# for (x = x2; x < x_max; x += dx2):
-					for x in np.linspace(x2, x_max, step):
-						sum2 += 1.0 - f2.f(x)
-						return ((sum1 * dx1) + (sum2 * dx2)) / scale
+			#TODO : Cambiare questi loop for con dei while, siccome funzionano
+			#for x in np.linspace(x1 - x_min, x1, step):
+			x = x_min
+			while x < x1:
+				sum1 += 1.0 - mf1.f(x)   # TODO: 1.0 - in the expression can be replaced by size(range) - integral(f)
+				x = x + dx1
+				
+		dx2 = (x_max - x2) / step
+		if dx2 > 0.0:
+			# for (x = x2; x < x_max; x += dx2):
+			#for x in np.linspace(x2, x_max, step):
+			x = x2
+			while x < x_max:
+				sum2 += 1.0 - mf2.f(x)
+				x = x + dx2
+				
+		return ((sum1 * dx1) + (sum2 * dx2)) / scale
 	
 	def getExternalDistance(self,f1, f2, x_min, x_max, scale, step):
 		"""
