@@ -119,16 +119,26 @@ class VariableFind(Variable):
 		self.__worst = worst
 
 	def getBestMF(self):
-		return self.membership_functions[self.best]
+		for mf in self.membership_functions:
+			if mf.name == self.best.name:
+				return mf
 
 	def getWorstMF(self):
-		return self.membership_functions[self.worst]
+		for mf in self.membership_functions:
+			if mf.name == self.worst.name:
+				return mf
 	
-	def getBestMFindex(self):
-		self.getBestMf.getMFindex()
+	def getBestMFindex(self):	
+		return self.getBestMF().index
+		#for mf in self.membership_functions:
+			#if mf.name == self.best.name:
+				#return mf.name
 
 	def getWorstMFindex(self):
-		self.getWorstMf.getMFindex()
+		return self.getWorstMF().index
+		#for mf in self.membership_functions:
+			#if mf.name == self.worst.name:
+				#return mf.name
 				
 	#DA QUI CI SONO I MIEI CHANGES:
 	
