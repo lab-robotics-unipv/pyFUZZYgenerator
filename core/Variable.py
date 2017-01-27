@@ -241,20 +241,26 @@ class VariableFind(Variable):
 		:return: the internal hole size between f1 and f2
 		"""
 		sum = 0.0
-
-		x1 = f1.getTopRightX()
-		x2 = f2.getTopLeftX()
+		mf1 = self.getMFfromIndex(f1)
+		mf2 = self.getMFfromIndex(f2)
+		x1 = mf1.getTopRightX()
+		x2 = mf2.getTopLeftX()
 		dx = (x2 - x1) / step
 		if dx > 0.0:
-			# for (x = x1; x <= x2; x += dx):
-			for x in np.linspace(x1, x2, step):
-				y1 = f1.f(x)
-				y2 = f2.f(x)
+			#In linespace it is needed to put step+1 since we have to do this operation:
+			#for (x = x1; x <= x2; x += dx)
+			#TODO : Ask to Daniele
+			#for x in np.linspace(x1, x2, step+1):
+			x = x1
+			while x <= x2:
+				y1 = mf1.f(x)
+				y2 = mf2.f(x)
 				if y1 > y2:
 					sum += 1.0 - y1
 				else:
 					sum += 1.0 - y2
-					return (sum * dx) / scale
+				x = x + dx
+		return (sum * dx) / scale
 					
 	def getExternalHoleSize(self, f1, f2, x_min, x_max, scale, step):
 		"""
