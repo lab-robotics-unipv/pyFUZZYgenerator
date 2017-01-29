@@ -56,6 +56,7 @@ int newState_{{ model.name }}(fuzzyLogic_{{ model.name }} * fl) {
 
 	{% endfor %}
 
+	{% if ( "{{ model.type}}" == "f-ind" ) %}
 	/*
 	 * NORMALIZED WEIGHTS
 	 */
@@ -73,6 +74,8 @@ int newState_{{ model.name }}(fuzzyLogic_{{ model.name }} * fl) {
 			memFunction_{{ model.name }} mf = fl->fInput[i].mf[j];
 			setNormalizedWeight( &mf, normalizedWeights[i][j]);
 		}
+		
+	{% endif %}
 	/*	
 	 * RULES
 	 */
