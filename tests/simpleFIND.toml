@@ -5,51 +5,75 @@
 	type = "f-ind"
 
 	[[model.input_var]]
-		name = "diff"
-		description = "Difference between the current in the horizontal line"
-		best = "neg"
-		worst = "pos"
+		name = "Input_1"
+		description = "Input_1"
+		best = "A"
+		worst = "C"
 		
 		[[model.input_var.mf]]
-			name = "neg"
-			type = "pairwise-linear"
-			parameters = [[-5.0, 1.0], [0.0, 0.0]]
+			name = "A"
+			type = "triangle"
+			parameters = [0.0, 0.0, 20.0]
 			index = 0
 
 		[[model.input_var.mf]]
-			name = "zero"
+			name = "B"
 			type = "triangle"
-			parameters = [-5.0, 0.0, 5.0]
+			parameters = [0.0, 20.0, 40.0]
 			index = 1
 
 		[[model.input_var.mf]]
-			name = "pos"
-			type = "pairwise-linear"
-			parameters = [[0.0, 0.0], [5.0, 1.0]]
+			name = "C"
+			type = "triangle"
+			parameters = [20.0, 40.0, 40.0]
 			index = 2
-				
+
+	[[model.input_var]]
+		name = "Input_2"
+		description = "Input_2"
+		best = "A"
+		worst = "C"
+		
+		[[model.input_var.mf]]
+			name = "A"
+			type = "triangle"
+			parameters = [0.0, 0.0, 20.0]
+			index = 0
+
+		[[model.input_var.mf]]
+			name = "B"
+			type = "triangle"
+			parameters = [0.0, 20.0, 40.0]
+			index = 1
+
+		[[model.input_var.mf]]
+			name = "C"
+			type = "triangle"
+			parameters = [20.0, 40.0, 40.0]
+			index = 2		
+					
 	[[model.output_var]]
-		name = "vel_ang"
-		description = "Angular velocity"
-		best = "neg"
-		worst = "pos"
-				
+		name = "output_1"
+		description = "output_1"
+		best = "A"
+		worst = "C"
+		
 		[[model.output_var.mf]]
-			name = "neg"
-			type = "pairwise-linear"
-			parameters = [[-1.0, 1.0], [0.0, 0.0]]
+			name = "A"
+			type = "triangle"
+			parameters = [0.0, 0.0, 20.0]
 			index = 0
 
 		[[model.output_var.mf]]
-			name = "zero"
+			name = "B"
 			type = "triangle"
-			parameters = [-1.0, 0.0, 1.0]
+			parameters = [0.0, 20.0, 40.0]
 			index = 1
 
 		[[model.output_var.mf]]
-			name = "pos"
-			type = "pairwise-linear"
-			parameters = [[0.0, 0.0], [1.0, 1.0]]
+			name = "C"
+			type = "triangle"
+			parameters = [20.0, 40.0, 40.0]
 			index = 2
 				
 	[model.rules]
