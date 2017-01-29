@@ -63,4 +63,12 @@ int getInputFromName_{{ model.name }}(fuzzyLogic_{{ model.name }} * fl, char * n
  */
 int getOutputFromName_{{ model.name }}(fuzzyLogic_{{ model.name }} * fl, char * name);
 
+/*! CALCULATE THE INDEX, GIVEN AN INPUT TO THE FUZZY SYSTEM. 
+ * 	THIS FUNCTIONS WORKS ***ONLY*** FOR F-IND SYSTEMS.
+ * 	IN ORDER TO SEE HOW F-IND WORKS LOOK AT THE DOCUMENTATION
+ *		input			fl				Fuzzy logic
+ *
+ *		return							Index 
+ */
+double calculateIndex_{{ model.name }}(fuzzyLogic_{{ model.name }} * fl);
 #endif
