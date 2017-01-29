@@ -57,6 +57,23 @@ int newState_{{ model.name }}(fuzzyLogic_{{ model.name }} * fl) {
 	{% endfor %}
 
 	/*
+	 * NORMALIZED WEIGHTS
+	 */
+	 
+	double normalizedWeights[N_INPUT_{{ model.name }}][MAX_N_MF_INPUT_{{ model.name }}] = 
+	{
+	{% for vin in model.input_var %}
+	{ {% for mf in vin.membership_functions recursive %} {% if mf.getNormalizedWeight() is iterable %}{{ loop(mf.getNormalizedWeight() ) }}{% else %}{{ mf.getNormalizedWeight() }}{% endif %}{% if not loop.last %}, {% endif %}{% endfor %} },
+	{% endfor %}
+	};
+	
+	int i,j;
+	for ( i = 0; i < N_INPUT_{{ model.name }}; i++)
+		for ( j = 0; j < MAX_N_MF_INPUT_{{ model.name }}; j++) {
+			memFunction_{{ model.name }} mf = fl->fInput[i].mf[j];
+			setNormalizedWeight( &mf, normalizedWeights[i][j]);
+		}
+	/*	
 	 * RULES
 	 */
 
