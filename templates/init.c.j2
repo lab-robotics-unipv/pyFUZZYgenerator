@@ -72,7 +72,7 @@ int newState_{{ model.name }}(fuzzyLogic_{{ model.name }} * fl) {
 	for ( i = 0; i < N_INPUT_{{ model.name }}; i++)
 		for ( j = 0; j < MAX_N_MF_INPUT_{{ model.name }}; j++) {
 			memFunction_{{ model.name }} mf = fl->fInput[i].mf[j];
-			setNormalizedWeight( &mf, normalizedWeights[i][j]);
+			setNormalizedWeight_{{ model.name }}( &mf, normalizedWeights[i][j]);
 		}
 		
 	{% endif %}

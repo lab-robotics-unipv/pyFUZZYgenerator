@@ -39,17 +39,25 @@ double getPercentage_{{ model.name }}(memFunction_{{ model.name }} * mf , double
 
 	switch (mf->ms) {
 		case TRI_MF:
-			if (inputValue == mf->poi[1])
-				return 1;
-			else if (inputValue > mf->poi[0] && inputValue < mf->poi[1]) {
+			//We first consider the special case of Rectangle Triangle
+			if (mf->poi[0] == mf->poi[1] || mf->poi[1] == mf->poi[2])
+				if (inputValue == mf->poi[1])
+					return 1;
+					
+			//Normal Triangle
+			if (inputValue <= mf->poi[0] || inputValue >= mf->poi[2])
+				return 0;
+			else {
+				if (inputValue < mf->poi[1]) {
 					slope = 1/(mf->poi[1]-mf->poi[0]);
 					return slope*(inputValue - mf->poi[0]);
-				} else if (inputValue > mf->poi[1] && inputValue < mf->poi[2]) {
+				} else if (inputValue > mf->poi[1]) {
 					slope = 1/(mf->poi[1]-mf->poi[2]);
 					return slope*(inputValue - mf->poi[2]);
-				} else{
-					return 0;
+				} else {
+					return 1;
 				}
+			}
 
 		case TRAP_MF:
 			if (inputValue >= mf->poi[1] && inputValue <= mf->poi[2])
@@ -72,4 +80,25 @@ double getPercentage_{{ model.name }}(memFunction_{{ model.name }} * mf , double
 			else
 				return 0;
 	}
+}
+
+/*!	SET THE WEIGHT ASSOCIATED TO THE MEMBER FUNCTION
+ * 			input		mf				Member Function
+ * 			input		weight			The weight to be associated to the Member Function
+ * 
+ * 			return		void
+ */
+void setWeight_{{ model.name }}(memFunction_{{ model.name }} * mf, double weight){
+	
+	mf->weight = weight;
+}
+/*!	SET THE WEIGHT ASSOCIATED TO THE MEMBER FUNCTION
+ * 			input		mf				Member Function
+ * 			input		nWeight			The normalized weight to be associated to the Member Function
+ * 
+ * 			return		void
+ */
+void setNormalizedWeight_{{ model.name }}(memFunction_{{ model.name }} * mf, double nWeight){
+	
+	mf->normalizedWeight = nWeight;
 }
