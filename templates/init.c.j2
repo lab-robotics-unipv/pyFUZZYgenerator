@@ -56,7 +56,7 @@ int newState_{{ model.name }}(fuzzyLogic_{{ model.name }} * fl) {
 
 	{% endfor %}
 
-	{% if ( "{{ model.type}}" == "f-ind" ) %}
+	{% if  model.type  == "f-ind"  %}
 	/*
 	 * NORMALIZED WEIGHTS
 	 */
