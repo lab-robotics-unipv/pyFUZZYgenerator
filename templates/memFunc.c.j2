@@ -19,6 +19,10 @@ int createMemFunction_{{ model.name }}(memFunction_{{ model.name }} * mf, char* 
 	mf->ms = ms;
 
 	mf->lPoi = getMFPoiNum(ms);
+	
+	mf->weight = 0.0;
+	
+	mf->normalizedWeight = 0.0;
 	if (mf->lPoi == -1) {
 		return -1;
 	}
