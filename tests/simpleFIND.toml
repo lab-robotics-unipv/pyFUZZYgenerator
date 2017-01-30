@@ -14,19 +14,16 @@
 			name = "A"
 			type = "triangle"
 			parameters = [0.0, 0.0, 20.0]
-			index = 0
 
 		[[model.input_var.mf]]
 			name = "B"
 			type = "triangle"
 			parameters = [0.0, 20.0, 40.0]
-			index = 1
 
 		[[model.input_var.mf]]
 			name = "C"
 			type = "triangle"
 			parameters = [20.0, 40.0, 40.0]
-			index = 2
 
 	[[model.input_var]]
 		name = "Input_2"
@@ -38,19 +35,16 @@
 			name = "A"
 			type = "triangle"
 			parameters = [0.0, 0.0, 20.0]
-			index = 0
 
 		[[model.input_var.mf]]
 			name = "B"
 			type = "triangle"
 			parameters = [0.0, 20.0, 40.0]
-			index = 1
 
 		[[model.input_var.mf]]
 			name = "C"
 			type = "triangle"
-			parameters = [20.0, 40.0, 40.0]
-			index = 2		
+			parameters = [20.0, 40.0, 40.0]	
 					
 	[[model.output_var]]
 		name = "output_1"
@@ -62,19 +56,16 @@
 			name = "A"
 			type = "triangle"
 			parameters = [0.0, 0.0, 0.5]
-			index = 0
 
 		[[model.output_var.mf]]
 			name = "B"
 			type = "triangle"
 			parameters = [0.0, 0.5, 1.0]
-			index = 1
 
 		[[model.output_var.mf]]
 			name = "C"
 			type = "triangle"
 			parameters = [0.5, 1.0, 1.0]
-			index = 2
 				
 	[model.rules]
 		rules = []
