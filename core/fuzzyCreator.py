@@ -30,11 +30,13 @@ templateList = [
 	"memFunc.h.j2",
 	"rules.h.j2",
 	"rules.c.j2",
+	"MFShapes.h.j2",
+	"MFShapes.c.j2",
 ]
 
 commonFileList = [
-	"MFShape.h.js",
-	"MFShape.c.js",
+	"MFShapes.h.j2",
+	"MFShapes.c.j2",
 ]
 
 class templateRenderer(object):
