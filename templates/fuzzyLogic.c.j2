@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 #include "fuzzyLogic_{{ model.name }}.h"
 
 /*! CONSTRUCTOR OF THE FUZZY LOGIC
@@ -295,7 +296,7 @@ double calculateIndex_{{ model.name }}(fuzzyLogic_{{ model.name }} * fl){
 		double indexValue = 0.0;
 		
 		//printf("\n div is : %f\n", div);
-		for ( j = 0; j< MAX_N_MF_OUTPUT_{{ model.name }}; j++)
+		//for ( j = 0; j< MAX_N_MF_OUTPUT_{{ model.name }}; j++)
 			//printf("var[%d] is : %f\n", j, var[j]);
 			
 		for (i = 0; i < MAX_N_MF_OUTPUT_{{ model.name }}; i++) {
