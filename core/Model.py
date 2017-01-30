@@ -1,6 +1,7 @@
 import re
 # import logging
-# import numpy as np
+import numpy as np
+import pdb 
 
 from core.Variable import VariableFis, VariableFind, VariableFeq
 # from core.Membership import computeWeights
@@ -214,9 +215,9 @@ class ModelFIND(Model):
 
 		:param step: the number of integration steps used to calculate the distances between membership functions. 
 		""" 
-		pdb.set_trace() 
+		#pdb.set_trace() 
 		for var in self.input_var: 
-		  var.computeWeights(step) 
+			var.computeWeights(step) 
 
 		self.computeNormalizedWeights() 
 	  
@@ -232,11 +233,11 @@ class ModelFIND(Model):
 		# get the sum of all the weights of the best cases 
 		sum = 0.0 
 		for var in self.input_var: 
-		  #sum += var.getWeight() * var.getBestMF().getWeight() 
-		  sum += 1 * var.getBestMF().getWeight() 
+			#sum += var.getWeight() * var.getBestMF().getWeight() 
+			sum += 1 * var.getBestMF().getWeight() 
 		 
 		for var in self.input_var: 
-		  for mf in var.membership_functions: 
-			w = mf.getWeight() 
-			#mf.setNormalizedWeight(var.getWeight * w / sum) 
-			mf.setNormalizedWeight( 1 * w / sum)    
+			for mf in var.membership_functions: 
+				w = mf.getWeight() 
+				#mf.setNormalizedWeight(var.getWeight * w / sum) 
+				mf.setNormalizedWeight( 1 * w / sum)    
