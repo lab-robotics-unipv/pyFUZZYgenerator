@@ -16,6 +16,11 @@ class Variable:
 		self.membership_functions = []
 		for mf in data['mf']:
 			self.add_membership_function(mf)
+		
+		i = 0
+		for mf in self.membership_functions:
+			mf.index = i
+			i = i + 1
 
 	def add_membership_function(self, data):
 		factory = MembershipFactory(data)

@@ -11,12 +11,7 @@ class MembershipFunction(object):
 		self.description = data.get('description', '')
 		self.type = data['type']
 		self.centroid_x = None
-		
-		#This try section is needed, if we are not using a F-IND Model we have not to set indexes for the MFs
-		try:
-			self.index = data['index']
-		except:
-			 self.index = None
+		self.index = None
 			 
 		self.weight = None
 		self.nWeight = None
