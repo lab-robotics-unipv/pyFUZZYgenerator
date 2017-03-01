@@ -32,6 +32,8 @@ templateList = [
 	"rules.c.j2",
 	"MFShapes.h.j2",
 	"MFShapes.c.j2",
+	"setup.py.j2",
+	"main.c.j2",
 ]
 
 commonFileList = [
@@ -86,5 +88,10 @@ class fuzzyCreator(object):
 
 			for tmpl in templateList:
 				tmplSplit = tmpl.split('.')
-				outfile = tmplSplit[0] + '_' + model.name + '.' + tmplSplit[1]
+				if tmplSplit[0] == 'main':
+					outfile = 'main.c'
+				elif tmplSplit[0] == 'setup':
+					outfile = 'setup.py'
+				else:
+					outfile = tmplSplit[0] + '_' + model.name + '.' + tmplSplit[1]
 				renderer.write(outDir / outfile, tmpl)
