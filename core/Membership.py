@@ -292,13 +292,14 @@ class Singleton(MembershipFunction):
 		else:
 			return False
 
-
+#TODO : Implement also Product and difference of Sigmoids
 class Sigmoid(MembershipFunction):
 	def __init__(self, name, data):
 		self.required_type = 'sigmoid'
 		self.printable_type_name = 'Sigmoid'
 		self.required_parameters_min_number = 2
 		self.required_parameters_max_number = 2
+		#First value is the slope, the second is the center
 		self.parameters = [float(x) for x in data['parameters']]
 		super().__init__(name, data)
 
@@ -313,13 +314,17 @@ class Sigmoid(MembershipFunction):
 		self.centroid_x = None  # invalidates the stored centroid value
 
 	def getMinX(self):
-		raise NotImplementedError("To be calculated for sigmoid functions")
+		#TODO: check if this value is correct
+		return param[1] - 3 * param[0]
+		#raise NotImplementedError("To be calculated for sigmoid functions")
 
 	def getMaxX(self):
-		raise NotImplementedError("To be calculated for sigmoid functions")
+		#TODO: check if this value is correct
+		return param[1] + 3 * param[0]
+		#raise NotImplementedError("To be calculated for sigmoid functions")
 
 	def f(self, value):
-		return 1. / (1. + np.exp(-self.parameters[0] * (value - self.parameters[1])))
+		return 1.0 / (1.0 + exp(-self.parameters[0] * (value - self.parameters[1])))
 
 	def outputIsNull(self, value):
 		if self.f(value) <= 0.0000001:
@@ -327,7 +332,46 @@ class Sigmoid(MembershipFunction):
 		else:
 			return False
 
+class Gaussian(MembershipFunction):
+	def __init__(self, name, data):
+		self.required_type = 'gaussian'
+		self.printable_type_name = 'Gaussian'
+		self.required_parameters_min_number = 2
+		self.required_parameters_max_number = 2
+		#First value is the slope, the second is the center
+		self.parameters = [float(x) for x in data['parameters']]
+		super().__init__(name, data)
 
+	@property
+	def parameters(self):
+		return self.__parameters
+
+	@parameters.setter
+	def parameters(self, param):
+		self.check_parameters_number(param)
+		self.__parameters = [float(x) for x in param]
+		self.centroid_x = None  # invalidates the stored centroid value
+
+	def getMinX(self):
+		#TODO: check if this value is correct
+		return self.parameters[1] - 3 * self.parameters[0]
+		#raise NotImplementedError("To be calculated for gaussian functions")
+
+	def getMaxX(self):
+		#TODO: check if this value is correct
+		return self.parameters[1] + 3 * self.parameters[0]
+		#raise NotImplementedError("To be calculated for gaussian functions")
+
+	def f(self, value):
+		return exp( - ( value - pow(self.parameters[1],2) )  / ( 2 * pow(self.parameters[0],2)) )
+
+	def outputIsNull(self, value):
+		if self.f(value) <= 0.0000001:
+			return True
+		else:
+			return False
+			
+#TODO: This class can be removed, sine a Pairwise function can be approximated by a rectangle triangle.
 class PairwiseLinear(MembershipFunction):
 	def __init__(self, name, data):
 		self.required_type = 'pairwise-linear'
