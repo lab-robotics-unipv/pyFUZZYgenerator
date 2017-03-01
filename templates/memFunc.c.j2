@@ -9,7 +9,7 @@
  *
  *		return					Flag: -1 if error, 0 otherwise
  */
-int createMemFunction_{{ model.name }}(memFunction_{{ model.name }} * mf, char* name, memFuncShape ms, double* poi) {
+int_t createMemFunction_{{ model.name }}(memFunction_{{ model.name }} * mf, char* name, memFuncShape ms, dataType * poi) {
 	if (mf == NULL) {
 		return -1;
 	}
@@ -23,10 +23,11 @@ int createMemFunction_{{ model.name }}(memFunction_{{ model.name }} * mf, char* 
 	mf->weight = 0.0;
 	
 	mf->normalizedWeight = 0.0;
+	
 	if (mf->lPoi == -1) {
 		return -1;
 	}
-	memcpy(mf->poi, poi, mf->lPoi*sizeof(double));
+	memcpy(mf->poi, poi, mf->lPoi*sizeof(dataType));
 
 	return 0;
 }
@@ -35,11 +36,12 @@ int createMemFunction_{{ model.name }}(memFunction_{{ model.name }} * mf, char* 
  *			input		mf				Pointer to a Member Function
  *			input 		inputValue		Value of the input
  *
- *			return		double			Return the % of membership to a Fuzzy set (mf) given as input inputValue
+ *			return		dataType		Return the % of membership to a Fuzzy set (mf) given as input inputValue
  */
-double getPercentage_{{ model.name }}(memFunction_{{ model.name }} * mf , double inputValue)
+dataType getPercentage_{{ model.name }}(memFunction_{{ model.name }} * mf , dataType inputValue)
 {
-	double slope;
+	dataType slope;
+	dataType slope1;
 
 	switch (mf->ms) {
 		case TRI_MF:
@@ -83,6 +85,25 @@ double getPercentage_{{ model.name }}(memFunction_{{ model.name }} * mf , double
 				return 1;
 			else
 				return 0;
+				
+		/* TODO : Insert an upper and lower bound to these functions in orther to get only 1 or 0 after a certain threshold */
+		case SIGMOID_MF:
+			//First point is the slope, the second one is the center of the Sigmoid
+			//If slope > 0 the function is increasing 
+			slope = exp( -mf->poi[0] * ( inputValue - mf->poi[1]));
+			return 1 / ( 1 + slope );
+		
+		case GAUSSIAN_MF:
+			//First point is sigma, the second one is the center of the Gaussian
+			slope = pow(( inputValue - mf->poi[1] ), 2) ;
+			return exp ( -slope / ( 2 * pow( mf->poi[0], 2 )) ); 
+			
+		case DIF_SIGMOID_MF:
+			//First point is the slope, the second one is the center of the first Sigmoid
+			//Third point is the slope, the fourth one is the center of the second Sigmoid
+			slope = exp( -mf->poi[0] * ( inputValue - mf->poi[1]));
+			slope1 = exp( -mf->poi[2] * ( inputValue - mf->poi[3]));
+			return fabs( (1 / (1 + slope)) - ( 1 / ( 1 + slope1)));
 	}
 }
 
@@ -92,7 +113,7 @@ double getPercentage_{{ model.name }}(memFunction_{{ model.name }} * mf , double
  * 
  * 			return		void
  */
-void setWeight_{{ model.name }}(memFunction_{{ model.name }} * mf, double weight){
+void setWeight_{{ model.name }}(memFunction_{{ model.name }} * mf, dataType weight){
 	
 	mf->weight = weight;
 }
@@ -102,7 +123,7 @@ void setWeight_{{ model.name }}(memFunction_{{ model.name }} * mf, double weight
  * 
  * 			return		void
  */
-void setNormalizedWeight_{{ model.name }}(memFunction_{{ model.name }} * mf, double nWeight){
+void setNormalizedWeight_{{ model.name }}(memFunction_{{ model.name }} * mf, dataType nWeight){
 	
 	mf->normalizedWeight = nWeight;
 }
