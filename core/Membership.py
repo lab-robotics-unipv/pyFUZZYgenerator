@@ -242,7 +242,7 @@ class Trapezoid(MembershipFunction):
 		if x < p[2]:
 			return 1
 		if x < p[3]:
-			return (x - p[2]) / (p[1] - p[2])
+			return (p[3] - x) / (p[3] - p[2])
 		return 0
 
 	def outputIsNull(self, value):

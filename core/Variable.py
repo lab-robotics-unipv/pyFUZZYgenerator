@@ -227,8 +227,11 @@ class VariableFind(Variable):
 		x = x1
 		while x <= x2:
 		#for x in np.linspace(x1, x2, step+1):
+
 			sum += abs(mf1.f(x) - mf2.f(x))
 			x = x + dx
+		#TODO: rimuovere
+		
 		return (sum * dx) / scale
 
 	def getInternalHoleSize(self, f1, f2, scale, step):
@@ -267,6 +270,8 @@ class VariableFind(Variable):
 				else:
 					sum += 1.0 - y2
 				x = x + dx
+		#TODO: Rimuovere
+		pdb.set_trace()
 		return (sum * dx) / scale
 					
 	def getExternalHoleSize(self, f1, f2, x_min, x_max, scale, step):
@@ -395,7 +400,6 @@ class VariableFind(Variable):
 		"""
 		
 		d = []
-		step = step
 		minX = self.getMinX()
 		maxX = self.getMaxX()
 		# TODO: check if this is really required
