@@ -12,8 +12,8 @@ typedef struct {
 	fuzzyInput_{{ model.name }} fInput[N_INPUT_{{ model.name }}];
 	fuzzyOutput_{{ model.name }} fOutput[N_OUTPUT_{{ model.name }}];
 	builtRule_{{ model.name }} rules[N_RULES_{{ model.name }}];
-	double fuzzified[N_INPUT_{{ model.name }} * MAX_N_MF_INPUT_{{ model.name }}];
-	double evaluated[N_OUTPUT_{{ model.name }} * MAX_N_MF_OUTPUT_{{ model.name }}];
+	dataType fuzzified[N_INPUT_{{ model.name }} * MAX_N_MF_INPUT_{{ model.name }}];
+	dataType evaluated[N_OUTPUT_{{ model.name }} * MAX_N_MF_OUTPUT_{{ model.name }}];
 } fuzzyLogic_{{ model.name }};
 
 /*! CONSTRUCTOR OF THE FUZZY LOGIC
@@ -24,20 +24,29 @@ typedef struct {
  *
  *		return						Flag: -1 if error, 0 otherwise
  */
-int createLogic_{{ model.name }}(fuzzyLogic_{{ model.name }} * fl, fuzzyInput_{{ model.name }} * inputs, fuzzyOutput_{{ model.name }} * outputs, rule_{{ model.name }} * r);
+int_t createLogic_{{ model.name }}(fuzzyLogic_{{ model.name }} * fl, fuzzyInput_{{ model.name }} * inputs, fuzzyOutput_{{ model.name }} * outputs, rule_{{ model.name }} * r);
+
+/*! CONSTRUCTOR OF THE FUZZY LOGIC FOR FIND SYSTEM
+ *		output			fl			Fuzzy logic to init
+ *		input			inputs		Vector of inputs of the logic
+ *		input			outputs		Vector of outputs of the logic
+ *
+ *		return						Flag: -1 if error, 0 otherwise
+ */
+int_t createFindLogic(fuzzyLogic * fl, fuzzyInput * inputs, fuzzyOutput * outputs);
 
 /*! FUZZIFY THE INPUTS
  *		input/output	fl					Fuzzy logic
  *		input			inputs				Inputs of the fuzzy logic			
  */
-void fuzzify_{{ model.name }}(fuzzyLogic_{{ model.name }} * fl, double * inputs);
+void fuzzify_{{ model.name }}(fuzzyLogic_{{ model.name }} * fl, dataType * inputs);
 
 /*! EVALUATE THE RULES GIVEN THE FUZZIFIED INPUTS
  *		input/output		fl			Fuzzy logic
  *
  *		return							-1 if smtg went wrong, 0 otherwise
  */
-int evaluateRules_{{ model.name }}(fuzzyLogic_{{ model.name }} * fl);
+int_t evaluateRules_{{ model.name }}(fuzzyLogic_{{ model.name }} * fl);
 
 /*! DEFUZZIFY THE EVALUATED RULES
  *		input			fl				Fuzzy logic
@@ -45,7 +54,34 @@ int evaluateRules_{{ model.name }}(fuzzyLogic_{{ model.name }} * fl);
  *
  *		return							-1 if smtg went wrong, 0 otherwise
  */
-int defuzzify_{{ model.name }}(fuzzyLogic_{{ model.name }} * fl, double * outputs);
+int_t defuzzify_{{ model.name }}(fuzzyLogic_{{ model.name }} * fl, dataType * outputs);
+
+/*! ADD A RULE TO THE FUZZY LOGIC
+ *		output			fl			Fuzzy logic 
+ *		input			rules		Rule to add to the logic
+ * 		input			indexRule	Index of the rule to be added
+ *
+ *		return						Flag: -1 if error, 0 otherwise
+ */
+int_t addRule_{{ model.name }}(fuzzyLogic_{{ model.name }} * fl, rule_{{ model.name }} * r, uint_t indexRule);
+
+/*! ADD AN INPUT TO THE FUZZY LOGIC
+ *		output			fl			Fuzzy logic 
+ *		input			fi			Input to add to the logic
+ * 		input			indexRule	Index of the Input to be added
+ *
+ *		return						Flag: -1 if error, 0 otherwise
+ */
+int_t addInput_{{ model.name }}(fuzzyLogic_{{ model.name }} * fl, fuzzyInput_{{ model.name }} * fi, uint_t index);
+
+/*! ADD AN OUTPUT TO THE FUZZY LOGIC
+ *		output			fl			Fuzzy logic 
+ *		input			fo			Output to add to the logic
+ * 		input			indexRule	Index of the Output to be added
+ *
+ *		return						Flag: -1 if error, 0 otherwise
+ */
+int_t addOutput_{{ model.name }}(fuzzyLogic_{{ model.name }} * fl, fuzzyOutput_{{ model.name }} * fo, uint_t index);
 
 /*! FIND INPUT INDEX GIVEN NAME
  *		input			fl				Fuzzy logic
@@ -53,7 +89,7 @@ int defuzzify_{{ model.name }}(fuzzyLogic_{{ model.name }} * fl, double * output
  *
  *		return							Index of the input or -1 if not found
  */
-int getInputFromName_{{ model.name }}(fuzzyLogic_{{ model.name }} * fl, char * name);
+int_t getInputFromName_{{ model.name }}(fuzzyLogic_{{ model.name }} * fl, char * name);
 
 /*! FIND OUTPUT INDEX GIVEN NAME
  *		input			fl				Fuzzy logic
@@ -61,7 +97,7 @@ int getInputFromName_{{ model.name }}(fuzzyLogic_{{ model.name }} * fl, char * n
  *
  *		return							Index of the output or -1 if not found
  */
-int getOutputFromName_{{ model.name }}(fuzzyLogic_{{ model.name }} * fl, char * name);
+int_t getOutputFromName_{{ model.name }}(fuzzyLogic_{{ model.name }} * fl, char * name);
 
 /*! CALCULATE THE INDEX, GIVEN AN INPUT TO THE FUZZY SYSTEM. 
  * 	THIS FUNCTIONS WORKS ***ONLY*** FOR F-IND SYSTEMS.
@@ -70,5 +106,6 @@ int getOutputFromName_{{ model.name }}(fuzzyLogic_{{ model.name }} * fl, char * 
  *
  *		return							Index 
  */
-double calculateIndex_{{ model.name }}(fuzzyLogic_{{ model.name }} * fl);
+dataType calculateIndex_{{ model.name }}(fuzzyLogic_{{ model.name }} * fl);
+
 #endif
