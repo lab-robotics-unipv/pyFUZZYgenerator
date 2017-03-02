@@ -1,0 +1,9 @@
+from distutils.core import setup, Extension
+
+module1 = Extension('index',
+                    sources = ['fuzzyInput_{{ model.name }}.c', 'fuzzyLogic_{{ model.name }}.c','fuzzyOutput_{{ model.name }}.c','init_{{ model.name }}.c','main.c','memFunc_{{ model.name }}.c','MFShapes_{{ model.name }}.c','rules_{{ model.name }}.c'])
+
+setup (name = 'IndexModule',
+       version = '1.0',
+       description = 'This is a package in order to get Python be able to calculate FIND index using C library',
+       ext_modules = [module1])

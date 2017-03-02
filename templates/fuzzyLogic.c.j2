@@ -11,7 +11,7 @@
  *
  *		return						Flag: -1 if error, 0 otherwise
  */
-int createLogic_{{ model.name }}(fuzzyLogic_{{ model.name }} * fl, fuzzyInput_{{ model.name }} * inputs, fuzzyOutput_{{ model.name }} * outputs, rule_{{ model.name }} * r) {
+int_t createLogic_{{ model.name }}(fuzzyLogic_{{ model.name }} * fl, fuzzyInput_{{ model.name }} * inputs, fuzzyOutput_{{ model.name }} * outputs, rule_{{ model.name }} * r) {
 	if (fl == NULL || inputs == NULL || outputs == NULL || r == NULL) {
 		return -1;
 	}
@@ -58,12 +58,22 @@ int createLogic_{{ model.name }}(fuzzyLogic_{{ model.name }} * fl, fuzzyInput_{{
 	return 0;
 }
 
+int_t createFindLogic_{{ model.name }}(fuzzyLogic_{{ model.name }} * fl, fuzzyInput_{{ model.name }} * inputs, fuzzyOutput_{{ model.name }} * outputs){
+	if (fl == NULL || inputs == NULL || outputs == NULL ) {
+		return -1;
+	}
+	memcpy(fl->fInput, inputs, N_INPUT_{{ model.name }}*sizeof(fuzzyInput_{{ model.name }}));
+	memcpy(fl->fOutput, outputs, N_OUTPUT_{{ model.name }}*sizeof(fuzzyOutput_{{ model.name }}));
+	
+	return 0;
+}
+
 /*! FUZZIFY THE INPUTS
  *		input/output	fl					Fuzzy logic
  *		input			inputs				Inputs of the fuzzy logic			
  */
 //The output type of fuzzifiedValues should be changed to pointer( no more pointer to pointer)
-void fuzzify_{{ model.name }}(fuzzyLogic_{{ model.name }} * fl, double * inputs) {
+void fuzzify_{{ model.name }}(fuzzyLogic_{{ model.name }} * fl, dataType * inputs) {
 	int i;
 	for ( i = 0; i < N_INPUT_{{ model.name }}; i++) {
 			getPercentageFromInput_{{ model.name }}( &(fl->fInput[i]), inputs[i], &(fl->fuzzified[i * MAX_N_MF_INPUT_{{ model.name }}]));
@@ -75,8 +85,8 @@ void fuzzify_{{ model.name }}(fuzzyLogic_{{ model.name }} * fl, double * inputs)
  *
  *		return							-1 if smtg went wrong, 0 otherwise
  */
-int evaluateRules_{{ model.name }}(fuzzyLogic_{{ model.name }} * fl) {
-	int i, j;
+int_t evaluateRules_{{ model.name }}(fuzzyLogic_{{ model.name }} * fl) {
+	uint_t i, j;
 
 	// Set evaluations to zeros
 	for ( i = 0; i < N_OUTPUT_{{ model.name }}; i++) {
@@ -85,7 +95,7 @@ int evaluateRules_{{ model.name }}(fuzzyLogic_{{ model.name }} * fl) {
 		}
 	}
 
-	double minValue;
+	dataType minValue;
 	for ( i = 0; i < N_RULES_{{ model.name }}; i++) {
 		minValue = 1;	//!< The values are always less than 1
 		builtRule_{{ model.name }} * r = &(fl->rules[i]);
@@ -97,7 +107,7 @@ int evaluateRules_{{ model.name }}(fuzzyLogic_{{ model.name }} * fl) {
 
 		minValue *= r->thenValue;
 		
-		double * e;
+		dataType * e;
 		for ( j = 0; j < r->nThenRules; j++) {
 			e = &(fl->evaluated[(r->thenRulesIndex[j]) * MAX_N_MF_OUTPUT_{{ model.name }} + r->thenRulesMFIndex[j]]);
 			//*e *= minValue;//*e == 0 ? minValue : MIN(minValue, *e);
@@ -113,10 +123,10 @@ int evaluateRules_{{ model.name }}(fuzzyLogic_{{ model.name }} * fl) {
  *
  *		return							-1 if smtg went wrong, 0 otherwise
  */
-int defuzzify_{{ model.name }}(fuzzyLogic_{{ model.name }} * fl, double * outputs) {
-	int i, j;
-	double sum = 0;
-	double aux = 0;
+int_t defuzzify_{{ model.name }}(fuzzyLogic_{{ model.name }} * fl, dataType * outputs) {
+	uint_t i, j;
+	dataType sum = 0;
+	dataType aux = 0;
 	
 	for ( i = 0; i < N_OUTPUT_{{ model.name }}; i++) {
 		for ( j = 0; j < fl->fOutput[i].nMF; j++) {
@@ -131,13 +141,49 @@ int defuzzify_{{ model.name }}(fuzzyLogic_{{ model.name }} * fl, double * output
 	
 }
 
+/*! ADD A RULE TO THE FUZZY LOGIC
+ *		output			fl			Fuzzy logic 
+ *		input			rules		Rule to add to the logic
+ * 		input			indexRule	Index of the rule to be added
+ *
+ *		return						Flag: -1 if error, 0 otherwise
+ */
+int_t addRule_{{ model.name }}(fuzzyLogic_{{ model.name }} * fl, rule_{{ model.name }} * r, uint_t indexRule){
+	
+	if (fl == NULL || r == NULL)
+		return -1; 
+		
+	fl->rules[indexRule].nIfRules = r->nIfRules;
+	fl->rules[indexRule].thenValue = r->thenValue;
+	fl->rules[indexRule].nThenRules = r->nThenRules;
+	
+	uint_t j;
+	int_t index,index2;
+	
+	for (j = 0; j < r->nIfRules; j++) {
+			index = getInputFromNameIn_{{ model.name }}(fl->fInput, N_INPUT_{{ model.name }}, r->ifRules[j].name);
+			if (index < 0) {
+				return -1;
+			} else {
+				fl->rules[indexRule].ifRulesIndex[j] = index;
+			}
+			index2 = getInputMFFromName_{{ model.name }}(&(fl->fInput[index]), r->ifRules[j].mf);
+			if (index2 < 0) {
+				return -1;
+			} else {
+				fl->rules[indexRule].ifRulesMFIndex[j] = index2;
+			}
+		}
+	return -1;
+}
+
 /*! FIND INPUT INDEX GIVEN NAME
  *		input			fl				Fuzzy logic
  *		input			name			Name of the input
  *
  *		return							Index of the input
  */
-int getInputFromName_{{ model.name }}(fuzzyLogic_{{ model.name }} * fl, char * name) {
+int_t  getInputFromName_{{ model.name }}(fuzzyLogic_{{ model.name }} * fl, char * name) {
 	int i;
 	for ( i = 0 ; i < N_INPUT_{{ model.name }}; i++) {
 		if (strcmp(fl->fInput[i].name, name) == 0) {
@@ -153,7 +199,7 @@ int getInputFromName_{{ model.name }}(fuzzyLogic_{{ model.name }} * fl, char * n
  *
  *		return							Index of the output
  */
-int getOutputFromName_{{ model.name }}(fuzzyLogic_{{ model.name }} * fl, char * name) {
+int_t  getOutputFromName_{{ model.name }}(fuzzyLogic_{{ model.name }} * fl, char * name) {
 	int i;
 	for ( i = 0 ; i < N_OUTPUT_{{ model.name }}; i++) {
 		if (strcmp(fl->fOutput[i].name, name) == 0) {
@@ -170,7 +216,7 @@ int getOutputFromName_{{ model.name }}(fuzzyLogic_{{ model.name }} * fl, char * 
  *
  *		return							Index 
  */
-double calculateIndex_{{ model.name }}(fuzzyLogic_{{ model.name }} * fl){
+dataType calculateIndex_{{ model.name }}(fuzzyLogic_{{ model.name }} * fl){
 	
 
 		//double[] membership = new double[nv];
@@ -179,9 +225,9 @@ double calculateIndex_{{ model.name }}(fuzzyLogic_{{ model.name }} * fl){
 		int nv = N_INPUT_{{ model.name }};
 		//Setting the number of total rules
 		int n_rules;
-		double membership[nv]; 
-		double var[MAX_N_MF_OUTPUT_{{ model.name }}];
-		double weight_sum, sum_membership_prod, membership_prod, div;
+		dataType membership[nv]; 
+		dataType var[MAX_N_MF_OUTPUT_{{ model.name }}];
+		dataType weight_sum, sum_membership_prod, membership_prod, div;
 		// counter for the index of each variable
 		int count[nv];
 		
@@ -293,7 +339,7 @@ double calculateIndex_{{ model.name }}(fuzzyLogic_{{ model.name }} * fl){
 		//div = 1.0 / (es_n_func - 1.0);
 		
 		div = 1.0 / (MAX_N_MF_OUTPUT_{{ model.name }} - 1.0);
-		double indexValue = 0.0;
+		dataType indexValue = 0.0;
 		
 		//printf("\n div is : %f\n", div);
 		//for ( j = 0; j< MAX_N_MF_OUTPUT_{{ model.name }}; j++)

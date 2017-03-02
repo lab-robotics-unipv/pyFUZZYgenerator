@@ -7,6 +7,18 @@
  */
 int getMFPoiNum(memFuncShape ms) {
 	switch (ms) {
+		case SIGMOID_MF:
+			//Slope and Center.
+			return 2; 
+			
+		case DIF_SIGMOID_MF:
+			//Slope and Center of first Sigmoid + Slope and Center of the second one.
+			return 4;
+			
+		case GAUSSIAN_MF:
+			//Sigma and Center.
+			return 2;
+			
 		case TRI_MF:
 			return 3;
 

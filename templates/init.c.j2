@@ -1,15 +1,16 @@
+#include <python3.4/Python.h>
 #include <string.h>
 
 #include "definitions_{{ model.name }}.h"
 #include "fuzzyLogic_{{ model.name }}.h"
 
-int newState_{{ model.name }}(fuzzyLogic_{{ model.name }} * fl) {
+int_t newState_{{ model.name }}(fuzzyLogic_{{ model.name }} * fl) {
 
 	/*
 	 * INPUT VARIABLES
 	 */
 
-	int flag;
+	int_t flag;
 	fuzzyInput_{{ model.name }} fi[N_INPUT_{{ model.name }}];
 
 	{% for vin in model.input_var %}
@@ -20,7 +21,7 @@ int newState_{{ model.name }}(fuzzyLogic_{{ model.name }} * fl) {
 	memFunction_{{ model.name }} MF_{{ vin.name }}[{{ vin.membership_functions | length }}];
 
 	{% for mf in vin.membership_functions %}
-	double poi_{{ vin.name }}_{{ mf.name }}[] = { {% for p in mf.parameters recursive %}{% if p is iterable %}{{ loop(p) }}{% else %}{{ p }}{% endif %}{% if not loop.last %}, {% endif %}{% endfor %} };
+	dataType poi_{{ vin.name }}_{{ mf.name }}[] = { {% for p in mf.parameters recursive %}{% if p is iterable %}{{ loop(p) }}{% else %}{{ p }}{% endif %}{% if not loop.last %}, {% endif %}{% endfor %} };
 	createMemFunction_{{ model.name }}(&(MF_{{ vin.name }}[{{ loop.index0 }}]), "{{ mf.name }}", {{ mfDict.get(mf.type) }}, poi_{{ vin.name }}_{{ mf.name }});
 	{% endfor %}
 
@@ -45,7 +46,7 @@ int newState_{{ model.name }}(fuzzyLogic_{{ model.name }} * fl) {
 	memFunction_{{ model.name }} MF_{{ vo.name }}[{{ vo.membership_functions | length }}];
 
 	{% for mf in vo.membership_functions %}
-	double poi_{{ vo.name }}_{{ mf.name }}[] = { {% for p in mf.parameters recursive %}{% if p is iterable %}{{ loop(p) }}{% else %}{{ p }}{% endif %}{% if not loop.last %}, {% endif %}{% endfor %} };
+	dataType poi_{{ vo.name }}_{{ mf.name }}[] = { {% for p in mf.parameters recursive %}{% if p is iterable %}{{ loop(p) }}{% else %}{{ p }}{% endif %}{% if not loop.last %}, {% endif %}{% endfor %} };
 	createMemFunction_{{ model.name }}(&(MF_{{ vo.name }}[{{ loop.index0 }}]), "{{ mf.name }}", {{ mfDict.get(mf.type) }}, poi_{{ vo.name }}_{{ mf.name }});
 	{% endfor %}
 
@@ -61,14 +62,14 @@ int newState_{{ model.name }}(fuzzyLogic_{{ model.name }} * fl) {
 	 * NORMALIZED WEIGHTS
 	 */
 	 
-	double normalizedWeights[N_INPUT_{{ model.name }}][MAX_N_MF_INPUT_{{ model.name }}] = 
+	dataType normalizedWeights[N_INPUT_{{ model.name }}][MAX_N_MF_INPUT_{{ model.name }}] = 
 	{
 	{% for vin in model.input_var %}
 	{ {% for mf in vin.membership_functions recursive %} {% if mf.getNormalizedWeight() is iterable %}{{ loop(mf.getNormalizedWeight() ) }}{% else %}{{ mf.getNormalizedWeight() }}{% endif %}{% if not loop.last %}, {% endif %}{% endfor %} },
 	{% endfor %}
 	};
 	
-	int i,j;
+	int_t i,j;
 	for ( i = 0; i < N_INPUT_{{ model.name }}; i++)
 		for ( j = 0; j < MAX_N_MF_INPUT_{{ model.name }}; j++) 
 			setNormalizedWeight_{{ model.name }}( &(fi[i].mf[j]), normalizedWeights[i][j]);
@@ -109,4 +110,53 @@ int newState_{{ model.name }}(fuzzyLogic_{{ model.name }} * fl) {
 	}
 
 	return 0;
+}
+
+static PyObject* py_index(PyObject* self, PyObject* args){
+
+    dataType *input;
+    dataType index;
+	int_t i;
+    int_t len;
+	PyObject *py_tuple;
+
+ 	fuzzyLogic_{{ model.name }} fl;
+	newState_{{ model.name }}(&fl);  
+    
+    if (!PyArg_ParseTuple(args, "O", &py_tuple)) {
+      return NULL;
+    }
+    
+    len = PyTuple_Size(py_tuple);
+    input= malloc(len*sizeof(dataType));
+    while (len--) {
+        input[len] = (dataType) PyFloat_AsDouble(PyTuple_GetItem(py_tuple, len));
+    }
+
+    fuzzify_{{ model.name }}(&fl, &(input[0]));
+    index = calculateIndex_{{ model.name }}(&fl);
+    return PyFloat_FromDouble(index);
+
+}
+
+static PyMethodDef indexMethods[] = {
+    
+    {"index",  py_index, METH_VARARGS,
+     "Calculate the index of F-IND model."},
+     
+    {NULL, NULL, 0, NULL}        /* Sentinel */
+};
+
+static struct PyModuleDef indexmodule = {
+   PyModuleDef_HEAD_INIT,
+   "index",   /* name of module */
+   NULL, /* module documentation, may be NULL */
+   -1,       /* size of per-interpreter state of the module,
+                or -1 if the module keeps state in global variables. */
+   indexMethods
+};
+
+PyMODINIT_FUNC PyInit_index(void)
+{
+    return PyModule_Create(&indexmodule);
 }

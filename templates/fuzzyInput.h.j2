@@ -2,6 +2,7 @@
 #define FUZZY_INPUT__{{ model.name }}H
 
 #include "definitions_{{ model.name }}.h"
+#include "defCommon_{{ model.name }}.h"
 #include "memFunc_{{ model.name }}.h"
 
 #ifndef MAX_L_NAME_{{ model.name }}
@@ -16,9 +17,9 @@
 typedef struct {
 	char name[MAX_L_NAME_{{ model.name }}];		//!< Name of the input
 	memFunction_{{ model.name }} mf[MAX_N_MF_INPUT_{{ model.name }}];	//!< List of Member Functions
-	int nMF;					//!< Number of MF
-	double minValue;			//!< Minimum value of the Fuzzy Input
-	double maxValue;			//!< Maximum value of the Fuzzy Input
+	uint_t nMF;					//!< Number of MF
+	dataType minValue;			//!< Minimum value of the Fuzzy Input
+	dataType maxValue;			//!< Maximum value of the Fuzzy Input
 } fuzzyInput_{{ model.name }};
 
 /*! INIT OF A FUZZY INPUT
@@ -31,7 +32,16 @@ typedef struct {
  *
  *		return					Flag: -1 if error, 0 otherwise
  */
-int createInput_{{ model.name }}(fuzzyInput_{{ model.name }} * fi, char* name, memFunction_{{ model.name }} * MFs, int nMF, double min, double max);
+int_t  createInput_{{ model.name }}(fuzzyInput_{{ model.name }} * fi, char* name, memFunction_{{ model.name }} * MFs, uint_t nMF, dataType min, dataType max);
+
+/*! FIND INPUT INDEX GIVEN NAME 
+ *    input      fl        Fuzzy Input 
+ *    input    nInputs    Fuzzy Input 
+ *    input      name      Name of the Input 
+ * 
+ *    return              Index of the Input or -1 if not found 
+ */ 
+int_t getInputFromNameIn_{{ model.name }}(fuzzyInput_{{ model.name }} * fi, uint_t nInputs, char * name); 
 
 /*! FIND MF GIVEN NAME
  *		input		fuzzy_input		Pointer to the Fuzzy Input struct
@@ -39,7 +49,7 @@ int createInput_{{ model.name }}(fuzzyInput_{{ model.name }} * fi, char* name, m
  *
  *		return						Index of the MF or -1 if not found
  */
-int getInputMFFromName_{{ model.name }}(fuzzyInput_{{ model.name }} * fuzzy_input, char * name);
+int_t  getInputMFFromName_{{ model.name }}(fuzzyInput_{{ model.name }} * fuzzy_input, char * name);
 
 /*! CALCULATION OF THE MEMBERSHIP TO A GIVEN FUZZY INPUT
  *			input		fuzzy_input		A Fuzzy Input
@@ -47,6 +57,6 @@ int getInputMFFromName_{{ model.name }}(fuzzyInput_{{ model.name }} * fuzzy_inpu
  * 
  * 			output		output			The % of membership to a Fuzzy Input given an input value		
  */
-void getPercentageFromInput_{{ model.name }}(fuzzyInput_{{ model.name }} * fuzzy_input, double inputValue, double * output);
+void getPercentageFromInput_{{ model.name }}(fuzzyInput_{{ model.name }} * fuzzy_input, dataType inputValue, dataType * output);
 
 #endif
