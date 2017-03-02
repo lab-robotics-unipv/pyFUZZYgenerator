@@ -33,7 +33,7 @@ int_t createLogic_{{ model.name }}(fuzzyLogic_{{ model.name }} * fl, fuzzyInput_
  *
  *		return						Flag: -1 if error, 0 otherwise
  */
-int_t createFindLogic(fuzzyLogic * fl, fuzzyInput * inputs, fuzzyOutput * outputs);
+int_t createFindLogic_{{ model.name }}(fuzzyLogic_{{ model.name }} * fl, fuzzyInput_{{ model.name }} * inputs, fuzzyOutput_{{ model.name }} * outputs);
 
 /*! FUZZIFY THE INPUTS
  *		input/output	fl					Fuzzy logic

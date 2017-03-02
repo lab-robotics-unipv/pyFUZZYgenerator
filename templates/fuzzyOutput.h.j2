@@ -29,7 +29,7 @@ typedef struct {
  *
  *		return					Flag: -1 if error, 0 otherwise
  */
-int createOutput_{{ model.name }}(fuzzyOutput_{{ model.name }} * fo, char* name, memFunction_{{ model.name }} * MFs, uint_t nMF);
+int_t createOutput_{{ model.name }}(fuzzyOutput_{{ model.name }} * fo, char* name, memFunction_{{ model.name }} * MFs, uint_t nMF);
 
 /*! FIND OUTPUT INDEX GIVEN NAME 
  *    input      fo        Fuzzy 

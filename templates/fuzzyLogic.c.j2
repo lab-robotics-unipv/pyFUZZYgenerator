@@ -123,7 +123,7 @@ int_t evaluateRules_{{ model.name }}(fuzzyLogic_{{ model.name }} * fl) {
  *
  *		return							-1 if smtg went wrong, 0 otherwise
  */
-int_t defuzzify_{{ model.name }}(fuzzyLogic_{{ model.name }} * fl, double * outputs) {
+int_t defuzzify_{{ model.name }}(fuzzyLogic_{{ model.name }} * fl, dataType * outputs) {
 	uint_t i, j;
 	dataType sum = 0;
 	dataType aux = 0;
