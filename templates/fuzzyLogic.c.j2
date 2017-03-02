@@ -1,6 +1,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#include <stdint.h>
+
 #include "fuzzyLogic_{{ model.name }}.h"
 
 /*! CONSTRUCTOR OF THE FUZZY LOGIC
@@ -55,6 +57,11 @@ int_t createLogic_{{ model.name }}(fuzzyLogic_{{ model.name }} * fl, fuzzyInput_
 			}
 		}
 	}
+	
+	for (i = 0; i < N_INPUT_{{ model.name }}; i++) 
+		for (i = 0; i < MAX_N_MF_INPUT_{{ model.name }}; i++) 
+			fl->fuzzified[ i * MAX_N_MF_INPUT_{{ model.name }} + j];
+			
 	return 0;
 }
 
