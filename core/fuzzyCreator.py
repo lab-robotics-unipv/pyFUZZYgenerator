@@ -10,14 +10,17 @@ mfDict = {
 	'triangle': 'TRI_MF',
 	'trapezoid': 'TRAP_MF',
 	# 'gaussian-bell': ,
-	# 'gaussian': ,
 	# 'gaussian2': ,
-	# 'sigmoid': ,
+	'gaussian': 'GAUSSIAN_MF' ,
+	'sigmoid': 'SIGMOID_MF',
+	'diff_sigmoid' : 'DIF_SIGMOID_MF',
 	'singleton': 'SPIKE_MF',
+	'
 }
 
 templateList = [
 	"definitions.h.j2",
+	"defCommon.h.j2",
 	"fuzzyInput.c.j2",
 	"fuzzyInput.h.j2",
 	"fuzzyLogic.c.j2",
@@ -34,6 +37,7 @@ templateList = [
 	"MFShapes.c.j2",
 	"setup.py.j2",
 	"main.c.j2",
+	"README.txt.j2",
 ]
 
 commonFileList = [
@@ -88,10 +92,8 @@ class fuzzyCreator(object):
 
 			for tmpl in templateList:
 				tmplSplit = tmpl.split('.')
-				if tmplSplit[0] == 'main':
-					outfile = 'main.c'
-				elif tmplSplit[0] == 'setup':
-					outfile = 'setup.py'
+				if tmplSplit[0] == 'main' || tmplSplit[0] == 'setup' ||tmplSplit[0] == 'README'
+o					outfile = tmplSplit[0] + '.' + tmplSplit[1]
 				else:
 					outfile = tmplSplit[0] + '_' + model.name + '.' + tmplSplit[1]
 				renderer.write(outDir / outfile, tmpl)
