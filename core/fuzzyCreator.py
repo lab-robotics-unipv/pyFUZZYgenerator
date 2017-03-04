@@ -15,7 +15,6 @@ mfDict = {
 	'sigmoid': 'SIGMOID_MF',
 	'diff_sigmoid' : 'DIF_SIGMOID_MF',
 	'singleton': 'SPIKE_MF',
-	'
 }
 
 templateList = [
@@ -92,8 +91,8 @@ class fuzzyCreator(object):
 
 			for tmpl in templateList:
 				tmplSplit = tmpl.split('.')
-				if tmplSplit[0] == 'main' || tmplSplit[0] == 'setup' ||tmplSplit[0] == 'README'
-o					outfile = tmplSplit[0] + '.' + tmplSplit[1]
+				if (tmplSplit[0] == 'main' or tmplSplit[0] == 'setup' or tmplSplit[0] == 'README') :
+					outfile = tmplSplit[0] + '.' + tmplSplit[1]
 				else:
 					outfile = tmplSplit[0] + '_' + model.name + '.' + tmplSplit[1]
 				renderer.write(outDir / outfile, tmpl)
