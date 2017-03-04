@@ -1,5 +1,6 @@
 import logging
 import numpy as np
+#TODO: Remove the following input when the code will be completed
 import pdb
 
 from core.Membership import MembershipFactory
@@ -17,10 +18,11 @@ class Variable:
 		for mf in data['mf']:
 			self.add_membership_function(mf)
 		
+		#TODO chiedere a Daniele come risolvere in modo furbo
 		i = 0
 		for mf in self.membership_functions:
 			mf.index = i
-			i = i + 1
+			i +=  1
 
 	def add_membership_function(self, data):
 		factory = MembershipFactory(data)
@@ -46,8 +48,6 @@ class Variable:
 
 	def __str__(self):
 		return self.name + ': ' + ', '.join([str(mf) for mf in self.membership_functions])
-	
-	#TODO: Controllare se questa funzione è necessaria.
 	
 	def getMFfromIndex(self, index):
 		"""
@@ -93,6 +93,7 @@ class VariableFind(Variable):
 		super().__init__(data)
 		
 		try:
+			#TODO: It could be added a Weight associated to each input variable.
 			#self.weight = data['weight']
 			self.best = data['best']
 			self.worst = data['worst']
@@ -137,18 +138,11 @@ class VariableFind(Variable):
 	
 	def getBestMFindex(self):	
 		return self.getBestMF().index
-		#for mf in self.membership_functions:
-			#if mf.name == self.best.name:
-				#return mf.name
 
 	def getWorstMFindex(self):
 		return self.getWorstMF().index
-		#for mf in self.membership_functions:
-			#if mf.name == self.worst.name:
-				#return mf.name
 				
-	#DA QUI CI SONO I MIEI CHANGES:
-	
+	#TODO : Refactoring of the following method is needed
 	def getExternalDiff(self, f1, f2, x_min, x_max, scale, step):
 		"""
 		Compute the "external" difference between f1 and f2.
@@ -183,10 +177,10 @@ class VariableFind(Variable):
 		if dx1 > 0.0:
 			x = x2
 			while x < x_max:
-				# for (x = x2; x < x_max; x += dx1):
+				# for (x = x2; x < x_max; x += dx1):		
 				#for x in np.linspace(x2, x_max, step):
 				sum1 += abs(mf1.f(x) - mf2.f(x))
-				x = x + dx1
+				x += dx1
 
 		dx2 = 0.5 * (x_max - x2) / step;
 		if dx2 > 0.0:
@@ -221,16 +215,11 @@ class VariableFind(Variable):
 		x1 = mf1.getMinX()
 		x2 = mf2.getMaxX()
 		dx = (x2 - x1) / step;
-		#In linespace it is needed to put step+1 since we have to do this operation:
-		#for (x = x1; x <= x2; x += dx)
-		#TODO : Ask to Daniele
-		x = x1
-		while x <= x2:
-		#for x in np.linspace(x1, x2, step+1):
-
+		
+		for x in np.linspace(x1, x2, step+1):
 			sum += abs(mf1.f(x) - mf2.f(x))
-			x = x + dx
-		#TODO: rimuovere
+			x += dx
+		
 		
 		return (sum * dx) / scale
 
@@ -257,23 +246,17 @@ class VariableFind(Variable):
 		x2 = mf2.getTopLeftX()
 		dx = (x2 - x1) / step
 		if dx > 0.0:
-			#In linespace it is needed to put step+1 since we have to do this operation:
-			#for (x = x1; x <= x2; x += dx)
-			#TODO : Ask to Daniele
-			#for x in np.linspace(x1, x2, step+1):
-			x = x1
-			while x <= x2:
+			for x in np.linspace(x1, x2, step+1):
 				y1 = mf1.f(x)
 				y2 = mf2.f(x)
 				if y1 > y2:
 					sum += 1.0 - y1
 				else:
 					sum += 1.0 - y2
-				x = x + dx
-		#TODO: Rimuovere
-		pdb.set_trace()
+
 		return (sum * dx) / scale
-					
+
+	#TODO: the following method needs to be refactored					
 	def getExternalHoleSize(self, f1, f2, x_min, x_max, scale, step):
 		"""
 		Compute the "external" hole size between f1 and f2, which goes from x_min
@@ -362,7 +345,7 @@ class VariableFind(Variable):
 		if worst == best:
 			return 0.0
 			
-		#Questo perchè vogliamo worst prima di best -> TODO: Controllare perchè
+		#We want te worst MF before best MF
 		if (best < worst):
 			tmp = best
 			best = worst
@@ -381,7 +364,8 @@ class VariableFind(Variable):
 				i = i + 1
 
 		return distance;
-		
+	
+	#TODO: the following method needs to be refactored						
 	def computeWeights(self, step):
 		"""
 		/**
@@ -402,23 +386,19 @@ class VariableFind(Variable):
 		d = []
 		minX = self.getMinX()
 		maxX = self.getMaxX()
-		# TODO: check if this is really required
-		# if (model.isCrisp()):
-		#     return
 		logging.debug(self)
 		logging.debug(self.best)
 		logging.debug(self.worst)
+		
 		if (self.worst == self.best):
 			raise ValueError("{}: worst and best membership functions are the same.".format(self.name))
 
 		nf = len(self.membership_functions)
 		interval = maxX - minX
 		
-		#Indexes of the MFs of the worst and best
 		worstIndex = self.getWorstMFindex()
 		bestIndex = self.getBestMFindex()
-		#pdb.set_trace()
-		#TODO : verificare se funziona da qui in poi
+
 		i = 0
 		while i < (nf-1):
 			f1 = self.getMFfromIndex(i)
