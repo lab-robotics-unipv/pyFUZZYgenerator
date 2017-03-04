@@ -253,7 +253,6 @@ class Trapezoid(MembershipFunction):
 			return False
 
 # TODO: maybe a singleton type with variable height different from 1 may be of interest
-
 class Singleton(MembershipFunction):
 	def __init__(self, name, data):
 		self.required_type = 'singleton'
@@ -315,13 +314,11 @@ class Sigmoid(MembershipFunction):
 
 	def getMinX(self):
 		#TODO: check if this value is correct
-		return param[1] - 3 * param[0]
-		#raise NotImplementedError("To be calculated for sigmoid functions")
+		return param[1] - fabs( 3 * param[0] )
 
 	def getMaxX(self):
 		#TODO: check if this value is correct
-		return param[1] + 3 * param[0]
-		#raise NotImplementedError("To be calculated for sigmoid functions")
+		return param[1] + fabs( 3 * param[0] )
 
 	def f(self, value):
 		return 1.0 / (1.0 + exp(-self.parameters[0] * (value - self.parameters[1])))
@@ -331,7 +328,46 @@ class Sigmoid(MembershipFunction):
 			return True
 		else:
 			return False
+			
+class DiffSigmoid(MembershipFunction):
+	def __init__(self, name, data):
+		self.required_type = 'diff_sigmoid'
+		self.printable_type_name = 'DiffSigmoid'
+		self.required_parameters_min_number = 4
+		self.required_parameters_max_number = 4
+		#First value is the slope, the second is the center of the first Sigmoid
+		self.parameters = [float(x) for x in data['parameters']]
+		super().__init__(name, data)
 
+	@property
+	def parameters(self):
+		return self.__parameters
+
+	@parameters.setter
+	def parameters(self, param):
+		self.check_parameters_number(param)
+		self.__parameters = [float(x) for x in param]
+		self.centroid_x = None  # invalidates the stored centroid value
+
+	def getMinX(self):
+		#TODO: check if this value is correct
+		return param[1] - fabs( 3 * param[0] )
+
+	def getMaxX(self):
+		#TODO: check if this value is correct
+		return param[3] + fabs( 3 * param[2] )
+
+	def f(self, value):
+		slope = exp( -self.parameters[0] * ( value - self.parameters[1]));
+		slope1 = exp( -self.parameters[2] * ( value - self.parameters[3]));
+		return fabs( (1 / (1 + slope)) - ( 1 / ( 1 + slope1)));
+
+	def outputIsNull(self, value):
+		if self.f(value) <= 0.0000001:
+			return True
+		else:
+			return False
+					
 class Gaussian(MembershipFunction):
 	def __init__(self, name, data):
 		self.required_type = 'gaussian'
@@ -355,12 +391,10 @@ class Gaussian(MembershipFunction):
 	def getMinX(self):
 		#TODO: check if this value is correct
 		return self.parameters[1] - 3 * self.parameters[0]
-		#raise NotImplementedError("To be calculated for gaussian functions")
 
 	def getMaxX(self):
 		#TODO: check if this value is correct
 		return self.parameters[1] + 3 * self.parameters[0]
-		#raise NotImplementedError("To be calculated for gaussian functions")
 
 	def f(self, value):
 		return exp( - ( value - pow(self.parameters[1],2) )  / ( 2 * pow(self.parameters[0],2)) )
@@ -442,13 +476,15 @@ class MembershipFactory():
 		elif type_name == 'gaussian-bell':
 			pass
 		elif type_name == 'gaussian':
-			pass
+			mf = Gaussian(self.name, self.data)
 		elif type_name == 'gaussian2':
 			pass
 		elif type_name == 'sigmoid':
 			mf = Sigmoid(self.name, self.data)
 		elif type_name == 'singleton':
 			mf = Singleton(self.name, self.data)
+		elif type_name == 'diff_sigmoid':
+			mf = DiffSigmoid(self.name, self.data)
 		else:
 			raise ValueError("Invalid type {} in MF {}".format(type_name, self.name))
 		return mf
