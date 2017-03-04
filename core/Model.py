@@ -1,10 +1,8 @@
 import re
 # import logging
 import numpy as np
-import pdb 
-
 from core.Variable import VariableFis, VariableFind, VariableFeq
-# from core.Membership import computeWeights
+
 
 
 class Model:
@@ -102,7 +100,6 @@ class ModelFeq(Model):
 			for i, ov in enumerate(self.output_var):
 				thMFs[i] = round(thMFs[i]/weight_sum)
 				thMFs[i] += ov.equilibrium
-				# import pdb; pdb.set_trace()
 				# thMFs[i] = thMFs[i]/weight_sum
 				if thMFs[i] < 0:
 					thMFs[i] = 0
@@ -153,7 +150,7 @@ class ModelFis(Model):
 		self.rules = self.parseRules()
 		if len(self.rules) != self.getCorrectNumRules():
 			raise Exception("Correct number of rules for model {name} is {num}".format(name=self.name, num=self.getCorrectNumRules()))
-
+	
 	def parseRules(self):
 		regexpGlobal = r'if (.*) then (.*) with (\d)'
 		rules = []
@@ -189,7 +186,7 @@ class ModelFis(Model):
 	# 		var.input = values[i]
 
 
-class ModelFIND(Model):
+class ModelFIND(Model):	
 	def __init__(self, data):
 		super().__init__(data)
 		for iv in self._input_var:
@@ -198,14 +195,13 @@ class ModelFIND(Model):
 		for ov in self._output_var:
 			self.output_var.append(VariableFind(ov))
 			
-		#TODO: Creare le regole 
 		self.parseRules() 
-   
    
 	def parseRules(self): 
      
-		#TODO: Decidere come verrà dato lo step di integrazione 
-		step = 1 
+		#TODO: Decide how to give the step parameter as input
+		#step = 10000 
+		step = 2
 		self.computeVariables(step) 
          
 	def computeVariables(self, step): 
@@ -228,9 +224,7 @@ class ModelFIND(Model):
 		weight of all the functions of all the variables by this sum. 
 		""" 
 
-		#TODO: Add the function getWeight for the Variables! **IMPORTANT** 
-
-		# get the sum of all the weights of the best cases 
+		#TODO: Add the function getWeight for the Variables! 
 		sum = 0.0 
 		for var in self.input_var: 
 			#sum += var.getWeight() * var.getBestMF().getWeight() 
@@ -240,4 +234,4 @@ class ModelFIND(Model):
 			for mf in var.membership_functions: 
 				w = mf.getWeight() 
 				#mf.setNormalizedWeight(var.getWeight * w / sum) 
-				mf.setNormalizedWeight( 1 * w / sum)    
+				mf.setNormalizedWeight( 1 * w / sum) 
