@@ -1,5 +1,7 @@
 import numpy as np
+import math
 import logging
+import pdb
 
 class MembershipFunction(object):
 	def __init__(self, name, data):
@@ -313,15 +315,39 @@ class Sigmoid(MembershipFunction):
 		self.centroid_x = None  # invalidates the stored centroid value
 
 	def getMinX(self):
-		#TODO: check if this value is correct
-		return param[1] - fabs( 3 * param[0] )
+		#When the Sigmoid reaches the value 0.001
+		value = - math.fabs(self.parameters[0] * 4)
+		if self.parameters[0] > 0:
+			while ( 1.0 / (1.0 + math.exp(-self.parameters[0] * (value))) < 0.001 ):
+				value += 0.01
+			return value + self.parameters[1]
+		
+		else:
+			while ( (1.0 / (1.0 + math.exp(-self.parameters[0] * (value)))) > 0.999 ):
+				value += 0.01
+			return value + self.parameters[1]	
 
 	def getMaxX(self):
-		#TODO: check if this value is correct
-		return param[1] + fabs( 3 * param[0] )
+		#When the Sigmoid reaches the value 0.001
+		value = - math.fabs(self.parameters[0] * 4)
+		if self.parameters[0] > 0:
+			while ( 1.0 / (1.0 + math.exp(-self.parameters[0] * (value))) < 0.999  ):
+				value += 0.01
+			return value + self.parameters[1]
+		
+		else:
+			while ( 1.0 / (1.0 + math.exp(-self.parameters[0] * (value))) > 0.001 ):
+				value += 0.01
+			return value + self.parameters[1]	
 
+	def getTopLeftX(self):
+		return self.parameters[1]
+
+	def getTopRightX(self):
+		return self.parameters[1]
+		
 	def f(self, value):
-		return 1.0 / (1.0 + exp(-self.parameters[0] * (value - self.parameters[1])))
+		return 1.0 / (1.0 + math.exp(-self.parameters[0] * (value - self.parameters[1])))
 
 	def outputIsNull(self, value):
 		if self.f(value) <= 0.0000001:
@@ -350,17 +376,29 @@ class DiffSigmoid(MembershipFunction):
 		self.centroid_x = None  # invalidates the stored centroid value
 
 	def getMinX(self):
-		#TODO: check if this value is correct
-		return param[1] - fabs( 3 * param[0] )
+		#When the Sigmoid reaches the value 0.001
+		value = - math.fabs(self.parameters[0] * 4)
+		while ( 1.0 / (1.0 + math.exp(-self.parameters[0] * (value))) < 0.001 ):
+			value += 0.01
+		return value + self.parameters[1]	
 
 	def getMaxX(self):
-		#TODO: check if this value is correct
-		return param[3] + fabs( 3 * param[2] )
+		#When the Sigmoid reaches the value 0.001
+		value = - math.fabs(self.parameters[0] * 4)
+		while ( 1.0 / (1.0 + math.exp(-self.parameters[0] * (value))) > 0.001 ):
+			value += 0.01
+		return value + self.parameters[1]	
+		
+	def getTopLeftX(self):
+		return self.parameters[1]
 
+	def getTopRightX(self):
+		return self.parameters[3]
+		
 	def f(self, value):
-		slope = exp( -self.parameters[0] * ( value - self.parameters[1]));
-		slope1 = exp( -self.parameters[2] * ( value - self.parameters[3]));
-		return fabs( (1 / (1 + slope)) - ( 1 / ( 1 + slope1)));
+		slope = math.exp( -self.parameters[0] * ( value - self.parameters[1]));
+		slope1 = math.exp( -self.parameters[2] * ( value - self.parameters[3]));
+		return math.fabs( (1 / (1 + slope)) - ( 1 / ( 1 + slope1)));
 
 	def outputIsNull(self, value):
 		if self.f(value) <= 0.0000001:
@@ -390,14 +428,20 @@ class Gaussian(MembershipFunction):
 
 	def getMinX(self):
 		#TODO: check if this value is correct
-		return self.parameters[1] - 3 * self.parameters[0]
+		return self.parameters[1] - math.fabs( 3 * self.parameters[0])
 
 	def getMaxX(self):
 		#TODO: check if this value is correct
-		return self.parameters[1] + 3 * self.parameters[0]
+		return self.parameters[1] + math.fabs( 3 * self.parameters[0])
+		
+	def getTopLeftX(self):
+		return self.parameters[1]
 
+	def getTopRightX(self):
+		return self.parameters[1]
+		
 	def f(self, value):
-		return exp( - ( value - pow(self.parameters[1],2) )  / ( 2 * pow(self.parameters[0],2)) )
+		return math.exp( - ( value - pow(self.parameters[1],2) )  / ( 2 * pow(self.parameters[0],2)) )
 
 	def outputIsNull(self, value):
 		if self.f(value) <= 0.0000001:
