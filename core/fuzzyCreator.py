@@ -10,14 +10,16 @@ mfDict = {
 	'triangle': 'TRI_MF',
 	'trapezoid': 'TRAP_MF',
 	# 'gaussian-bell': ,
-	# 'gaussian': ,
 	# 'gaussian2': ,
-	# 'sigmoid': ,
+	'gaussian': 'GAUSSIAN_MF' ,
+	'sigmoid': 'SIGMOID_MF',
+	'diff_sigmoid' : 'DIF_SIGMOID_MF',
 	'singleton': 'SPIKE_MF',
 }
 
 templateList = [
 	"definitions.h.j2",
+	"defCommon.h.j2",
 	"fuzzyInput.c.j2",
 	"fuzzyInput.h.j2",
 	"fuzzyLogic.c.j2",
@@ -30,11 +32,16 @@ templateList = [
 	"memFunc.h.j2",
 	"rules.h.j2",
 	"rules.c.j2",
+	"MFShapes.h.j2",
+	"MFShapes.c.j2",
+	"setup.py.j2",
+	"main.c.j2",
+	"README.txt.j2",
 ]
 
 commonFileList = [
-	"MFShape.h.js",
-	"MFShape.c.js",
+	"MFShapes.h.j2",
+	"MFShapes.c.j2",
 ]
 
 class templateRenderer(object):
@@ -57,14 +64,14 @@ class templateRenderer(object):
 class fuzzyCreator(object):
 	def __init__(self, modelString, outDir):
 		conf = pytoml.loads(modelString)
-
+		
 		self.models = []
 		for m in conf['model']:
 			if m['type'].upper() == 'F-IND':
-				self.models.append(Model.ModelFind(m))
+				self.models.append(Model.ModelFIND(m))
 			if m['type'].upper() == 'FEQ':
 				self.models.append(Model.ModelFeq(m))
-			else:
+			if m['type'].upper() != 'F-IND' and m['type'].upper() != 'FEQ':
 				self.models.append(Model.ModelFis(m))
 
 		self.outDir = outDir
@@ -84,5 +91,8 @@ class fuzzyCreator(object):
 
 			for tmpl in templateList:
 				tmplSplit = tmpl.split('.')
-				outfile = tmplSplit[0] + '_' + model.name + '.' + tmplSplit[1]
+				if (tmplSplit[0] == 'main' or tmplSplit[0] == 'setup' or tmplSplit[0] == 'README') :
+					outfile = tmplSplit[0] + '.' + tmplSplit[1]
+				else:
+					outfile = tmplSplit[0] + '_' + model.name + '.' + tmplSplit[1]
 				renderer.write(outDir / outfile, tmpl)

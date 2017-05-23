@@ -1,7 +1,10 @@
 #ifndef RULES_{{ model.name }}_H
 #define RULES_{{ model.name }}_H
 
+#include <stdint.h>
+
 #include "definitions_{{ model.name }}.h"
+#include "defCommon_{{ model.name }}.h"
 
 #ifndef MAX_L_NAME_{{ model.name }}
 #error "MAX_L_NAME_{{ model.name }} not defined: check definitions_{{ model.name }}.h"
@@ -24,27 +27,28 @@ typedef struct {
 //! RULE
 typedef struct {
 	ruleStatement_{{ model.name }} ifRules[N_INPUT_{{ model.name }}];		//!< Vector of "if statements"
-	int nIfRules;						//!< Number of "if statements"
+	uint_t nIfRules;						//!< Number of "if statements"
 
-	double thenValue;					//!< Value of correctness of the rule
+	dataType thenValue;					//!< Value of correctness of the rule
 
 	ruleStatement_{{ model.name }} thenRules[N_OUTPUT_{{ model.name }}];	//!< Vector of "then statements"
-	int nThenRules;						//!< Number of "then statements"
+	uint_t nThenRules;						//!< Number of "then statements"
 } rule_{{ model.name }};
 
 //! RULE AFTER FINDING THE INDICES OF THE INPUTS AND MEMBERSHIP FUNCTIONS OF THE FUZZY LOGIC
 typedef struct {
-	int ifRulesIndex[N_INPUT_{{ model.name }}];			//!< Vector of the indices of "if statements"
-	int ifRulesMFIndex[N_INPUT_{{ model.name }}];		//!< Vector of the indices of the mf of the "if statements"
-	int nIfRules;						//!< Number of "if statements"
+	uint_t ifRulesIndex[N_INPUT_{{ model.name }}];			//!< Vector of the indices of "if statements"
+	uint_t ifRulesMFIndex[N_INPUT_{{ model.name }}];		//!< Vector of the indices of the mf of the "if statements"
+	uint_t nIfRules;						//!< Number of "if statements"
 
-	double thenValue;					//!< Value of correctness of the rule
+	dataType thenValue;					//!< Value of correctness of the rule
 
-	int thenRulesIndex[N_OUTPUT_{{ model.name }}];		//!< Vector of the indices of the "then statements"
-	int thenRulesMFIndex[N_OUTPUT_{{ model.name }}];		//!< Vector of the indices of the mf of the "then statements"
-	int nThenRules;						//!< Number of "then statements"
+	uint_t thenRulesIndex[N_OUTPUT_{{ model.name }}];		//!< Vector of the indices of the "then statements"
+	uint_t thenRulesMFIndex[N_OUTPUT_{{ model.name }}];		//!< Vector of the indices of the mf of the "then statements"
+	uint_t nThenRules;						//!< Number of "then statements"
 } builtRule_{{ model.name }};
 
+//TODO: Check if these lines need to be removed
 inline double min(double a, double b);
 inline double multiply(double a, double b);
 inline double max(double a, double b);

@@ -1,4 +1,7 @@
 #include <string.h>
+#include <stdint.h>
+
+#include "memFunc_{{ model.name }}.h"
 #include "fuzzyInput_{{ model.name }}.h"
 
 /*! INIT OF A FUZZY INPUT
@@ -11,7 +14,7 @@
  *
  *		return					Flag: -1 if error, 0 otherwise
  */
-int createInput_{{ model.name }}(fuzzyInput_{{ model.name }} * fi, char* name, memFunction_{{ model.name }} * MFs, int nMF, double min, double max) {
+int_t createInput_{{ model.name }}(fuzzyInput_{{ model.name }} * fi, char* name, memFunction_{{ model.name }} * MFs, uint_t nMF, dataType min, dataType max) {
 	if (fi == NULL) {
 		return -1;
 	}
@@ -33,14 +36,31 @@ int createInput_{{ model.name }}(fuzzyInput_{{ model.name }} * fi, char* name, m
 	return 0;
 }
 
+/*! FIND INPUT INDEX GIVEN NAME 
+ *    input    fi      Fuzzy Input 
+ *    input    nInputs    Fuzzy Input 
+ *    input    name    Name of the Input 
+ * 
+ *    return              Index of the Input 
+ */ 
+int_t getInputFromNameIn_{{ model.name }}(fuzzyInput_{{ model.name }} * fi, uint_t nInputs, char * name) { 
+  uint_t i; 
+  for ( i = 0 ; i < nInputs ; i++ ) { 
+    if ( strcmp(fi[i].name, name) == 0 ) { 
+      return i; 
+    } 
+  }  
+    return -1; 
+} 
+
 /*! FIND MF GIVEN NAME
  *		input		fuzzy_input		Pointer to the Fuzzy Input struct
  *		input		name			Name of the MF
  *
  *		return						Index of the MF or -1 if not found
  */
-int getInputMFFromName_{{ model.name }}(fuzzyInput_{{ model.name }} * fuzzy_input, char * name) {
-	int i;
+int_t getInputMFFromName_{{ model.name }}(fuzzyInput_{{ model.name }} * fuzzy_input, char * name) {
+	uint_t i;
 	for (i = 0; i < fuzzy_input->nMF; i++) {
 		if ( strcmp(name, fuzzy_input->mf[i].name) == 0 ) {
 			return i;
@@ -55,14 +75,14 @@ int getInputMFFromName_{{ model.name }}(fuzzyInput_{{ model.name }} * fuzzy_inpu
  * 
  * 			output		output			The % of membership to a Fuzzy Input given an input value		
  */
-void getPercentageFromInput_{{ model.name }}(fuzzyInput_{{ model.name }} * fuzzy_input, double inputValue, double * output) {
+void getPercentageFromInput_{{ model.name }}(fuzzyInput_{{ model.name }} * fuzzy_input, dataType inputValue, dataType * output) {
 	if (inputValue < fuzzy_input->minValue) {
 		inputValue = fuzzy_input->minValue;
 	} else if (inputValue > fuzzy_input->maxValue) {
 		inputValue = fuzzy_input->maxValue;
 	}
 	
-	int i;	
+	uint_t i;	
 	for ( i = 0; i < fuzzy_input->nMF; i++) {
 		output[i] = getPercentage_{{ model.name }}(&(fuzzy_input->mf[i]), inputValue);		
 	}		

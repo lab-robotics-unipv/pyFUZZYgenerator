@@ -1,8 +1,11 @@
 #ifndef MEMBERSHIP_FUNCTION_{{ model.name }}_H
 #define MEMBERSHIP_FUNCTION_{{ model.name }}_H
 
+#include <stdint.h>
+
 #include "definitions_{{ model.name }}.h"
-#include "MFShapes.h"
+#include "defCommon_{{ model.name }}.h"
+#include "MFShapes_{{ model.name }}.h"
 
 #ifndef MAX_L_NAME_{{ model.name }}
 #error "MAX_L_NAME_{{ model.name }} not defined: check definitions_{{ model.name }}.h"
@@ -16,8 +19,10 @@
 typedef struct {
 	char name[MAX_L_NAME_{{ model.name }}];		//!< Name of the Fuzzy Set
 	memFuncShape ms;			//!< Shape of the Fuzzy Set
-	double poi[MAX_N_POI_{{ model.name }}];		//!< Points of interest of the Fuzzy Set
+	dataType poi[MAX_N_POI_{{ model.name }}];		//!< Points of interest of the Fuzzy Set
 	int lPoi;					//!< Numbers of POI
+	dataType weight;				//!< Weight associated to Fuzzy Set
+	dataType normalizedWeight;	//!< Normalized weight associated to the Fuzzy Set
 } memFunction_{{ model.name }};
 
 /*! ALLOCATION AND CREATION OF A MEMBER FUNCTION (A FUZZY SET):
@@ -28,7 +33,7 @@ typedef struct {
  *
  *		return					Flag: -1 if error, 0 otherwise
  */
-int createMemFunction_{{ model.name }}(memFunction_{{ model.name }} * mf, char* name, memFuncShape ms, double* poi);
+int_t createMemFunction_{{ model.name }}(memFunction_{{ model.name }} * mf, char* name, memFuncShape ms, dataType * poi);
 
 /*! CALCULATION OF THE MEMBERSHIP TO A GIVEN FUZZY SET
  *			input		mf				Pointer to a Member Function
@@ -36,6 +41,21 @@ int createMemFunction_{{ model.name }}(memFunction_{{ model.name }} * mf, char* 
  *
  *			return		double			Return the % of membership to a Fuzzy set (mf) given as input inputValue
  */
-double getPercentage_{{ model.name }}(memFunction_{{ model.name }} * mf , double inputValue);
+dataType getPercentage_{{ model.name }}(memFunction_{{ model.name }} * mf , dataType inputValue);
 
+/*!	SET THE WEIGHT ASSOCIATED TO THE MEMBER FUNCTION
+ * 			input		mf				Member Function
+ * 			input		weight			The weight to be associated to the Member Function
+ * 
+ * 			return		void
+ */
+void setWeight_{{ model.name }}(memFunction_{{ model.name }} * mf, dataType weight);
+
+/*!	SET THE WEIGHT ASSOCIATED TO THE MEMBER FUNCTION
+ * 			input		mf				Member Function
+ * 			input		nWeight			The normalized weight to be associated to the Member Function
+ * 
+ * 			return		void
+ */
+void setNormalizedWeight_{{ model.name }}(memFunction_{{ model.name }} * mf, dataType nWeight);
 #endif
