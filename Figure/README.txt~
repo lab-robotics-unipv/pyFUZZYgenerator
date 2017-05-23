@@ -1,9 +1,0 @@
-In questa cartella sono riportati i grafici di contfronto tra la FIND implementata in Java e quella implementata in C generata da Python.
-
-Il test è stato fatto usando il file "time.fcl" e riportato nel corrispettivo file .toml per Python.
-
-Come si può vedere dal file .fcl sono presenti 3 INPUT ognuno con 5 MFs.
-Per ogni grafico è fatto variare solo un input ( dal suo massimo al suo minimo, o meglio dal best al worst case), mentre gli altri 2 sono lasciati fissi.
-In questo modo si passa da un indice 100% nella figura 1 ad un indice pari a 0% nella figura 3.
-
-La diversità tra i due indici è da imputare a come sono valuate le regole ( es min, moltiplicazione ecc ).
