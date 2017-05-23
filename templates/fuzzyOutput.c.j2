@@ -1,4 +1,7 @@
 #include <string.h>
+#include <stdint.h>
+
+#include "memFunc_{{ model.name }}.h"
 #include "fuzzyOutput_{{ model.name }}.h"
 
 /*! INIT OF A FUZZY OUTPUT
@@ -9,7 +12,7 @@
  *
  *		return					Flag: -1 if error, 0 otherwise
  */
-int createOutput_{{ model.name }}(fuzzyOutput_{{ model.name }} * fo, char* name, memFunction_{{ model.name }} * MFs, int nMF) {
+int_t createOutput_{{ model.name }}(fuzzyOutput_{{ model.name }} * fo, char* name, memFunction_{{ model.name }} * MFs, uint_t nMF) {
 	if (fo == NULL) {
 		return -1;
 	}
@@ -28,14 +31,30 @@ int createOutput_{{ model.name }}(fuzzyOutput_{{ model.name }} * fo, char* name,
 	return 0;
 }
 
+/*! FIND OUTPUT INDEX GIVEN NAME 
+ *    input      fo        Fuzzy 
+ *    input      name      Name of the output 
+ * 
+ *    return              Index of the output, -1 if not found 
+ */ 
+int_t getOutputFromNameOu_{{ model.name }}(fuzzyOutput_{{ model.name }} * fo, uint_t nOutput, char * name) { 
+  uint_t i; 
+  for( i = 0 ; i < nOutput ; i++ ) { 
+    if ( strcmp(name, fo[i].name) == 0 ) { 
+      return i; 
+    } 
+  } 
+  return -1; 
+} 
+
 /*! FIND MF GIVEN NAME
  *		input		fuzzy_output	Pointer to the Fuzzy Output struct
  *		input		name			Name of the MF
  *
  *		return						Index of the MF or -1 if not found
  */
-int getOutputMFFromName_{{ model.name }}(fuzzyOutput_{{ model.name }} * fuzzy_output, char * name) {
-	int i;
+int_t getOutputMFFromName_{{ model.name }}(fuzzyOutput_{{ model.name }} * fuzzy_output, char * name) {
+	uint_t i;
 	for (i = 0; i < fuzzy_output->nMF; i++) {
 		if ( strcmp(name, fuzzy_output->mf[i].name) == 0 ) {
 			return i;

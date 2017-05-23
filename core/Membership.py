@@ -1,298 +1,22 @@
 import numpy as np
+import math
 import logging
-
-def getExternalDiff(f1, f2, x_min, x_max, scale, step):
-	"""
-	Compute the "external" difference between f1 and f2.
-
-	The external difference goes from
-	x_min to x1 and from x2 to x_max, where x1 is the max x of f1 and x2 is
-	the min x of f2. The difference is computed as delta on the two functions y
-	coordinate values corresponding to the same x coordinate. Then all these differences are added
-	into sum1 starting from x_min to x1 and then from x2 to x_max in sum2.
-	Finally the integral is computed by multiplying the 2 sums by the 2
-	differentials dx1 and dx2.
-
-	IMPORTANT: membership function f1 MUST be on the left w.r.t. f2.
-
-	:param f1: membership function on the left
-	:param f2: membership function on the right
-	:param x_min: min x value from which the distance is computed
-	:param x_max: max x value from which the distance is computed
-	:param scale: scale factor that divides the final result
-	:param step: number of steps for the computation
-	:return: the external difference between f1 and f2
-	"""
-	sum1 = 0.0
-	sum2 = 0.0
-
-	x1 = f1.getMaxX()
-	x2 = f2.getMinX()
-	dx1 = 0.5 * (x1 - x_min) / step
-	if dx1 > 0.0:
-		# for (x = x2; x < x_max; x += dx1):
-		for x in np.linspace(x2, x_max, step):
-			sum1 += abs(f1.y(x) - f2.y(x))
-
-	dx2 = 0.5 * (x_max - x2) / step;
-	if dx2 > 0.0:
-		# for (x = x_min; x < x1; x += dx2):
-		for x in np.linspace(x_min, x1, step):
-			sum2 += abs(f1.y(x) - f2.y(x))
-
-	return ((sum1 * dx1) + (sum2 * dx2)) / scale
-
-
-def getInternalDiff(f1, f2, scale, step):
-	"""
-	Compute the "internal" difference between f1 and f2, which goes from x1
-	to x2, where x1 is the max x of f1 and x2 is the min x of f2. The
-	difference is computed as delta on the 2 function y coordinate on the
-	same x coordinate. Then all these differences are added into sum. Finally
-	the integral is computed by multiplying the sum by the differential dx.
-
-	IMPORTANT: membership function f1 MUST be on the left w.r.t. f2.
-
-	:param f1: membership function on the left
-	:param f2: membership function on the right
-	:param scale: scale factor that divides the final result
-	:param step: the number of steps for the computation
-	:return: the internal difference between f1 and f2
-	"""
-	sum = 0.0;
-
-	x1 = f1.getMinX()
-	x2 = f2.getMaxX()
-	dx = (x2 - x1) / step;
-	# for (x = x1; x <= x2; x += dx):
-	for x in np.linspace(x1, x2, step):
-		sum += abs(f1.f(x) - f2.f(x))
-		return (sum * dx) / scale
-
-def getInternalHoleSize(f1, f2, scale, step):
-	"""
-	Compute the "internal" hole size between f1 and f2, which goes from x1 to
-	x2, where x1 is the top right x of f1 and x2 is the top left x of f2. A
-	difference is computed: 1-y of f1 and f2 starting from x1 and ending into
-	x2. This difference is added into sum and finally the integral is
-	computed by multiplying the sum by the differential dx.
-
-	IMPORTANT: membership function f1 MUST be on the left w.r.t. f2.
-
-	:param f1: membership function on the left
-	:param f2: membership function on the right
-	:param scale: scale factor that divides the final result
-	:param step: the number of steps for the computation
-	:return: the internal hole size between f1 and f2
-	"""
-	sum = 0.0
-
-	x1 = f1.getTopRightX()
-	x2 = f2.getTopLeftX()
-	dx = (x2 - x1) / step
-	if dx > 0.0:
-		# for (x = x1; x <= x2; x += dx):
-		for x in np.linspace(x1, x2, step):
-			y1 = f1.f(x)
-			y2 = f2.f(x)
-			if y1 > y2:
-				sum += 1.0 - y1
-			else:
-				sum += 1.0 - y2
-				return (sum * dx) / scale
-
-
-def getExternalHoleSize(f1, f2, x_min, x_max, scale, step):
-	"""
-	Compute the "external" hole size between f1 and f2, which goes from x_min
-	to x1 and from x2 to x_max, where x1 is the top left x of f1 and x2 is
-	the top right x of f2. 2 differences are computed: 1-y of f1 starting
-	from x_min and ending into x1 and 1-y of f2 starting from x2 and ending
-	into x_max. These 2 differences are added into sum1 and sum2 and finally
-	the integral is computed by multiplying the 2 sums by the 2 differentials
-	dx1 and dx2.
-
-	IMPORTANT: membership function f1 MUST be on the left w.r.t. f2
-
-	:param f1: membership function on the left
-	:param f2: membership function on the right
-	:param x_min :min value from which the distance is being computed
-	:param x_max: max value to which the distance is being computed
-	:param scale: scale factor that divides the final result
-	:param step: the number of steps for the computation
-	:return: the external hole size between f1 and f2
-	"""
-	sum1 = 0.0
-	sum2 = 0.0
-
-	x1 = f1.getTopLeftX()
-	x2 = f2.getTopRightX()
-	dx1 = (x1 - x_min) / step   # TODO: remove this
-	if dx1 > 0.0:
-		# for (x = x_min; x < x1; x += dx1):
-		for x in np.linspace(x1 - x_min, x1, step):
-			sum1 += 1.0 - f1.f(x)   # TODO: 1.0 - in the expression can be replaced by size(range) - integral(f)
-			dx2 = (x_max - x2) / step
-			if dx2 > 0.0:
-				# for (x = x2; x < x_max; x += dx2):
-				for x in np.linspace(x2, x_max, step):
-					sum2 += 1.0 - f2.f(x)
-					return ((sum1 * dx1) + (sum2 * dx2)) / scale
-
-
-def getExternalCentroidDist(f1, f2, x_min, x_max, scale, step):
-	"""
-	Compute the "external" distance between the centroids of f1 and f2
-	membership functions. The distance is obtained by substracting the real
-	distance to the size of the range of definition of the corresponding
-	variable.
-
-	:param f1: membership function on the left
-	:param f2: membership function on the right
-	:param x_min :min value from which the distance is being computed
-	:param x_max: max value to which the distance is being computed
-	:param scale: scale factor that divides the final result
-	:param step: the number of steps for the computation
-	:return: the external distance between of f1 and f2 centroids
-	"""
-	dist = abs(f1.getCentroidX(step) - f2.getCentroidX(step))
-	return (abs(x_max - x_min) - dist) / scale
-
-
-def getInternalCentroidDist(f1, f2, x_min, x_max, scale, step):
-	"""
-	Compute the "internal" distance between the centroids of f1 and f2
-	membership functions.
-
-	:param f1: membership function on the left
-	:param f2: membership function on the right
-	:param x_min :min value from which the distance is being computed
-	:param x_max: max value to which the distance is being computed
-	:param scale: scale factor that divides the final result
-	:param step: the number of steps for the computation
-	:return: the internal distance between of f1 and f2 centroids
-	"""
-	dist = abs(f1.getCentroidX(step) - f2.getCentroidX(step))
-	return dist / scale
-
-
-def getExternalDistance(f1, f2, x_min, x_max, scale, step):
-	"""
-	Compute the external distance between f1 and f2 membership functions.
-
-	:param f1: membership function on the left
-	:param f2: membership function on the right
-	:param x_min :min value from which the distance is being computed
-	:param x_max: max value to which the distance is being computed
-	:param scale: scale factor that divides the final result
-	:param step: the number of steps for the computation
-	:return: the external distance between of f1 and f2 centroids
-	"""
-	return getExternalDiff(f1, f2, x_min, x_max, scale, step) + getExternalHoleSize(f1, f2, x_min, x_max, scale, step)
-
-
-def getInternalDistance(f1, f2, x_min, x_max, scale, step):
-	"""
-	Compute the internal distance between f1 and f2 membership functions.
-
-	:param f1: membership function on the left
-	:param f2: membership function on the right
-	:param x_min :min value from which the distance is being computed
-	:param x_max: max value to which the distance is being computed
-	:param scale: scale factor that divides the final result
-	:param step: the number of steps for the computation
-	:return: the internal distance between of f1 and f2 centroids
-	"""
-	return getInternalDiff(f1, f2, x_min, x_max, scale, step) + getInternalHoleSize(f1, f2, x_min, x_max, scale, step)
-
-
-# TODO: should become a class method
-def computeWeights(variable, step):
-	"""
-	/**
-	* Compute and assign a weight of every function. WORST has weight=0, BEST
-	* has weight=max and all the other functions have intermediate weights.
-	* Since the weight is computed as a distance and the distance between worst
-	* and best function must be the largest, if these 2 functions are not on
-	* the opposite sides, the external distance is used. All the other weights
-	* are computed imagining the intermediate function always between best and
-	* worst ones, so that the appropriate distance (internal or external) is
-	* used. Worst-best distance is a special case.
-	*
-	* @param step
-	*            the number of integration steps
-	*/
-	"""
-
-	d = []
-
-	# TODO: check if this is really required
-	# if (model.isCrisp()):
-	#     return
-	logging.debug(variable)
-	logging.debug(variable.best)
-	logging.debug(variable.worst)
-	if (variable.worst == variable.best):
-		raise ValueError("{}: worst and best membership functions are the same.".format(variable.name))
-
-	nf = len(variable.membership_functions)
-	interval = variable.getMaxX() - variable.getMinX()
-	for mf in variable.membership_functions:    # TODO: fix since we need to address i-th and (i+1)-th mf
-		d.append(getInternalDistance(getMF(i), getMF(i + 1), interval, step))
-		d.append(getExternalDistance(getMF(0), getMF(nf - 1), getMinX(), getMaxX(), interval, step))
-
-	variable.getWorstMF().setWeight(0.0)
-
-	d1 = sumVect(d, nf, variable.worst, variable.best, True)
-	d2 = sumVect(d, nf, variable.worst, variable.best, False)
-
-	if (d1 > d2):
-		variable.getBestMF().setWeight(d1)
-		internal = True
-	else:
-		variable.getBestMF().setWeight(d2)
-		internal = False
-
-	# for (i = 0; i < nf; i++):
-	for i, mf in enumerate(variable.membership_functions):
-		if (i != worst) and (i != best):
-			d1 = sumVect(d, nf, worst, i, true);
-			d2 = sumVect(d, nf, worst, i, false);
-
-			# it seems independent from the value of the "internal" flag
-			if (internal):
-				if (variable.worst < best):
-					if (i < best):
-						getMF(i).setWeight(d1)
-					else:
-						getMF(i).setWeight(d2)
-				else:
-					if (i > best):
-						getMF(i).setWeight(d1)
-					else:
-						getMF(i).setWeight(d2)
-			else:
-				if (worst < best):
-					if (i < best):
-						getMF(i).setWeight(d1)
-					else:
-						getMF(i).setWeight(d2)
-				else:
-					if (i > best):
-						getMF(i).setWeight(d1)
-					else:
-						getMF(i).setWeight(d2)
-
+import pdb
 
 class MembershipFunction(object):
 	def __init__(self, name, data):
 		"""
-		This method is called by child classes to initialize name, description and type from provided data.
+		This method is called by child classes to initialize name, description and type from provided data,
+		plus the index indicating the order, increasing from left to right.
 		"""
 		self.name = name
 		self.description = data.get('description', '')
 		self.type = data['type']
 		self.centroid_x = None
+		self.index = None
+			 
+		self.weight = None
+		self.nWeight = None
 
 	def __str__(self):
 		return self.name
@@ -389,6 +113,22 @@ class MembershipFunction(object):
 			sum_xfx += x * value
 			x += dx
 			return sum_xfx / sum_fx
+			
+	def getMFindex(self):
+		return self.data['index']
+		
+	def setWeight(self, weight):
+		self.weight = weight
+	
+	def getWeight(self):
+		return self.weight
+	
+	def setNormalizedWeight(self,weight):
+		self.nWeight = weight
+	
+	def getNormalizedWeight(self):
+		return self.nWeight
+		
 
 
 class Triangle(MembershipFunction):
@@ -432,6 +172,14 @@ class Triangle(MembershipFunction):
 
 	def f(self, x):
 		p = self.parameters
+		
+		#Special case of Triangle with 2 equal points ( Triangle Rectangle ) 
+		if p[0] == p[1]:
+			if x == p[0]:
+				return 1
+		if p[1] == p[2]:
+			if x == p[1]:
+				 return 1
 		if x <= p[0]:
 			return 0
 		if x <= p[1]:
@@ -496,7 +244,7 @@ class Trapezoid(MembershipFunction):
 		if x < p[2]:
 			return 1
 		if x < p[3]:
-			return (x - p[2]) / (p[1] - p[2])
+			return (p[3] - x) / (p[3] - p[2])
 		return 0
 
 	def outputIsNull(self, value):
@@ -507,7 +255,6 @@ class Trapezoid(MembershipFunction):
 			return False
 
 # TODO: maybe a singleton type with variable height different from 1 may be of interest
-
 class Singleton(MembershipFunction):
 	def __init__(self, name, data):
 		self.required_type = 'singleton'
@@ -546,13 +293,14 @@ class Singleton(MembershipFunction):
 		else:
 			return False
 
-
+#TODO : Implement also Product and difference of Sigmoids
 class Sigmoid(MembershipFunction):
 	def __init__(self, name, data):
 		self.required_type = 'sigmoid'
 		self.printable_type_name = 'Sigmoid'
 		self.required_parameters_min_number = 2
 		self.required_parameters_max_number = 2
+		#First value is the slope, the second is the center
 		self.parameters = [float(x) for x in data['parameters']]
 		super().__init__(name, data)
 
@@ -567,21 +315,141 @@ class Sigmoid(MembershipFunction):
 		self.centroid_x = None  # invalidates the stored centroid value
 
 	def getMinX(self):
-		raise NotImplementedError("To be calculated for sigmoid functions")
+		#When the Sigmoid reaches the value 0.001
+		value = - math.fabs(self.parameters[0] * 4)
+		if self.parameters[0] > 0:
+			while ( 1.0 / (1.0 + math.exp(-self.parameters[0] * (value))) < 0.001 ):
+				value += 0.01
+			return value + self.parameters[1]
+		
+		else:
+			while ( (1.0 / (1.0 + math.exp(-self.parameters[0] * (value)))) > 0.999 ):
+				value += 0.01
+			return value + self.parameters[1]	
 
 	def getMaxX(self):
-		raise NotImplementedError("To be calculated for sigmoid functions")
+		#When the Sigmoid reaches the value 0.001
+		value = - math.fabs(self.parameters[0] * 4)
+		if self.parameters[0] > 0:
+			while ( 1.0 / (1.0 + math.exp(-self.parameters[0] * (value))) < 0.999  ):
+				value += 0.01
+			return value + self.parameters[1]
+		
+		else:
+			while ( 1.0 / (1.0 + math.exp(-self.parameters[0] * (value))) > 0.001 ):
+				value += 0.01
+			return value + self.parameters[1]	
 
+	def getTopLeftX(self):
+		return self.parameters[1]
+
+	def getTopRightX(self):
+		return self.parameters[1]
+		
 	def f(self, value):
-		return 1. / (1. + np.exp(-self.parameters[0] * (value - self.parameters[1])))
+		return 1.0 / (1.0 + math.exp(-self.parameters[0] * (value - self.parameters[1])))
 
 	def outputIsNull(self, value):
 		if self.f(value) <= 0.0000001:
 			return True
 		else:
 			return False
+			
+class DiffSigmoid(MembershipFunction):
+	def __init__(self, name, data):
+		self.required_type = 'diff_sigmoid'
+		self.printable_type_name = 'DiffSigmoid'
+		self.required_parameters_min_number = 4
+		self.required_parameters_max_number = 4
+		#First value is the slope, the second is the center of the first Sigmoid
+		self.parameters = [float(x) for x in data['parameters']]
+		super().__init__(name, data)
 
+	@property
+	def parameters(self):
+		return self.__parameters
 
+	@parameters.setter
+	def parameters(self, param):
+		self.check_parameters_number(param)
+		self.__parameters = [float(x) for x in param]
+		self.centroid_x = None  # invalidates the stored centroid value
+
+	def getMinX(self):
+		#When the Sigmoid reaches the value 0.001
+		value = - math.fabs(self.parameters[0] * 4)
+		while ( 1.0 / (1.0 + math.exp(-self.parameters[0] * (value))) < 0.001 ):
+			value += 0.01
+		return value + self.parameters[1]	
+
+	def getMaxX(self):
+		#When the Sigmoid reaches the value 0.001
+		value = - math.fabs(self.parameters[0] * 4)
+		while ( 1.0 / (1.0 + math.exp(-self.parameters[0] * (value))) > 0.001 ):
+			value += 0.01
+		return value + self.parameters[1]	
+		
+	def getTopLeftX(self):
+		return self.parameters[1]
+
+	def getTopRightX(self):
+		return self.parameters[3]
+		
+	def f(self, value):
+		slope = math.exp( -self.parameters[0] * ( value - self.parameters[1]));
+		slope1 = math.exp( -self.parameters[2] * ( value - self.parameters[3]));
+		return math.fabs( (1 / (1 + slope)) - ( 1 / ( 1 + slope1)));
+
+	def outputIsNull(self, value):
+		if self.f(value) <= 0.0000001:
+			return True
+		else:
+			return False
+					
+class Gaussian(MembershipFunction):
+	def __init__(self, name, data):
+		self.required_type = 'gaussian'
+		self.printable_type_name = 'Gaussian'
+		self.required_parameters_min_number = 2
+		self.required_parameters_max_number = 2
+		#First value is the slope, the second is the center
+		self.parameters = [float(x) for x in data['parameters']]
+		super().__init__(name, data)
+
+	@property
+	def parameters(self):
+		return self.__parameters
+
+	@parameters.setter
+	def parameters(self, param):
+		self.check_parameters_number(param)
+		self.__parameters = [float(x) for x in param]
+		self.centroid_x = None  # invalidates the stored centroid value
+
+	def getMinX(self):
+		#TODO: check if this value is correct
+		return self.parameters[1] - math.fabs( 3 * self.parameters[0])
+
+	def getMaxX(self):
+		#TODO: check if this value is correct
+		return self.parameters[1] + math.fabs( 3 * self.parameters[0])
+		
+	def getTopLeftX(self):
+		return self.parameters[1]
+
+	def getTopRightX(self):
+		return self.parameters[1]
+		
+	def f(self, value):
+		return math.exp( - ( value - pow(self.parameters[1],2) )  / ( 2 * pow(self.parameters[0],2)) )
+
+	def outputIsNull(self, value):
+		if self.f(value) <= 0.0000001:
+			return True
+		else:
+			return False
+			
+#TODO: This class can be removed, sine a Pairwise function can be approximated by a rectangle triangle.
 class PairwiseLinear(MembershipFunction):
 	def __init__(self, name, data):
 		self.required_type = 'pairwise-linear'
@@ -629,6 +497,7 @@ class PairwiseLinear(MembershipFunction):
 class MembershipFactory():
 	def __init__(self, data):
 		self.data = data
+		
 		if self.data is None:
 			raise ValueError("data is None in MF {}".format(self.data['name']))
 
@@ -651,14 +520,19 @@ class MembershipFactory():
 		elif type_name == 'gaussian-bell':
 			pass
 		elif type_name == 'gaussian':
-			pass
+			mf = Gaussian(self.name, self.data)
 		elif type_name == 'gaussian2':
 			pass
 		elif type_name == 'sigmoid':
 			mf = Sigmoid(self.name, self.data)
 		elif type_name == 'singleton':
 			mf = Singleton(self.name, self.data)
+		elif type_name == 'diff_sigmoid':
+			mf = DiffSigmoid(self.name, self.data)
 		else:
 			raise ValueError("Invalid type {} in MF {}".format(type_name, self.name))
 		return mf
+	
+
+	
 
