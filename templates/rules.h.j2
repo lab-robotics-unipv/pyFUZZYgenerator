@@ -48,9 +48,19 @@ typedef struct {
 	uint_t nThenRules;						//!< Number of "then statements"
 } builtRule_{{ model.name }};
 
-//TODO: Check if these lines need to be removed
-inline double min(double a, double b);
-inline double multiply(double a, double b);
-inline double max(double a, double b);
+#undef max
+#undef min
+
+inline double min(double a, double b) {
+	return a<=b ? a : b;
+}
+
+inline double multiply(double a, double b) {
+	return a*b;
+}
+
+inline double max(double a, double b){
+	return a>=b ? a : b;
+}
 
 #endif
