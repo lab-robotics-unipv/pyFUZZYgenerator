@@ -31,7 +31,6 @@ templateList = [
 	"memFunc.c.j2",
 	"memFunc.h.j2",
 	"rules.h.j2",
-	"rules.c.j2",
 	"MFShapes.h.j2",
 	"MFShapes.c.j2",
 	"setup.py.j2",
