@@ -1,262 +1,237 @@
-import logging
+import re
+# import logging
 import numpy as np
-import pytoml as toml
+from core.Variable import VariableFis, VariableFind, VariableFeq
 
-from core.Variable import VariableFIND
-from core.Membership import computeWeights
 
 
 class Model:
-    def __init__(self, name=None, data=None):
-        if name is not None:
-            self.name = name
-        if data is not None and 'fuzzify' in data['model']:
-            self.variables = data['model']['fuzzify']
-        else:
-            self.variables = []
+	def __init__(self, data):
+		self.name = data.get('name', None)
+		self.description = data.get('description', None)
+		self.version = data.get('version', None)
+		self.type = data.get('type', 'fis')
 
-        if data is not None and 'defuzzify' in data['model']:
-            self.defuzzify = data['model']['defuzzify']
-        else:
-            self.defuzzify = []
+		self.input_var = []
+		self.output_var = []
+		try:
+			self._input_var = data['input_var']
+			self._output_var = data['output_var']
+		except:
+			raise
 
-    def getNumRules(self):
-        """
-        Computes the total number of rules required by the current model, considering all the possible
-        combinations of membership functions and variables.
-        :return: Total number of rules.
-        """
-        n_rules = 1.0
-        for v in self.variables:
-            n_rules *= len(v.membership_functions)
-        return n_rules
+		self._rules = data.get('rules', None)
+		self.andFn = self._rules.get('and', 'min')
+		self.thenFn = self._rules.get('then', 'max')
 
-    def getMaxNumberOfMF(self):
-        """
-        Computes the maximum number of membership functions among all the variables.
-        :return: Maximum number of membership functions.
-        """
-        return max([len(v.membership_functions) for v in self.variables])
+	def getCorrectNumRules(self):
+		"""
+		Computes the total number of rules required by the current model, considering all the possible
+		combinations of membership functions and variables.
+		:return: Total number of rules.
+		"""
+		n_rules = 1.0
+		for iv in self.input_var:
+			n_rules *= len(iv.membership_functions)
+		return n_rules
 
-    def setInputValuesList(self, values):
-        """
-        Assign the input value to each input variable taking values from a list.
+	def __str__(self):
+		s = self.name + '\n'
+		s += 'Inputs\n'
+		for vi in self.input_var:
+			s += '\t' + str(vi) + '\n'
 
-        :param values: the list of input values
-        :return: None
-        """
-        for i, var in enumerate(self.variables):
-            var.input = values[i]
+		s += 'Outputs\n'
+		for vo in self.output_var:
+			s += '\t' + str(vo) + '\n'
 
+		return s
 
-class ModelFIND(Model):
-    def load(self, infile):
-        with open(infile, 'rb') as f:
-            data = toml.load(f)
-        if 'model' not in data:
-            raise ValueError("Missing 'model' section")
-        if 'fuzzify' not in data['model']:
-            raise ValueError("Missing 'fuzzify' section in model section")
-        if 'defuzzify' not in data['model']:
-            raise ValueError("Missing 'defuzzify' section in model section")
-        if len(data['model']['fuzzify']) < 1:
-            raise ValueError("At least 1 input variable required")
+	def getMaxNumberOfMFInput(self):
+		"""
+		Computes the maximum number of membership functions among all input the variables.
+		:return: Maximum number of membership functions.
+		"""
+		return max([len(vi.membership_functions) for vi in self.input_var])
 
-        for var_name in data['model']['fuzzify']:
-            var = VariableFIND(name=var_name, data=data[var_name])
+	def getMaxNumberOfMFOutput(self):
+		"""
+		Computes the maximum number of membership functions among all the output variables.
+		:return: Maximum number of membership functions.
+		"""
+		return max([len(vo.membership_functions) for vo in self.output_var])
 
-            if 'best' not in data[var_name]:
-                raise ValueError("Missing 'best' field in {} variable.".format(var_name))
-            # should also check that best/worst are valid function names (must find an elegant way to do it)
-            var.best = data[var_name]['best']
+class ModelFeq(Model):
+	def __init__(self, data):
+		super().__init__(data)
 
-            if 'worst' not in data[var_name]:
-                raise ValueError("Missing 'worst' field in {} variable.".format(var_name))
-            # should also check that best/worst are valid function names (must find an elegant way to do it)
-            var.worst = data[var_name]['worst']
+		for iv in self._input_var:
+			self.input_var.append(VariableFeq(iv))
 
-            self.variables.append(var)
-            logging.debug(str(var))
+		for ov in self._output_var:
+			self.output_var.append(VariableFeq(ov, False))
 
-        output_function_name = data['model']['defuzzify']
-        self.defuzzify = VariableFIND(name=output_function_name, data=data[output_function_name])
-        return data
+		try:
+			self.checkRules()
+		except:
+			raise
 
-    def calcIndex(self):
-        """
-        First the program does the AND of all the rules and then the SUM of all
-        the ANDs. The exit function is evaluated according to sum of the
-        normalized weights of all the functions. Finally the value of the
-        functions composing the exit function are evaluated dividing the
-        range of the index [0; 100] into a number of parts equal to the number of
-        functions in the exit variable. The final value is obtained through a
-        composition of the intermediate indexes. The number of executions of this
-        procedure is equal to the combination of all functions of all variables.
+		self.createRules()
 
-        :return: The value of the index.
-        """
+	def createRules(self):
+		self.rules = []
+		numRules = self.getCorrectNumRules()
+		ruleGen = self.iterate()
+		while len(self.rules) != numRules:
+			ifMFs = next(ruleGen)
+			thMFs = [0] * len(self.output_var)
 
-        nv = len(self.variables)
-        # // product of the number of functions
-        # long n_rules;
-        # double[] membership = new double[nv];
-        # double[] var = new double[ef.getFuncNumber()];
-        # double weight_sum, sum_membership_prod, membership_prod, div;
-        # // counter for the index of each variable
-        # int[] count = new int[nv];
+			ifRs = []
+			weight_sum = 0
+			for iv, mf in zip(self.input_var, ifMFs):
+				ifRs.append((iv.name, iv.membership_functions[mf].name))
+				for i, ov in enumerate(self.output_var):
+					r = next((rule for rule in iv.rules if rule['output'] == ov.name), None)
+					p = r['fact'] * r['weight'] * (mf - iv.equilibrium)
+					weight_sum += r['weight']
+					thMFs[i] += p
 
-        if (nv <= 0):
-            raise ValueError("The number of variables {} (<= 0): can not compute the index".format(nv))
+			thRs = []
+			for i, ov in enumerate(self.output_var):
+				thMFs[i] = round(thMFs[i]/weight_sum)
+				thMFs[i] += ov.equilibrium
+				# thMFs[i] = thMFs[i]/weight_sum
+				if thMFs[i] < 0:
+					thMFs[i] = 0
+				elif thMFs[i] >= len(ov.membership_functions) - 1:
+					thMFs[i] = len(ov.membership_functions) - 1
 
-        # gets the maximum number of membership functions among all variables
-        maxMF = self.getMaxNumberOfMF()
+				thRs.append((ov.name, ov.membership_functions[thMFs[i]].name))
 
-        # # indexes of the active MFs in each variable
-        # # an active MF is one MF having output != 0 for the given input value
-        # int activeMF[][] = new int[nv][maxMF]
-        #
-        # # number of active functions for each variable
-        # int[] naf = new int[nv]
-        #
-        # # resets the content of arrays
-        # for (i = 0; i < nv; i++):
-        #     naf[i] = 0
-        #     count[i] = 0
-        #     for (j = 0; j < maxMF; j++):
-        #         activeMF[i][j] = -1
+			self.rules.append((list(ifRs), list(thRs), 1))
 
-        # number of active functions for each variable
-        naf = np.zeros(nv)
-        # counter for the index of each variable
-        count = np.zeros(nv)
-        # indexes of the active MFs in each variable
-        # an active MF is one MF having output != 0 for the given input value
-        activeMF = -1 * np.ones(nv * maxMF).reshape(nv, maxMF)
+		# for r in self.rules:
+		# 	print(r)
+		# print("")
 
-        membership = np.zeros(nv)
+		#round(sum(fatt))
 
-        # initialize the arrays
-        # for (i = 0; i < nv; i++):
-        for i, var in enumerate(self.variables):
-            # Variable currVar = v.get(i);
-            # for (j = 0; j < currVar.getFuncNumber(); j++):
-            for j, mf in enumerate(var.membership_functions):
-                if mf.outputIsNull(var.input):
-                # if mf.outputIsNull(var.getInput()):
-                # if (mf.f(var.getInput()) != 0.0):   # TODO: a isNull() method may help here
-                    activeMF[i][naf[i]] = j
-                    naf[i] += 1
+	def iterate(self):
+		num = [0]*len(self.input_var)
+		stop = [len(i.membership_functions) for i in self.input_var]
+		while num[0] < stop[0]:
+			yield num
+			num[-1] += 1
+			for i in reversed(range(1, len(self.input_var))):
+				if num[i] == stop[i]:
+					num[i] = 0
+					num[i-1] += 1
 
-        # calculate the total number of rules
-        n_rules = 1
-        # for (i = 0; i < nv; i++):
-        for val in naf:
-            n_rules *= val
+	def checkRules(self):
+		for iv in self.input_var:
+			if len(iv.rules) > len(self.output_var):
+				raise ValueError("Too many rules for {}".format(iv.name))
 
-        n_exit_functions = len(self.defuzzify.membership_functions)
+			for ov in self.output_var:
+				r = [n['output'] for n in iv.rules]
+				if ov.name not in r:
+					raise ValueError("{} not in rules for {}".format(ov.name, iv.name))
 
-        fuzzyOut = np.zeros(n_exit_functions)
-        var = np.zeros(n_exit_functions)
+class ModelFis(Model):
+	def __init__(self, data):
+		super().__init__(data)
 
-        # for (i = 0; i < ef.getFuncNumber(); i++):
-        #     fuzzyOut[i] = 0.0
-        #     var[i] = 0.
+		for iv in self._input_var:
+			self.input_var.append(VariableFis(iv))
 
-        # one loop for each rule
-        sum_membership_prod = 0.0
-        # for (i = 0; i < n_rules; i++):
-        # for i in xrange(n_rules):
-        for i in np.arange(n_rules):
-            weight_sum = 0.0
-            membership_prod = 1.0
+		for ov in self._output_var:
+			self.output_var.append(VariableFis(ov))
 
-            # one loop for each value of the rule
-            # for (j = 0; j < nv; j++):
-            for j, var in enumerate(self.variables):
-                # Variable currVar = v.get(j)
+		self.rules = self.parseRules()
+		if len(self.rules) != self.getCorrectNumRules():
+			raise Exception("Correct number of rules for model {name} is {num}".format(name=self.name, num=self.getCorrectNumRules()))
+	
+	def parseRules(self):
+		regexpGlobal = r'if (.*) then (.*) with (\d)'
+		rules = []
+		try:
+			for r in self._rules['rules']:
+				a = re.match(regexpGlobal, r)
+				ifR = re.split('\sand\s', a.group(1))
+				thR = re.split('\sand\s', a.group(2))
 
-                # mf = var.getMF(activeMF[j][count[j]])
-                mf = var.membership_functions[int(activeMF[j][count[j]])]
+				ifRs = []
+				for i in ifR:
+					ifRs.append(tuple(re.split('\sis\s', i[1:-1])))
 
-                # sum the contribution of the j-th variable
-                # weight_sum += mf.getNormalizedWeight()
-                weight_sum += mf.normalized_weight
+				thRs = []
+				for i in thR:
+					thRs.append(tuple(re.split('\sis\s', i[1:-1])))
 
-                # calculate the membership grade of j-th variable
-                membership[j] = mf.f(var.getInput())
+				rules.append((ifRs, thRs, a.group(3)))
+		except:
+			raise
 
-                # calculate the AND operator among membership grades
-                membership_prod *= membership[j]
-
-            # sum the column of ANDs
-            sum_membership_prod += membership_prod
-
-            # for (j = 0; j < ef.getFuncNumber(); j++):
-            for j in np.arange(n_exit_functions):
-                var[j] += self.ef.getMF(j).f(weight_sum) * membership_prod
-
-            # update the counters to evaluate the next rule
-            count[0] += 1
-            # for (j = 0; j < nv - 1; j++):
-            for j in np.arange(nv - 1):
-                count[j + 1] += count[j] / naf[j]
-                count[j] %= naf[j]
-
-        # double es_n_func = ef.getFuncNumber()
-        es_n_func = n_exit_functions
-        div = 1.0 / (es_n_func - 1.0)
-        indexValue = 0.0
-        # for (i = 0; i < ef.getFuncNumber(); i++):
-        for i in np.arange(es_n_func):
-            fuzzyOut[i] = var[i] / sum_membership_prod
-            indexValue += div * i * fuzzyOut[i]
-
-        indexValue = 100 * indexValue
-
-        return indexValue
+		return rules
 
 
-    def computeNormalizedWeights(self):
-        """
-	    Compute and assign the normalized weights of the functions. First add the
-	    weights of all the best functions of all the variables, then divide the
-	    weight of all the functions of all the variables by this sum.
-	    """
-        # int nv, nf;
-		# int i, j;
-		# double sum, w;
+	# def setInputValuesList(self, values):
+	# 	"""
+	# 	Assign the input value to each input variable taking values from a list.
 
-		# get the sum of all the weights of the best cases
-        sum = 0.0
-        for var in self.variables:
-            sum += var.weight * var.getBestMF().weight
-
-        for var in self.variables:
-            nf = var.getFuncNumber()
-
-            # compute and assign the normalized weights
-            # for (j = 0; j < nf; j++):
-            #     w = var.getMF(j).getWeight()
-            #     var.getMF(j).setNormalizedWeight(var.getWeight() * w / sum)
+	# 	:param values: the list of input values
+	# 	:return: None
+	# 	"""
+	# 	for i, var in enumerate(self.variables):
+	# 		var.input = values[i]
 
 
-            for mf in var.membership_functions:
-                w = mf.weight
-                mf.normalized_weight = var.weight * w / sum
+class ModelFIND(Model):	
+	def __init__(self, data):
+		super().__init__(data)
+		for iv in self._input_var:
+			self.input_var.append(VariableFind(iv))
 
-    def computeVariables(self, step):
-        """
-        First computes the weights for each variable; afterwards calculates the normalized weights
-        of all the functions for all the variables in the model
+		for ov in self._output_var:
+			self.output_var.append(VariableFind(ov))
+			
+		self.parseRules() 
+   
+	def parseRules(self): 
+     
+		#TODO: Decide how to give the step parameter as input
+		#step = 10000 
+		step = 2
+		self.computeVariables(step) 
+         
+	def computeVariables(self, step): 
+		""" 
+		First computes the weights for each variable; afterwards calculates the normalized weights 
+		of all the functions for all the variables in the model 
 
-        :param step: the number of integration steps used to calculate the distances between membership functions.
-	    """
+		:param step: the number of integration steps used to calculate the distances between membership functions. 
+		""" 
+		#pdb.set_trace() 
+		for var in self.input_var: 
+			var.computeWeights(step) 
 
-        # nv = getVarNumber()
-        # for (i = 0; i < nv; i++) {
-        #     v.get(i).computeWeights(step)
-        # computeNormalizedWeights()
+		self.computeNormalizedWeights() 
+	  
+	def computeNormalizedWeights(self): 
+		""" 
+		Compute and assign the normalized weights of the functions. First add the 
+		weights of all the best functions of all the variables, then divide the 
+		weight of all the functions of all the variables by this sum. 
+		""" 
 
-        for var in self.variables:
-            computeWeights(var, step)
-        self.computeNormalizedWeights(self)
+		#TODO: Add the function getWeight for the Variables! 
+		sum = 0.0 
+		for var in self.input_var: 
+			#sum += var.getWeight() * var.getBestMF().getWeight() 
+			sum += 1 * var.getBestMF().getWeight() 
+		 
+		for var in self.input_var: 
+			for mf in var.membership_functions: 
+				w = mf.getWeight() 
+				#mf.setNormalizedWeight(var.getWeight * w / sum) 
+				mf.setNormalizedWeight( 1 * w / sum) 
