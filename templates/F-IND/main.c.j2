@@ -1,0 +1,25 @@
+#include <stdio.h>
+
+#include "init_{{ model.name }}.h"
+
+int main(){
+
+	fuzzyLogic fl;
+	newState_{{ model.name }}(&fl);
+
+
+	/*
+	* In order to change the INPUTS variable you have to change the following array
+	*/
+
+	dataType input[] = {0.44, 0.44, 0.44};
+	
+	dataType output;
+
+	output = calculateIndex(&fl, input);
+
+	printf("Stampa: %lf\n", output);
+
+
+	return 0;
+}

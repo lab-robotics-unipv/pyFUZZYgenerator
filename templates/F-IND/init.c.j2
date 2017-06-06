@@ -1,0 +1,80 @@
+#include <stdint.h>
+#include "init_{{ model.name }}.h"
+
+// INPUTS
+static fuzzyInput fi[N_INPUT_{{ model.name }}];
+
+{% for vin in model.input_var %}
+
+/* Input {{ vin.name }}
+* {{ vin.description }}
+*/
+static memFunction MF_{{ vin.name }}[{{ vin.membership_functions | length }}];
+
+{% for mf in vin.membership_functions %}
+static const dataType poi_{{ vin.name }}_{{ mf.name }}[] = { {% for p in mf.parameters recursive %}{% if p is iterable %}{{ loop(p) }}{% else %}{{ p }}{% endif %}{% if not loop.last %}, {% endif %}{% endfor %} };	// {{ mf.name }}{% if mf.description is defined %}: {{ mf.description }}{% endif %}
+{% endfor %}
+{% endfor %}
+
+// OUTPUT
+static fuzzyOutput fo;
+
+{% for vout in model.output_var %}
+/* Output {{ vout.name }}
+* {{ vout.description }}
+*/
+static memFunction MF_O[{{ vout.membership_functions | length }}];
+
+{% for mf in vout.membership_functions %}
+static const dataType poi_{{ vout.name }}_{{ mf.name }}[] = { {% for p in mf.parameters recursive %}{% if p is iterable %}{{ loop(p) }}{% else %}{{ p }}{% endif %}{% if not loop.last %}, {% endif %}{% endfor %} };	// {{ mf.name }}{% if mf.description is defined %}: {{ mf.description }}{% endif %}
+{% endfor %}
+{% endfor %}
+
+// NORMALIZED WEIGHTS
+static const dataType normalizedWeights[N_INPUT_{{ model.name }}][{{ model.getMaxNumberOfMFInput() }}] =
+	{
+	{% for vin in model.input_var %}
+		{ {% for mf in vin.membership_functions recursive %} {% if mf.getNormalizedWeight() is iterable %}{{ loop(mf.getNormalizedWeight() ) }}{% else %}{{ mf.getNormalizedWeight() }}{% endif %}{% if not loop.last %}, {% endif %}{% endfor %} },
+		{% endfor %}
+	};
+
+void newState_{{ model.name }}(fuzzyLogic *fl) {
+
+	{% for vin in model.input_var %}
+	// Input variable: {{ vin.name }}
+
+	{% for mf in vin.membership_functions %}
+	createMemFunction(&(MF_{{ vin.name }}[{{ loop.index0 }}]), {{ mfDict.get(mf.type) }}, poi_{{ vin.name }}_{{ mf.name }});
+	{% endfor %}
+
+	createInput(&(fi[{{ loop.index0 }}]), MF_{{ vin.name }}, {{ vin.membership_functions | length }}, {{ vin.getMinX() }}, {{ vin.getMaxX() }});
+
+	{% endfor %}
+
+	/*
+	* OUTPUT VARIABLES
+	*/
+
+	{% for vout in model.output_var %}
+	// Output variable: {{ vout.name }}
+
+	{% for mf in vout.membership_functions %}
+	createMemFunction(&(MF_{{ vo.name }}[{{ loop.index0 }}]), {{ mfDict.get(mf.type) }}, poi_{{ vo.name }}_{{ mf.name }});
+	{% endfor %}
+
+	createOutput(&fo, MF_{{ vo.name }}, {{ vo.membership_functions | length }});
+
+	/*
+	* NORMALIZED WEIGHTS
+	*/
+
+	uint_t i, j;
+	for ( i = 0; i < N_INPUT_{{ model.name }}; i++)
+		for ( j = 0; j < MAX_N_MF_INPUT_{{ model.name }}; j++)
+			setNormalizedWeight_{{ model.name }}( &(fi[i].mf[j]), normalizedWeights[i][j]);
+
+	/*
+	* LOGIC
+	*/
+	createFindLogic(fl, fi, &fo, N_INPUT_{{ model.name }});
+}

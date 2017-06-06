@@ -1,37 +1,21 @@
-#include <string.h>
-#include <stdint.h>
-
-#include "memFunc_{{ model.name }}.h"
+#include "memFunc.h"
 
 /*! ALLOCATION AND CREATION OF A MEMBER FUNCTION (A FUZZY SET):
  *		output		mf			Fuzzy Set to init
  *		input		name		Label of the Fuzzy set
  *		input		ms			Member Function shape
  *		input		poi			Array containing the points of interest of the shape
- *
- *		return					Flag: -1 if error, 0 otherwise
  */
-int_t createMemFunction_{{ model.name }}(memFunction_{{ model.name }} * mf, char* name, memFuncShape ms, dataType * poi) {
-	if (mf == NULL) {
-		return -1;
-	}
-
-	strcpy(mf->name, name);
+void createMemFunction(memFunction *mf, memFuncShape ms, const dataType *poi) {
 
 	mf->ms = ms;
 
 	mf->lPoi = getMFPoiNum(ms);
-	
-	mf->weight = 0.0;
-	
-	mf->normalizedWeight = 0.0;
-	
-	if (mf->lPoi == -1) {
-		return -1;
-	}
-	memcpy(mf->poi, poi, mf->lPoi*sizeof(dataType));
 
-	return 0;
+	mf->normalizedWeight = 0.0;
+
+	mf->poi = poi;
+
 }
 
 /*! CALCULATION OF THE MEMBERSHIP TO A GIVEN FUZZY SET
@@ -40,7 +24,7 @@ int_t createMemFunction_{{ model.name }}(memFunction_{{ model.name }} * mf, char
  *
  *			return		dataType		Return the % of membership to a Fuzzy set (mf) given as input inputValue
  */
-dataType getPercentage_{{ model.name }}(memFunction_{{ model.name }} * mf , dataType inputValue)
+dataType getPercentage(memFunction *mf, dataType inputValue)
 {
 	dataType slope;
 	dataType slope1;
@@ -107,25 +91,17 @@ dataType getPercentage_{{ model.name }}(memFunction_{{ model.name }} * mf , data
 			slope1 = exp( -mf->poi[2] * ( inputValue - mf->poi[3]));
 			return fabs( (1 / (1 + slope)) - ( 1 / ( 1 + slope1)));
 	}
+	//Warning: it should never reach this point
+	return 0;
 }
 
-/*!	SET THE WEIGHT ASSOCIATED TO THE MEMBER FUNCTION
- * 			input		mf				Member Function
- * 			input		weight			The weight to be associated to the Member Function
- * 
- * 			return		void
- */
-void setWeight_{{ model.name }}(memFunction_{{ model.name }} * mf, dataType weight){
-	
-	mf->weight = weight;
-}
 /*!	SET THE WEIGHT ASSOCIATED TO THE MEMBER FUNCTION
  * 			input		mf				Member Function
  * 			input		nWeight			The normalized weight to be associated to the Member Function
  * 
  * 			return		void
  */
-void setNormalizedWeight_{{ model.name }}(memFunction_{{ model.name }} * mf, dataType nWeight){
+void setNormalizedWeight(memFunction *mf, dataType nWeight){
 	
 	mf->normalizedWeight = nWeight;
 }
