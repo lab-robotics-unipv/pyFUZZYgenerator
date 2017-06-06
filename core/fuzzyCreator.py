@@ -5,10 +5,10 @@ import os
 import pytoml
 from pathlib import Path
 
-from core import Model
+from core import Model, ModelType
 
 folders = {
-	"f-ind": "F-IND",
+	"F-IND": "F-IND",
 }
 
 mfDict = {
@@ -24,8 +24,9 @@ mfDict = {
 }
 
 class templateRenderer(object):
-	def __init__(self, model):
-		self.tmplDir = Path(__file__).parent / '..' / 'templates' / folders[model.type.lower()]
+	def __init__(self, model, path):
+		#self.tmplDir = Path(__file__).parent / '..' / 'templates' / folders[model.type.lower()]
+		self.tmplDir = path
 		self.tmplDir.resolve()
 
 		loader = j2.FileSystemLoader(str(self.tmplDir))
@@ -55,11 +56,25 @@ class fuzzyCreator(object):
 
 		self.outDir = outDir
 
+	def __process_template__(self, renderer, template_name, out_dir, add_model_name=None):
+		try:
+			tmplSplit = template_name.split('.')
+			if add_model_name is None:
+				outfile = tmplSplit[0] + '.' + tmplSplit[1]
+			else:
+				outfile = tmplSplit[0] + '_' + add_model_name + '.' + tmplSplit[1]
+			renderer.write(out_dir / outfile, template_name)
+		except j2.TemplateSyntaxError as e:
+			print("Exception in ", template_name, ":")
+			raise e
+
+		pass
+
 	def render(self, subfolder=True):
 		if not self.outDir.exists():
 			self.outDir.mkdir(parents=True)
 
-		model_types_added = set()
+		model_types_added = ModelType.ModelTypeSet()
 
 		outDir = self.outDir
 		for model in self.models:
@@ -68,38 +83,32 @@ class fuzzyCreator(object):
 				if not outDir.exists():
 					outDir.mkdir()
 
-			renderer = templateRenderer(model)
+			templ_dir = Path(__file__).parent / '..' / 'templates' / folders[model.type.upper()]
 
-			templDir = Path(__file__).parent / '..' / 'templates' / folders[model.type.lower()]
-			templateList = templDir.glob('*.j2')
-			templateList = [x.name for x in templateList]
+			renderer = templateRenderer(model, templ_dir)
 
-			for tmpl in templateList:
-				try:
-					tmplSplit = tmpl.split('.')
-					if tmplSplit[0] == 'main' or tmplSplit[0] == 'setup' or tmplSplit[0] == 'README' :
-						outfile = tmplSplit[0] + '.' + tmplSplit[1]
-					else:
-						outfile = tmplSplit[0] + '_' + model.name + '.' + tmplSplit[1]
-					renderer.write(outDir / outfile, tmpl)
-				except j2.TemplateSyntaxError as e:
-					print("Exception in ", tmpl, ":")
-					raise e
+			template_list = templ_dir.glob('*.j2')
+			template_list = [x.name for x in template_list]
 
+			for tmpl in template_list:
+				self.__process_template__(renderer, tmpl, outDir, model.name)
 
-			model_types_added.add(model.type.lower())
+			model_types_added.update(model)
 
 		# Check if the model type has any common that should be copied as well
 		for mt in model_types_added:
-			templDir = Path(__file__).parent / '..' / 'templates' / folders[mt]
-			common = (templDir / 'common').exists()
-
+			templ_dir = Path(__file__).parent / '..' / 'templates' / folders[mt.type]
+			common = (templ_dir / 'common').exists()
 			if common:
-				fileDir = templDir / 'common'
+				renderer = templateRenderer(mt, templ_dir / "common")
+				fileDir = templ_dir / 'common'
 				fileList = fileDir.glob('*')
 				for f in fileList:
 					if f.is_file():
-						shutil.copy(str(f), str(self.outDir))
+						if f.suffix == ".j2":
+							self.__process_template__(renderer, f.name, outDir)
+						else:
+							shutil.copy(str(f), str(self.outDir))
 
 		# Copies common model types files
 		fileDir = Path(__file__).parent / '..' / 'templates' / "common"
