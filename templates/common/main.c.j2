@@ -15,6 +15,7 @@ int main(){
     {% if m.description is defined %}
     * {{ m.description }}
     {% endif %}
+    * FUZZY TYPE: {{ m.type | upper }}
     *
     * INPUTS:
     {% for vin in m.input_var %}
