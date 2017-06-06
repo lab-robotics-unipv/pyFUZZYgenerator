@@ -72,15 +72,20 @@ class fuzzyCreator(object):
 
 			templDir = Path(__file__).parent / '..' / 'templates' / folders[model.type.lower()]
 			templateList = templDir.glob('*.j2')
-			common = (templDir / 'common').exists()
+			templateList = [x.name for x in templateList]
 
 			for tmpl in templateList:
-				tmplSplit = tmpl.split('.')
-				if tmplSplit[0] == 'main' or tmplSplit[0] == 'setup' or tmplSplit[0] == 'README' :
-					outfile = tmplSplit[0] + '.' + tmplSplit[1]
-				else:
-					outfile = tmplSplit[0] + '_' + model.name + '.' + tmplSplit[1]
-				renderer.write(outDir / outfile, tmpl)
+				try:
+					tmplSplit = tmpl.split('.')
+					if tmplSplit[0] == 'main' or tmplSplit[0] == 'setup' or tmplSplit[0] == 'README' :
+						outfile = tmplSplit[0] + '.' + tmplSplit[1]
+					else:
+						outfile = tmplSplit[0] + '_' + model.name + '.' + tmplSplit[1]
+					renderer.write(outDir / outfile, tmpl)
+				except j2.TemplateSyntaxError as e:
+					print("Exception in ", tmpl, ":")
+					raise e
+
 
 			model_types_added.add(model.type.lower())
 
@@ -94,11 +99,11 @@ class fuzzyCreator(object):
 				fileList = fileDir.glob('*')
 				for f in fileList:
 					if f.is_file():
-						shutil.copy(f, self.outDir)
+						shutil.copy(str(f), str(self.outDir))
 
 		# Copies common model types files
 		fileDir = Path(__file__).parent / '..' / 'templates' / "common"
 		fileList = fileDir.glob('*')
 		for f in fileList:
 			if f.is_file():
-				shutil.copy(f, self.outDir)
+				shutil.copy(str(f), str(self.outDir))

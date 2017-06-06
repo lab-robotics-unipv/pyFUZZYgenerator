@@ -59,10 +59,12 @@ void initFindLogic_{{ model.name }}(findLogic *fl) {
 	// Output variable: {{ vout.name }}
 
 	{% for mf in vout.membership_functions %}
-	createMemFunction(&(MF_{{ vo.name }}[{{ loop.index0 }}]), {{ mfDict.get(mf.type) }}, poi_{{ vo.name }}_{{ mf.name }});
+	createMemFunction(&(MF_{{ vout.name }}[{{ loop.index0 }}]), {{ mfDict.get(mf.type) }}, poi_{{ vout.name }}_{{ mf.name }});
 	{% endfor %}
 
-	createFindOutput(&fo, MF_{{ vo.name }}, {{ vo.membership_functions | length }});
+
+	createFindOutput(&fo, MF_{{ vout.name }}, {{ vout.membership_functions | length }});
+    {% endfor %}
 
 	/*
 	* NORMALIZED WEIGHTS
