@@ -1,9 +1,15 @@
+import shutil
+
 import jinja2 as j2
 import os
 import pytoml
 from pathlib import Path
 
 from core import Model
+
+folders = {
+	"f-ind": "F-IND",
+}
 
 mfDict = {
 	# 'pairwise-linear': ,
@@ -17,35 +23,9 @@ mfDict = {
 	'singleton': 'SPIKE_MF',
 }
 
-templateList = [
-	"definitions.h.j2",
-	"defCommon.h.j2",
-	"fuzzyInput.c.j2",
-	"fuzzyInput.h.j2",
-	"fuzzyLogic.c.j2",
-	"fuzzyLogic.h.j2",
-	"fuzzyOutput.c.j2",
-	"fuzzyOutput.h.j2",
-	"init.c.j2",
-	"init.h.j2",
-	"memFunc.c.j2",
-	"memFunc.h.j2",
-	"rules.h.j2",
-	"MFShapes.h.j2",
-	"MFShapes.c.j2",
-	"setup.py.j2",
-	"main.c.j2",
-	"README.txt.j2",
-]
-
-commonFileList = [
-	"MFShapes.h.j2",
-	"MFShapes.c.j2",
-]
-
 class templateRenderer(object):
 	def __init__(self, model):
-		self.tmplDir = Path(__file__).parent / '..' / 'templates'
+		self.tmplDir = Path(__file__).parent / '..' / 'templates' / folders[model.type.lower()]
 		self.tmplDir.resolve()
 
 		loader = j2.FileSystemLoader(str(self.tmplDir))
@@ -79,6 +59,8 @@ class fuzzyCreator(object):
 		if not self.outDir.exists():
 			self.outDir.mkdir(parents=True)
 
+		model_types_added = set()
+
 		outDir = self.outDir
 		for model in self.models:
 			if subfolder:
@@ -88,10 +70,35 @@ class fuzzyCreator(object):
 
 			renderer = templateRenderer(model)
 
+			templDir = Path(__file__).parent / '..' / 'templates' / folders[model.type.lower()]
+			templateList = templDir.glob('*.j2')
+			common = (templDir / 'common').exists()
+
 			for tmpl in templateList:
 				tmplSplit = tmpl.split('.')
-				if (tmplSplit[0] == 'main' or tmplSplit[0] == 'setup' or tmplSplit[0] == 'README') :
+				if tmplSplit[0] == 'main' or tmplSplit[0] == 'setup' or tmplSplit[0] == 'README' :
 					outfile = tmplSplit[0] + '.' + tmplSplit[1]
 				else:
 					outfile = tmplSplit[0] + '_' + model.name + '.' + tmplSplit[1]
 				renderer.write(outDir / outfile, tmpl)
+
+			model_types_added.add(model.type.lower())
+
+		# Check if the model type has any common that should be copied as well
+		for mt in model_types_added:
+			templDir = Path(__file__).parent / '..' / 'templates' / folders[mt]
+			common = (templDir / 'common').exists()
+
+			if common:
+				fileDir = templDir / 'common'
+				fileList = fileDir.glob('*')
+				for f in fileList:
+					if f.is_file():
+						shutil.copy(f, self.outDir)
+
+		# Copies common model types files
+		fileDir = Path(__file__).parent / '..' / 'templates' / "common"
+		fileList = fileDir.glob('*')
+		for f in fileList:
+			if f.is_file():
+				shutil.copy(f, self.outDir)
