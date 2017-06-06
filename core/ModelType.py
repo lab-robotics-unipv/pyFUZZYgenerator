@@ -2,6 +2,10 @@ class ModelType:
     def __init__(self):
         self.type = None
         self.properties = {}
+        self.models = []
+        self.logic_function_name = None
+        self.init_function_name = None
+        self.output_function_name = None
 
     def __eq__(self, other):
         if other.type == self.type:
@@ -9,7 +13,7 @@ class ModelType:
         return False
 
     def update(self, model):
-        raise NotImplementedError
+        self.models.append(model)
 
 
 class TooBigDimensionsException(Exception):
@@ -25,8 +29,12 @@ class FINDModelType(ModelType):
         super().__init__()
         self.type = "F-IND"
         self.properties["max_input_n"] = 0
+        self.logic_function_name = "findLogic"
+        self.init_function_name = "initFindLogic"
+        self.output_function_name = "calculateFindIndex"
 
     def update(self, model):
+        super().update(model)
         self.properties["max_input_n"] = max(len(model.input_var), self.properties["max_input_n"])
 
     def get_squaredint_t(self):
@@ -45,23 +53,29 @@ class FISModelType(ModelType):
     def __init__(self):
         super().__init__()
         self.type = "FIS"
+        self.logic_function_name = "fisLogic"
+        self.init_function_name = "initFisLogic"
+        self.output_function_name = "calculateFisOutput"
 
     def update(self, model):
-        pass
+        super().update(model)
 
 
 class FEQModelType(ModelType):
     def __init__(self):
         super().__init__()
         self.type = "FIS"
+        self.logic_function_name = "feqLogic"
+        self.init_function_name = "initFeqLogic"
+        self.output_function_name = "calculateFeqOutput"
 
     def update(self, model):
-        pass
+        super().update(model)
 
 
 class ModelTypeSet:
     def __init__(self):
-        self.list = []
+        self.model_type_list = []
 
     def update(self, model):
         model_type = None
@@ -74,11 +88,11 @@ class ModelTypeSet:
         else:
             raise ModelNotFoundException
 
-        if model_type not in self.list:
-            self.list.append(model_type)
+        if model_type not in self.model_type_list:
+            self.model_type_list.append(model_type)
 
-        actual_model_type = self.list[self.list.index(model_type)]
+        actual_model_type = self.model_type_list[self.model_type_list.index(model_type)]
         actual_model_type.update(model)
 
     def __iter__(self):
-        return self.list.__iter__()
+        return self.model_type_list.__iter__()

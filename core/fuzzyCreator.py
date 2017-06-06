@@ -113,6 +113,11 @@ class fuzzyCreator(object):
 		# Copies common model types files
 		fileDir = Path(__file__).parent / '..' / 'templates' / "common"
 		fileList = fileDir.glob('*')
+		renderer = templateRenderer(model_types_added, fileDir)
 		for f in fileList:
 			if f.is_file():
-				shutil.copy(str(f), str(self.outDir))
+				if f.suffix == ".j2":
+					self.__process_template__(renderer, f.name, outDir)
+				else:
+					shutil.copy(str(f), str(self.outDir))
+

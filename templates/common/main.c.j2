@@ -1,0 +1,43 @@
+#include <stdio.h>
+
+{% for mt in model.model_type_list %}
+{% for m in mt.models %}
+#include "init_{{ m.name }}.h"
+{% endfor %}
+{% endfor %}
+
+int main(){
+
+{% for mt in model.model_type_list %}
+{% for m in mt.models %}
+    /*
+    * {{ m.name | upper }}
+    {% if m.description is defined %}
+    * {{ m.description }}
+    {% endif %}
+    *
+    * INPUTS:
+    {% for vin in m.input_var %}
+	* {{ vin.name }}{% if vin.description is defined %} - {{ vin.description }} {% endif %}
+
+	{% endfor %}
+	*
+	* OUTPUTS:
+	{% for vo in m.output_var %}
+	* {{ vo.name }}{% if vo.description is defined %} - {{ vo.description }} {% endif %}
+
+    {% endfor %}
+    */
+    {{ mt.logic_function_name }} fl_{{ m.name }};
+    {{ mt.init_function_name }}_{{ m.name }}(&fl_{{ m.name}});
+    // TODO update with meaningful values w.r.t. your problem's domain
+    dataType input_{{ m.name }}[ N_INPUT_{{ m.name }} ] = {0.0};
+
+    dataType output_{{ m.name }} = {{ mt.output_function_name }}(&fl_{{ m.name}}, input_{{ m.name }});
+
+    printf("Output for {{ m.name }}: %lf\n", output_{{ m.name }});
+
+{% endfor %}
+{% endfor %}
+	return 0;
+}
