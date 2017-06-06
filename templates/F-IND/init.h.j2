@@ -1,0 +1,10 @@
+#ifndef INIT_{{ model.name }}_H
+#define INIT_{{ model.name }}_H
+
+#include "findLogic.h"
+
+#define N_INPUT_{{ model.name }} {{ model.input_var | length }}
+
+void initFindLogic_{{ model.name }}(findLogic *fl);
+
+#endif
