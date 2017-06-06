@@ -4,8 +4,8 @@
 
 int main(){
 
-	fuzzyLogic fl;
-	newState_{{ model.name }}(&fl);
+	findLogic fl;
+	initFindLogic_{{ model.name }}(&fl);
 
 
 	/*
@@ -16,7 +16,7 @@ int main(){
 	
 	dataType output;
 
-	output = calculateIndex(&fl, input);
+	output = calculateFindIndex(&fl, input);
 
 	printf("Stampa: %lf\n", output);
 

@@ -2,7 +2,7 @@
 #include "init_{{ model.name }}.h"
 
 // INPUTS
-static fuzzyInput fi[N_INPUT_{{ model.name }}];
+static findInput fi[N_INPUT_{{ model.name }}];
 
 {% for vin in model.input_var %}
 
@@ -17,7 +17,7 @@ static const dataType poi_{{ vin.name }}_{{ mf.name }}[] = { {% for p in mf.para
 {% endfor %}
 
 // OUTPUT
-static fuzzyOutput fo;
+static findOutput fo;
 
 {% for vout in model.output_var %}
 /* Output {{ vout.name }}
@@ -38,7 +38,7 @@ static const dataType normalizedWeights[N_INPUT_{{ model.name }}][{{ model.getMa
 		{% endfor %}
 	};
 
-void newState_{{ model.name }}(fuzzyLogic *fl) {
+void initFindLogic_{{ model.name }}(findLogic *fl) {
 
 	{% for vin in model.input_var %}
 	// Input variable: {{ vin.name }}
@@ -47,7 +47,7 @@ void newState_{{ model.name }}(fuzzyLogic *fl) {
 	createMemFunction(&(MF_{{ vin.name }}[{{ loop.index0 }}]), {{ mfDict.get(mf.type) }}, poi_{{ vin.name }}_{{ mf.name }});
 	{% endfor %}
 
-	createInput(&(fi[{{ loop.index0 }}]), MF_{{ vin.name }}, {{ vin.membership_functions | length }}, {{ vin.getMinX() }}, {{ vin.getMaxX() }});
+	createFindInput(&(fi[{{ loop.index0 }}]), MF_{{ vin.name }}, {{ vin.membership_functions | length }}, {{ vin.getMinX() }}, {{ vin.getMaxX() }});
 
 	{% endfor %}
 
@@ -62,7 +62,7 @@ void newState_{{ model.name }}(fuzzyLogic *fl) {
 	createMemFunction(&(MF_{{ vo.name }}[{{ loop.index0 }}]), {{ mfDict.get(mf.type) }}, poi_{{ vo.name }}_{{ mf.name }});
 	{% endfor %}
 
-	createOutput(&fo, MF_{{ vo.name }}, {{ vo.membership_functions | length }});
+	createFindOutput(&fo, MF_{{ vo.name }}, {{ vo.membership_functions | length }});
 
 	/*
 	* NORMALIZED WEIGHTS

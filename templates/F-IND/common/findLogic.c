@@ -1,13 +1,13 @@
 #include <stdint.h>
 #include <string.h>
 
-#include "fuzzyLogic.h"
+#include "findLogic.h"
 
 squareduint_t two_to_n(uint_t ninput) {
     return ((squareduint_t) 1)<<ninput;
 }
 
-void createFindLogic(fuzzyLogic *fl, fuzzyInput *inputs, fuzzyOutput *outputs, uint_t ninput) {
+void createFindLogic(findLogic *fl, findInput *inputs, findOutput *outputs, uint_t ninput) {
     fl->fInput = inputs;
     fl->fOutput = outputs;
 	fl->ninput = ninput;
@@ -15,14 +15,14 @@ void createFindLogic(fuzzyLogic *fl, fuzzyInput *inputs, fuzzyOutput *outputs, u
 }
 
 
-/*! CALCULATE THE INDEX, GIVEN AN INPUT TO THE FUZZY SYSTEM.
+/*! CALCULATE THE INDEX, GIVEN AN INPUT TO THE FIND SYSTEM.
  * 	THIS FUNCTIONS WORKS ***ONLY*** FOR F-IND SYSTEMS.
  * 	IN ORDER TO SEE HOW F-IND WORKS LOOK AT THE DOCUMENTATION
- *		input			fl				Fuzzy logic
+ *		input			fl				FIND logic
  *
  *		return							Index 
  */
-dataType calculateIndex(fuzzyLogic *fl, dataType *inputs){
+dataType calculateFindIndex(findLogic *fl, dataType *inputs){
 
     squareduint_t mask=0, mask_ones = 0;
     uint_t skipped = 0, i, j;
@@ -36,7 +36,7 @@ dataType calculateIndex(fuzzyLogic *fl, dataType *inputs){
     memset(var, 0, fl->fOutput->nMF*sizeof(dataType));
 
     for ( i = 0; i < fl->ninput; i++) {
-        fuzzified_index[i] = getPercentageFromInput(&(fl->fInput[i]), inputs[i], &fuzzified[i]);
+        fuzzified_index[i] = getPercentageFromFindInput(&(fl->fInput[i]), inputs[i], &fuzzified[i]);
     }
 
     //This creates a "cache" to map the path that must be skipped.
