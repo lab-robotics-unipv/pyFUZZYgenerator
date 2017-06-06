@@ -106,7 +106,7 @@ class fuzzyCreator(object):
 				for f in fileList:
 					if f.is_file():
 						if f.suffix == ".j2":
-							self.__process_template__(renderer, f.name, outDir)
+							self.__process_template__(renderer, f.name, self.outDir)
 						else:
 							shutil.copy(str(f), str(self.outDir))
 
@@ -117,7 +117,7 @@ class fuzzyCreator(object):
 		for f in fileList:
 			if f.is_file():
 				if f.suffix == ".j2":
-					self.__process_template__(renderer, f.name, outDir)
+					self.__process_template__(renderer, f.name, self.outDir)
 				else:
 					shutil.copy(str(f), str(self.outDir))
 
