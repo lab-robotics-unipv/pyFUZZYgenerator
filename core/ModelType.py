@@ -35,7 +35,8 @@ class FINDModelType(ModelType):
 
     def update(self, model):
         super().update(model)
-        self.properties["max_input_n"] = max(len(model.input_var), self.properties["max_input_n"])
+        self.properties["max_input_n"] = max(
+            len(model.input_var), self.properties["max_input_n"])
 
     def get_squaredint_t(self):
         ninput = self.properties["max_input_n"]
@@ -91,7 +92,8 @@ class ModelTypeSet:
         if model_type not in self.model_type_list:
             self.model_type_list.append(model_type)
 
-        actual_model_type = self.model_type_list[self.model_type_list.index(model_type)]
+        actual_model_type = self.model_type_list[self.model_type_list.index(
+            model_type)]
         actual_model_type.update(model)
 
     def __iter__(self):
