@@ -19,7 +19,7 @@ class Model:
         except:
             raise
 
-        self._rules = data.get('rules', None)
+        self._rules = data.get('rules', {})
         self.andFn = self._rules.get('and', 'min')
         self.thenFn = self._rules.get('then', 'max')
 
