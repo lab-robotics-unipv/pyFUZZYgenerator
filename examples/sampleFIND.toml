@@ -1,0 +1,119 @@
+[[model]]
+	name = "Prova"
+	description = "Prova per un modello FIND"
+	version = "1.0alpha"
+	type = "f-ind"
+
+	[[model.input_var]]
+		name = "A"
+		description = "A"
+		best = "A"
+		worst = "E"
+		
+		[[model.input_var.mf]]
+			name = "A"
+			type = "trapezoid"
+			parameters = [0.0, 0.0, 0.35, 0.52]
+
+		[[model.input_var.mf]]
+			name = "B"
+			type = "triangle"
+			parameters = [0.35, 0.52, 0.7]
+
+		[[model.input_var.mf]]
+			name = "C"
+			type = "triangle"
+			parameters = [0.52, 0.7, 0.9]
+
+		[[model.input_var.mf]]
+			name = "D"
+			type = "triangle"
+			parameters = [0.7, 0.9, 1.05]
+
+		[[model.input_var.mf]]
+			name = "E"
+			type = "triangle"
+			parameters = [0.9, 1.05, 1.05]
+
+	[[model.input_var]]
+		name = "B"
+		description = "A"
+		best = "A"
+		worst = "E"
+		
+		[[model.input_var.mf]]
+			name = "A"
+			type = "trapezoid"
+			parameters = [0.0, 0.0, 0.35, 0.52]
+
+		[[model.input_var.mf]]
+			name = "B"
+			type = "triangle"
+			parameters = [0.35, 0.52, 0.7]
+
+		[[model.input_var.mf]]
+			name = "C"
+			type = "triangle"
+			parameters = [0.52, 0.7, 0.9]
+
+		[[model.input_var.mf]]
+			name = "D"
+			type = "triangle"
+			parameters = [0.7, 0.9, 1.05]
+
+		[[model.input_var.mf]]
+			name = "E"
+			type = "triangle"
+			parameters = [0.9, 1.05, 1.05]
+
+	[[model.input_var]]
+		name = "C"
+		description = "A"
+		best = "A"
+		worst = "E"
+		
+		[[model.input_var.mf]]
+			name = "A"
+			type = "trapezoid"
+			parameters = [0.0, 0.0, 0.35, 0.52]
+
+		[[model.input_var.mf]]
+			name = "B"
+			type = "triangle"
+			parameters = [0.35, 0.52, 0.7]
+
+		[[model.input_var.mf]]
+			name = "C"
+			type = "triangle"
+			parameters = [0.52, 0.7, 0.9]
+
+		[[model.input_var.mf]]
+			name = "D"
+			type = "triangle"
+			parameters = [0.7, 0.9, 1.05]
+
+		[[model.input_var.mf]]
+			name = "E"
+			type = "triangle"
+			parameters = [0.9, 1.05, 1.05]
+					
+	[[model.output_var]]
+		name = "O"
+		description = "output_1"
+		best = "A"
+		worst = "C"
+		
+		[[model.output_var.mf]]
+			name = "A"
+			type = "triangle"
+			parameters = [0.0, 0.0, 0.5]
+
+		[[model.output_var.mf]]
+			name = "B"
+			type = "triangle"
+			parameters = [0.0, 0.5, 1.0]
+
+		[[model.output_var.mf]]
+			name = "C"
+			type = "triangle"
+			parameters = [0.5, 1.0, 1.0]
