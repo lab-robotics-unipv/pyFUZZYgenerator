@@ -1,0 +1,163 @@
+#include <python3.4/Python.h>
+#include <string.h>
+#include <stdint.h>
+
+#include "definitions_{{ model.name }}.h"
+#include "fuzzyLogic_{{ model.name }}.h"
+
+int_t newState_{{ model.name }}(fuzzyLogic_{{ model.name }} * fl) {
+
+	/*
+	 * INPUT VARIABLES
+	 */
+
+	int_t flag;
+	fuzzyInput_{{ model.name }} fi[N_INPUT_{{ model.name }}];
+
+	{% for vin in model.input_var %}
+	// Input variable: {{ vin.name }}
+	{% if vin.description is defined %}
+	// {{ vin.description }}
+	{% endif %}
+	memFunction_{{ model.name }} MF_{{ vin.name }}[{{ vin.membership_functions | length }}];
+
+	{% for mf in vin.membership_functions %}
+	dataType poi_{{ vin.name }}_{{ mf.name }}[] = { {% for p in mf.parameters recursive %}{% if p is iterable %}{{ loop(p) }}{% else %}{{ p }}{% endif %}{% if not loop.last %}, {% endif %}{% endfor %} };
+	createMemFunction_{{ model.name }}(&(MF_{{ vin.name }}[{{ loop.index0 }}]), "{{ mf.name }}", {{ mfDict.get(mf.type) }}, poi_{{ vin.name }}_{{ mf.name }});
+	{% endfor %}
+
+	flag = createInput_{{ model.name }}(&(fi[{{ loop.index0 }}]), "{{ vin.name }}", MF_{{ vin.name }}, {{ vin.membership_functions | length }}, {{ vin.getMinX() }}, {{ vin.getMaxX() }});
+	if (flag < 0) {
+		return 1;
+	}
+
+	{% endfor %}
+
+	/*
+	 * OUTPUT VARIABLES
+	 */
+
+	fuzzyOutput_{{ model.name }} fo[N_OUTPUT_{{ model.name }}];
+
+	{% for vo in model.output_var %}
+	// Output variable: {{ vo.name }}
+	{% if vo.description is defined %}
+	// {{ vo.description }}
+	{% endif %}
+	memFunction_{{ model.name }} MF_{{ vo.name }}[{{ vo.membership_functions | length }}];
+
+	{% for mf in vo.membership_functions %}
+	dataType poi_{{ vo.name }}_{{ mf.name }}[] = { {% for p in mf.parameters recursive %}{% if p is iterable %}{{ loop(p) }}{% else %}{{ p }}{% endif %}{% if not loop.last %}, {% endif %}{% endfor %} };
+	createMemFunction_{{ model.name }}(&(MF_{{ vo.name }}[{{ loop.index0 }}]), "{{ mf.name }}", {{ mfDict.get(mf.type) }}, poi_{{ vo.name }}_{{ mf.name }});
+	{% endfor %}
+
+	flag = createOutput_{{ model.name }}(&(fo[{{ loop.index0 }}]), "{{ vo.name }}", MF_{{ vo.name }}, {{ vo.membership_functions | length }});
+	if (flag < 0) {
+		return 1;
+	}
+
+	{% endfor %}
+
+	{% if  model.type  == "f-ind"  %}
+	/*
+	 * NORMALIZED WEIGHTS
+	 */
+	 
+	dataType normalizedWeights[N_INPUT_{{ model.name }}][MAX_N_MF_INPUT_{{ model.name }}] = 
+	{
+	{% for vin in model.input_var %}
+	{ {% for mf in vin.membership_functions recursive %} {% if mf.getNormalizedWeight() is iterable %}{{ loop(mf.getNormalizedWeight() ) }}{% else %}{{ mf.getNormalizedWeight() }}{% endif %}{% if not loop.last %}, {% endif %}{% endfor %} },
+	{% endfor %}
+	};
+	
+	int_t i,j;
+	for ( i = 0; i < N_INPUT_{{ model.name }}; i++)
+		for ( j = 0; j < MAX_N_MF_INPUT_{{ model.name }}; j++) 
+			setNormalizedWeight_{{ model.name }}( &(fi[i].mf[j]), normalizedWeights[i][j]);
+		
+	{% endif %}
+	/*	
+	 * RULES
+	 */
+
+	rule_{{ model.name }} rules[N_RULES_{{ model.name }}];
+
+	{% for r in model.rules %}{% set outerLoop = loop %}
+	rules[{{ loop.index0 }}].nIfRules = {{ r[0] | length }};
+
+	{% for ir in r[0] %}
+	strcpy(rules[{{ outerLoop.index0 }}].ifRules[{{ loop.index0 }}].name, "{{ ir[0] }}");
+	strcpy(rules[{{ outerLoop.index0 }}].ifRules[{{ loop.index0 }}].mf, "{{ ir[1] }}");
+	{% endfor %}
+
+	rules[{{ loop.index0 }}].thenValue = {{ r[2] }};
+	
+	rules[{{ loop.index0 }}].nThenRules = {{ r[1] | length }};
+
+	{% for tr in r[1] %}
+	strcpy(rules[{{ outerLoop.index0 }}].thenRules[{{ loop.index0 }}].name, "{{ tr[0] }}");
+	strcpy(rules[{{ outerLoop.index0 }}].thenRules[{{ loop.index0 }}].mf, "{{ tr[1] }}");
+	{% endfor %}
+
+	{% endfor %}
+
+	/*
+	 * LOGIC
+	 */
+
+	flag = createLogic_{{ model.name }}(fl, fi, fo, rules);
+	if ( flag < 0 ) {
+		return 3;
+	}
+
+	return 0;
+}
+
+static PyObject* py_index(PyObject* self, PyObject* args){
+
+    dataType *input;
+    dataType index;
+	int_t i;
+    int_t len;
+	PyObject *py_tuple;
+
+ 	fuzzyLogic_{{ model.name }} fl;
+	newState_{{ model.name }}(&fl);  
+    
+    if (!PyArg_ParseTuple(args, "O", &py_tuple)) {
+      return NULL;
+    }
+    
+    len = PyTuple_Size(py_tuple);
+    input= malloc(len*sizeof(dataType));
+    while (len--) {
+        input[len] = (dataType) PyFloat_AsDouble(PyTuple_GetItem(py_tuple, len));
+    }
+
+    fuzzify_{{ model.name }}(&fl, &(input[0]));
+    index = calculateIndex_{{ model.name }}(&fl);
+    return PyFloat_FromDouble(index);
+
+}
+
+static PyMethodDef indexMethods[] = {
+    
+    {"index",  py_index, METH_VARARGS,
+     "Calculate the index of F-IND model."},
+     
+    {NULL, NULL, 0, NULL}        /* Sentinel */
+};
+
+static struct PyModuleDef indexmodule = {
+   PyModuleDef_HEAD_INIT,
+   "index",   /* name of module */
+   NULL, /* module documentation, may be NULL */
+   -1,       /* size of per-interpreter state of the module,
+                or -1 if the module keeps state in global variables. */
+   indexMethods
+};
+
+PyMODINIT_FUNC PyInit_index(void)
+{
+    return PyModule_Create(&indexmodule);
+}
