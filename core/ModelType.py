@@ -50,13 +50,13 @@ class FINDModelType(ModelType):
             raise TooBigDimensionsException
 
 
-class FISModelType(ModelType):
+class FSTDModelType(ModelType):
     def __init__(self):
         super().__init__()
-        self.type = "FIS"
-        self.logic_function_name = "fisLogic"
-        self.init_function_name = "initFisLogic"
-        self.output_function_name = "calculateFisOutput"
+        self.type = "F-STD"
+        self.logic_function_name = "fstdLogic"
+        self.init_function_name = "initFstdLogic"
+        self.output_function_name = "calculateFstdOutput"
 
     def update(self, model):
         super().update(model)
@@ -65,7 +65,7 @@ class FISModelType(ModelType):
 class FEQModelType(ModelType):
     def __init__(self):
         super().__init__()
-        self.type = "FIS"
+        self.type = "F-STD"
         self.logic_function_name = "feqLogic"
         self.init_function_name = "initFeqLogic"
         self.output_function_name = "calculateFeqOutput"
@@ -84,8 +84,8 @@ class ModelTypeSet:
             model_type = FINDModelType()
         elif model.type.upper() == 'FEQ':
             model_type = FEQModelType()
-        elif model.type.upper() != 'FIS':
-            model_type = FISModelType()
+        elif model.type.upper() != 'FSTD':
+            model_type = FSTDModelType()
         else:
             raise ModelNotFoundException
 

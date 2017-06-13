@@ -1,7 +1,7 @@
 import re
 # import logging
 import numpy as np
-from core.Variable import VariableFis, VariableFind, VariableFeq
+from core.Variable import VariableFstd, VariableFind, VariableFeq
 
 
 class Model:
@@ -9,7 +9,7 @@ class Model:
         self.name = data.get('name', None)
         self.description = data.get('description', None)
         self.version = data.get('version', None)
-        self.type = data.get('type', 'fis')
+        self.type = data.get('type', 'f-std')
 
         self.input_var = []
         self.output_var = []
@@ -140,15 +140,15 @@ class ModelFeq(Model):
                         "{} not in rules for {}".format(ov.name, iv.name))
 
 
-class ModelFis(Model):
+class ModelFSTD(Model):
     def __init__(self, data):
         super().__init__(data)
 
         for iv in self._input_var:
-            self.input_var.append(VariableFis(iv))
+            self.input_var.append(VariableFstd(iv))
 
         for ov in self._output_var:
-            self.output_var.append(VariableFis(ov))
+            self.output_var.append(VariableFstd(ov))
 
         self.rules = self.parseRules()
         if len(self.rules) != self.getCorrectNumRules():

@@ -8,6 +8,7 @@ from core import Model, ModelType
 
 folders = {
         "F-IND": "F-IND",
+        "F-STD": "F-STD",
 }
 
 mfDict = {
@@ -54,7 +55,7 @@ class fuzzyCreator(object):
             if m['type'].upper() == 'FEQ':
                 self.models.append(Model.ModelFeq(m))
             if m['type'].upper() != 'F-IND' and m['type'].upper() != 'FEQ':
-                self.models.append(Model.ModelFis(m))
+                self.models.append(Model.ModelFSTD(m))
 
         self.outDir = outDir
 

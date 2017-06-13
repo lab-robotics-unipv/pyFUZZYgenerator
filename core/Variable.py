@@ -65,7 +65,7 @@ class Variable:
             '{} is not a valid index, probably is mayor than the maximum one'.format(index))
 
 
-class VariableFis(Variable):
+class VariableFstd(Variable):
     def __init__(self, data):
         super().__init__(data)
 
