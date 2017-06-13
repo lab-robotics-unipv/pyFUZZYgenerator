@@ -11,14 +11,11 @@
  * 		input 		max			Maximum value of the Fuzzy Input
  */
 void createFindInput(findInput *fi, memFunction *MFs, uint_t nMF, dataType min, dataType max) {
-	
 	fi->minValue = min;
 	fi->maxValue = max;
 
 	fi->nMF = nMF;
-
 	fi->mf = MFs;
-
 }
 
 /*! CALCULATION OF THE MEMBERSHIP TO A GIVEN FIND INPUT

@@ -1,7 +1,7 @@
 #ifndef FIND_INPUT_H
 #define FIND_INPUT_H
 
-#include "defCommon.h"
+#include "findCommon.h"
 #include "memFunc.h"
 
 //! FIND INPUT STRUCTURE
