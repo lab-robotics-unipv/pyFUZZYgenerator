@@ -1,5 +1,5 @@
 #include <stdint.h>
-#include "memFunc.h"
+
 #include "findOutput.h"
 
 /*! INIT OF A FIND OUTPUT
@@ -9,10 +9,6 @@
  *		input 		nMF			Number of membership functions to be included
  */
 void createFindOutput(findOutput *fo, memFunction *MFs, uint_t nMF) {
-
-
 	fo->nMF = nMF;
-
 	fo->mf = MFs;
-
 }
