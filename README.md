@@ -1,4 +1,6 @@
-# pyFUZZYgenerator
+
+
+<img src="doc/img/pyfuzzy_logo_with_text.png" height="300" />
 
 ## Overview
 pyFUZZYgenerator is a framework to automatically generate a fuzzy systems in ANSI C using configuration files.
