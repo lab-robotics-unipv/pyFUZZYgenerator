@@ -25,7 +25,7 @@ static findOutput fo;
 /* Output {{ vout.name }}
 * {{ vout.description }}
 */
-static memFunction MF_O[{{ vout.membership_functions | length }}];
+static memFunction MF_{{ vout.name }}[{{ vout.membership_functions | length }}];
 
 {% for mf in vout.membership_functions %}
 // {{ mf.name }}{% if mf.description is defined %}: {{ mf.description }}{% endif %}
