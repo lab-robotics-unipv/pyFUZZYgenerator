@@ -99,7 +99,7 @@ class VariableFind(Variable):
 
         try:
             # TODO: It could be added a Weight associated to each input variable.
-            #self.weight = data['weight']
+            self.weight = data.get('weight', 1)
             self.best = data['best']
             self.worst = data['worst']
         except:

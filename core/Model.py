@@ -231,10 +231,10 @@ class ModelFIND(Model):
         sum = 0.0
         for var in self.input_var:
             #sum += var.getWeight() * var.getBestMF().getWeight()
-            sum += 1 * var.getBestMF().getWeight()
+            sum += var.weight * var.getBestMF().getWeight()
 
         for var in self.input_var:
             for mf in var.membership_functions:
                 w = mf.getWeight()
                 #mf.setNormalizedWeight(var.getWeight * w / sum)
-                mf.setNormalizedWeight(1 * w / sum)
+                mf.setNormalizedWeight(var.weight * w / sum)
