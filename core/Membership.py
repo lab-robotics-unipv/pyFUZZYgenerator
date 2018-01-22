@@ -299,6 +299,12 @@ class Singleton(MembershipFunction):
         else:
             return False
 
+    def getTopLeftX(self):
+        return self.parameters[0]
+
+    def getTopRightX(self):
+        return self.parameters[0]
+
 # TODO : Implement also Product and difference of Sigmoids
 
 
