@@ -30,6 +30,8 @@ if __name__ == '__main__':
                         help='disable the subfolder division')
     parser.add_argument('-d', '--output-dir', type=outputDir,
                         default='./output', help='output directory')
+    parser.add_argument('-is', '--include_strings', action="store_true",
+                        help='Include names in input and output (models require more memory)')
 
     args = parser.parse_args()
 
@@ -37,6 +39,6 @@ if __name__ == '__main__':
         with toml.open('r') as t:
             try:
                 fuzzyCreator(t.read(), args.output_dir).render(
-                    args.no_subforlder)
+                    args.no_subforlder, args.include_strings)
             except:
                 raise

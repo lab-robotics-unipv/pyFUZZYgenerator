@@ -10,6 +10,8 @@ typedef struct {
 	uint_t nMF;					//!< Number of MF
 	dataType minValue;			//!< Minimum value of the FIND Input
 	dataType maxValue;			//!< Maximum value of the FIND Input
+	{% if model.include_strings %}    char *name;         //!< Input name{% endif %}
+
 } findInput;
 
 /*! INIT OF A FIND INPUT
