@@ -10,6 +10,8 @@ typedef struct {
 	squareduint_t two_to_ndim;
 	findInput *fInput;
 	findOutput *fOutput;
+	{% if model.include_strings %}    char *name; {% endif %}
+
 } findLogic;
 
 /*! CONSTRUCTOR OF THE FIND LOGIC FOR FIND SYSTEM

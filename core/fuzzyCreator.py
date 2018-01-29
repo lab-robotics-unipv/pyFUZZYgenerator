@@ -72,7 +72,7 @@ class fuzzyCreator(object):
             raise e
 
 
-    def render(self, subfolder=True):
+    def render(self, subfolder=True, include_strings=False):
         if not self.outDir.exists():
             self.outDir.mkdir(parents=True)
 
@@ -80,6 +80,7 @@ class fuzzyCreator(object):
 
         outDir = self.outDir
         for model in self.models:
+            model.include_strings = include_strings
             if subfolder:
                 outDir = self.outDir / model.name
                 if not outDir.exists():
@@ -100,6 +101,7 @@ class fuzzyCreator(object):
 
         # Check if the model type has any common that should be copied as well
         for mt in model_types_added:
+            mt.include_strings = include_strings
             templ_dir = Path(__file__).parent / '..' / \
                              'templates' / folders[mt.type]
             common = (templ_dir / 'common').exists()

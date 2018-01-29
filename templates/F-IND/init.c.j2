@@ -44,8 +44,12 @@ static const dataType normalizedWeights[N_INPUT_{{ model.name }}][{{ model.getMa
 
 void initFindLogic_{{ model.name }}(findLogic *fl) {
 
+    {% if model.include_strings %}    fl->name = "{{ model.name }}"; {% endif %}
+
 	{% for vin in model.input_var %}
 	// Input variable: {{ vin.name }}
+
+    {% if model.include_strings %}fi[{{ loop.index0 }}].name = "{{ vin.name }}";{% endif %}
 
 	{% for mf in vin.membership_functions %}
 	createMemFunction(&(MF_{{ vin.name }}[{{ loop.index0 }}]), {{ mfDict.get(mf.type) }}, poi_{{ vin.name }}_{{ mf.name }});
@@ -61,6 +65,8 @@ void initFindLogic_{{ model.name }}(findLogic *fl) {
 
 	{% for vout in model.output_var %}
 	// Output variable: {{ vout.name }}
+
+    {% if model.include_strings %}fo.name = "{{ vout.name }}";{% endif %}
 
 	{% for mf in vout.membership_functions %}
 	createMemFunction(&(MF_{{ vout.name }}[{{ loop.index0 }}]), {{ mfDict.get(mf.type) }}, poi_{{ vout.name }}_{{ mf.name }});

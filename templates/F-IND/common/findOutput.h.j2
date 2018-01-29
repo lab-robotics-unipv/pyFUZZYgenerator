@@ -9,6 +9,8 @@
 typedef struct {
 	memFunction *mf;	//!< List of the Member Functions
 	uint_t nMF;					//!< Number of MF
+	{% if model.include_strings %}   char *name;         //!< Output name{% endif %}
+
 } findOutput;
 
 /*! INIT OF A FIND OUTPUT
