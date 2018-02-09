@@ -6,7 +6,7 @@ from pathlib import Path
 
 from core import Model, ModelType
 
-from pyFUZZYgenerator.core.ModelValidator import ModelValidator
+from core.ModelValidator import ModelValidator
 
 folders = {
         "F-IND": "F-IND",
