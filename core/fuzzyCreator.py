@@ -6,6 +6,8 @@ from pathlib import Path
 
 from core import Model, ModelType
 
+from pyFUZZYgenerator.core.ModelValidator import ModelValidator
+
 folders = {
         "F-IND": "F-IND",
 }
@@ -75,6 +77,10 @@ class fuzzyCreator(object):
     def render(self, subfolder=True, include_strings=False):
         if not self.outDir.exists():
             self.outDir.mkdir(parents=True)
+
+        # Validate the models
+        validator = ModelValidator(self.models)
+        validator.validate()
 
         model_types_added = ModelType.ModelTypeSet()
 
