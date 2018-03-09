@@ -24,6 +24,8 @@ class Variable:
             mf.index = i
             i += 1
 
+        self.cutoff = data.get('cutoff', None)
+
     def add_membership_function(self, data):
         factory = MembershipFactory(data)
         mf = factory.getMF()
@@ -44,6 +46,28 @@ class Variable:
         :return: a floating point value.
         """
         return max([mf.getMaxX() for mf in self.membership_functions])
+
+    def getCutoffMinX(self):
+        """
+        Returns the cutoff min value (any value passed below this will be cut to this)
+
+        :return: a floating point value.
+        """
+        if self.cutoff is not None:
+            return min(self.cutoff)
+
+        return self.getMinX()
+
+    def getCutoffMaxX(self):
+        """
+        Returns the cutoff max value (any value passed above this will be cut to this)
+
+        :return: a floating point value.
+        """
+        if self.cutoff is not None:
+            return max(self.cutoff)
+
+        return self.getMaxX()
 
     def __str__(self):
         return self.name + ': ' + ', '.join([str(mf) for mf in self.membership_functions])

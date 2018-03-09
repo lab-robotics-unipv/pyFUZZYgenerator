@@ -55,7 +55,7 @@ void initFindLogic_{{ model.name }}(findLogic *fl) {
 	createMemFunction(&(MF_{{ vin.name }}[{{ loop.index0 }}]), {{ mfDict.get(mf.type) }}, poi_{{ vin.name }}_{{ mf.name }});
 	{% endfor %}
 
-	createFindInput(&(fi[{{ loop.index0 }}]), MF_{{ vin.name }}, {{ vin.membership_functions | length }}, {{ vin.getMinX() }}, {{ vin.getMaxX() }});
+	createFindInput(&(fi[{{ loop.index0 }}]), MF_{{ vin.name }}, {{ vin.membership_functions | length }}, {{ vin.getMinX() }}, {{ vin.getMaxX() }}, {{ vin.getCutoffMinX() }}, {{ vin.getCutoffMaxX() }} );
 
 	{% endfor %}
 

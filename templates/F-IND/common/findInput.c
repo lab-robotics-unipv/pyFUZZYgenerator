@@ -9,10 +9,16 @@
  *		input 		nMF			Number of membership functions to be included
  * 		input		min			Minimum value of the Fuzzy Input
  * 		input 		max			Maximum value of the Fuzzy Input
+ * 		input		cutoff_min	Any value below this is cut to this
+ * 		input 		cutoff_max	Any value above this is cut to this
  */
-void createFindInput(findInput *fi, memFunction *MFs, uint_t nMF, dataType min, dataType max) {
+void createFindInput(findInput *fi, memFunction *MFs, uint_t nMF, dataType min, dataType max,
+        dataType cutoffMin, dataType cutoffMax) {
 	fi->minValue = min;
 	fi->maxValue = max;
+
+    fi->cutoffMin = cutoffMin;
+	fi->cutoffMax = cutoffMax;
 
 	fi->nMF = nMF;
 	fi->mf = MFs;
@@ -25,6 +31,11 @@ void createFindInput(findInput *fi, memFunction *MFs, uint_t nMF, dataType min, 
  * 			output		output			The % of membership to a FIND Input given an input value
  */
 uint_t getPercentageFromFindInput(findInput *fuzzy_input, dataType inputValue, dataType *output) {
+
+    if(inputValue < fuzzy_input->cutoffMin)
+        inputValue = fuzzy_input->cutoffMin;
+    else if(inputValue > fuzzy_input->cutoffMax)
+        inputValue = fuzzy_input->cutoffMax;
 
 	if (inputValue < fuzzy_input->minValue) {
 		*output = 1.0;
