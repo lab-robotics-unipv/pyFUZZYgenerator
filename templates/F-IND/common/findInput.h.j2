@@ -10,6 +10,8 @@ typedef struct {
 	uint_t nMF;					//!< Number of MF
 	dataType minValue;			//!< Minimum value of the FIND Input
 	dataType maxValue;			//!< Maximum value of the FIND Input
+	dataType cutoffMin;        //!< Any value below this is cut to this
+	dataType cutoffMax;        //!< Any value above this is cut to this
 	{% if model.include_strings %}    char *name;         //!< Input name{% endif %}
 
 } findInput;
@@ -21,10 +23,12 @@ typedef struct {
  *		input 		nMF			Number of membership functions to be included
  * 		input		min			Minimum value of the FIND Input
  * 		input 		max			Maximum value of the FIND Input
+ * 		input		cutoffMin	Any value below this is cut to this
+ * 		input 		cutoffMax	Any value above this is cut to this
  *
  *		return					Flag: -1 if error, 0 otherwise
  */
-void createFindInput(findInput *fi, memFunction *MFs, uint_t nMF, dataType min, dataType max);
+void createFindInput(findInput *fi, memFunction *MFs, uint_t nMF, dataType min, dataType max, dataType cutoffMin, dataType cutoffMax);
 
 /*! CALCULATION OF THE MEMBERSHIP TO A GIVEN FIND INPUT
  *			input		fuzzy_input		A FIND Input
