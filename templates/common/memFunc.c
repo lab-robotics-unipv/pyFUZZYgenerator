@@ -32,10 +32,12 @@ dataType getPercentage(memFunction *mf, dataType inputValue)
 	switch (mf->ms) {
 		case TRI_MF:
 			//We first consider the special case of Rectangle Triangle
-			if (mf->poi[0] == mf->poi[1] || mf->poi[1] == mf->poi[2])
-				if (inputValue == mf->poi[1])
-					return 1;
-					
+			if (mf->poi[0] == mf->poi[1] && inputValue <= mf->poi[0]) {
+				return 1;
+			} else if (mf->poi[1] == mf->poi[2] && inputValue >= mf->poi[2]) {
+				return 1;
+			}
+
 			//Normal Triangle
 			if (inputValue <= mf->poi[0] || inputValue >= mf->poi[2])
 				return 0;
