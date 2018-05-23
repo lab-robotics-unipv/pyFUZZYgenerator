@@ -203,8 +203,8 @@ class ModelFIND(Model):
     def parseRules(self):
 
         # TODO: Decide how to give the step parameter as input
-        #step = 10000
-        step = 2
+        step = 10000
+        # step = 2
         self.computeVariables(step)
 
     def computeVariables(self, step):
