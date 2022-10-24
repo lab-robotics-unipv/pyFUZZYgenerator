@@ -39,6 +39,6 @@ if __name__ == '__main__':
         with toml.open('r') as t:
             try:
                 fuzzyCreator(t.read(), args.output_dir).render(
-                    args.no_subforlder, args.include_strings)
+                    args.plain, args.include_strings)
             except:
                 raise
