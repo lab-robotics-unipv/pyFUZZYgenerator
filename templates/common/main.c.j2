@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
    struct argp_option options[] = {
 {% for mt in model.model_type_list %}
 {% for m in mt.models %}
-       { "{{ m.name }}", {{ m.id_for_cli }}, "VALUES", 0, "Inputs of model {{ m.name }}: {% for vin in m.input_var %}{{ vin.name }} {% endfor %}"},
+       { "{{ m.name }}", {{ m.id_for_cli }}, "VALUES", 0, "Input of model {{ m.name }}: {% for vin in m.input_var %}{{ vin.name }} {% endfor %}"},
 {% endfor %}
 {% endfor %}
        { 0 }
