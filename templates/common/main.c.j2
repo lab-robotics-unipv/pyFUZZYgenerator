@@ -94,6 +94,8 @@ int main(int argc, char *argv[])
             printf("Wrong number of parameters for model '{{ m.name }}': %d (expected {{ m.input_var | length }})\n", nconv);
             return 1;
         }
+    } else {
+        fprintf(stderr, "WARNING: input not set for model '{{ m.name }}.'\n");
     }
 
     dataType output_{{ m.name }} = {{ mt.output_function_name }}(&fl_{{ m.name}}, input_{{ m.name }});
