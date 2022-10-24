@@ -26,9 +26,9 @@ if __name__ == '__main__':
         description='Translate TOML files into ANSI C Fuzzy library', prog=sys.argv[0])
     parser.add_argument(metavar='TOML', type=tomlFile, nargs='+',
                         help='a TOML file to translate', dest='toml')
-    parser.add_argument('-n', '--no-subforlder', action='store_false',
-                        help='disable the subfolder division')
-    parser.add_argument('-d', '--output-dir', type=outputDir,
+    parser.add_argument('-p', '--plain', action='store_false',
+                        help='plain output - disable the subfolder splitting')
+    parser.add_argument('-o', '--output-dir', type=outputDir,
                         default='./output', help='output directory')
     parser.add_argument('-is', '--include_strings', action="store_true",
                         help='Include names in input and output (models require more memory)')
