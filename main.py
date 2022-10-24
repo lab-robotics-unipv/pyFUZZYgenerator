@@ -24,7 +24,7 @@ def outputDir(string):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
         description='Translate TOML files into ANSI C Fuzzy library', prog=sys.argv[0])
-    parser.add_argument(metavar='TOML', type=tomlFile, nargs='*',
+    parser.add_argument(metavar='TOML', type=tomlFile, nargs='+',
                         help='a TOML file to translate', dest='toml')
     parser.add_argument('-n', '--no-subforlder', action='store_false',
                         help='disable the subfolder division')
