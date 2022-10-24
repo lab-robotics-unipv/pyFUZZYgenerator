@@ -1,6 +1,6 @@
 [[model]]
-	name = "Prova"
-	description = "Prova per un modello FIND"
+	name = "Test"
+	description = "Test for a FIND model"
 	version = "1.0alpha"
 	type = "f-ind"
 
