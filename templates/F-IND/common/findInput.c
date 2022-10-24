@@ -32,10 +32,8 @@ void createFindInput(findInput *fi, memFunction *MFs, uint_t nMF, dataType min, 
  */
 uint_t getPercentageFromFindInput(findInput *fuzzy_input, dataType inputValue, dataType *output) {
 
-    if(inputValue < fuzzy_input->cutoffMin)
-        inputValue = fuzzy_input->cutoffMin;
-    else if(inputValue > fuzzy_input->cutoffMax)
-        inputValue = fuzzy_input->cutoffMax;
+    if (inputValue < fuzzy_input->cutoffMin) inputValue = fuzzy_input->cutoffMin;
+    if (inputValue > fuzzy_input->cutoffMax) inputValue = fuzzy_input->cutoffMax;
 
 	if (inputValue < fuzzy_input->minValue) {
 		*output = 1.0;
