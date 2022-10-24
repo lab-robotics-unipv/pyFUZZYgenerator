@@ -1,4 +1,7 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <argp.h>
 
 {% for mt in model.model_type_list %}
 {% for m in mt.models %}
@@ -6,8 +9,52 @@
 {% endfor %}
 {% endfor %}
 
+struct arguments_t {
+{% for mt in model.model_type_list %}
+{% for m in mt.models %}
+    char *{{ m.name }};
+{% endfor %}
+{% endfor %}
+};
+
+struct arguments_t arguments = {
+{% for mt in model.model_type_list %}
+{% for m in mt.models %}
+    .{{ m.name }} = NULL{{ "," if not loop.last else "" }}
+{% endfor %}
+{% endfor %}
+};
+
+static int parse_opt(int key, char *arg, struct argp_state *state)
+{
+    switch (key) {
+{% for mt in model.model_type_list %}
+{% for m in mt.models %}
+        case {{ m.id_for_cli }}: {
+            arguments.{{ m.name }} = strdup(arg);
+            break;
+        }
+{% endfor %}
+{% endfor %}
+        default:
+            return ARGP_ERR_UNKNOWN;
+    }
+    return 0;
+} 
+
 int main(int argc, char *argv[])
 {
+   struct argp_option options[] = {
+{% for mt in model.model_type_list %}
+{% for m in mt.models %}
+       { "{{ m.name }}", {{ m.id_for_cli }}, "VALUES", 0, "Inputs of model {{ m.name }}: {% for vin in m.input_var %}{{ vin.name }} {% endfor %}"},
+{% endfor %}
+{% endfor %}
+       { 0 }
+   };
+   struct argp argp = { options, parse_opt };
+   argp_parse (&argp, argc, argv, 0, 0, 0);
+
 {% for mt in model.model_type_list %}
 {% for m in mt.models %}
     /*
@@ -33,6 +80,21 @@ int main(int argc, char *argv[])
     {{ mt.init_function_name }}_{{ m.name }}(&fl_{{ m.name}});
     // TODO update with meaningful values w.r.t. your problem's domain
     dataType input_{{ m.name }}[ N_INPUT_{{ m.name }} ] = {0.0};
+
+    // loads values from the command line, if any
+    if (arguments.{{ m.name }} != NULL) {
+        int nconv = sscanf(
+            arguments.{{ m.name }},
+            "{% for i in range(m.input_var | length) %}%lf{{ "," if not loop.last else "" }}{% endfor %}",
+            {% for i in range(m.input_var | length) %}
+            &input_{{ m.name }}[ {{ i }} ]{{ ", " if not loop.last else "" }}
+            {% endfor %}
+        );
+        if (nconv != {{ m.input_var | length }}) {
+            printf("Wrong number of parameters for model '{{ m.name }}': %d (expected {{ m.input_var | length }})\n", nconv);
+            return 1;
+        }
+    }
 
     dataType output_{{ m.name }} = {{ mt.output_function_name }}(&fl_{{ m.name}}, input_{{ m.name }});
 

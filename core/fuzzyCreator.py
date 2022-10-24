@@ -85,7 +85,13 @@ class fuzzyCreator(object):
         model_types_added = ModelType.ModelTypeSet()
 
         outDir = self.outDir
+        i = 0
         for model in self.models:
+            # this is required to have unique numbers for each model
+            # to be used by argp in the main C file for reading
+            # from command line (the starting value must be > 256)
+            model.id_for_cli = 1000 + i
+
             model.include_strings = include_strings
             if subfolder:
                 outDir = self.outDir / model.name
@@ -104,6 +110,7 @@ class fuzzyCreator(object):
                 self.__process_template__(renderer, tmpl, outDir, model.name)
 
             model_types_added.update(model)
+            i += 1
 
         # Check if the model type has any common that should be copied as well
         for mt in model_types_added:
