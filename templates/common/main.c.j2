@@ -6,8 +6,8 @@
 {% endfor %}
 {% endfor %}
 
-int main(){
-
+int main(int argc, char *argv[])
+{
 {% for mt in model.model_type_list %}
 {% for m in mt.models %}
     /*
@@ -40,5 +40,5 @@ int main(){
 
 {% endfor %}
 {% endfor %}
-	return 0;
+    return 0;
 }
