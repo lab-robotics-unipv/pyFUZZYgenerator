@@ -98,7 +98,7 @@ int main(int argc, char *argv[])
 
     dataType output_{{ m.name }} = {{ mt.output_function_name }}(&fl_{{ m.name}}, input_{{ m.name }});
 
-    printf("Output for {{ m.name }}: %lf\n", output_{{ m.name }});
+    printf("{{ m.name }} = %lf\n", output_{{ m.name }});
 
 {% endfor %}
 {% endfor %}
