@@ -12,11 +12,11 @@ It uses configuration files to define the characteristics of the fuzzy system.
 To generate a fuzzy library, a configuration file is required.
 Configuration files are in [TOML](https://github.com/toml-lang/toml) format.
 
-In the `examples` directory there is an example that includes all the available fuzzy types.
+In the `examples` directory there is an example configuration file that includes all the available fuzzy types.
 
-In the followings, we will use the default example for the F-IND model `examples/sampleFIND.toml`.
+In the following, the default example for the F-IND model `examples/sampleFIND.toml` will be used.
 
-To create a C library using the sample file, run the `main.py` script as follows:
+To create the set of C source files using the sample file, run the `main.py` script as follows:
 
 ```bash
 python3 main.py examples/sampleFIND.toml -d sample
