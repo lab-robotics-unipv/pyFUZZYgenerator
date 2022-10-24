@@ -143,6 +143,7 @@ class fuzzyCreator(object):
         # Copies common model types files
         fileDir = Path(__file__).parent / '..' / 'templates' / "common"
         fileList = fileDir.glob('*')
+        model_types_added.outdir = base_out_dir
         renderer = templateRenderer(model_types_added, fileDir)
         for f in fileList:
             if f.is_file():
