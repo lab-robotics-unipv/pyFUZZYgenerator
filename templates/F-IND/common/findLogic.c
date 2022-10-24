@@ -59,8 +59,8 @@ dataType calculateFindIndex(findLogic *fl, dataType *inputs){
         //Actual "costly" computation: the product of all variables in the current path
         float result_j = 1;
         float sum_j = 0;
-        for(i=0; i < fl->ninput; i++){
-            if(((mask >> fl->ninput-i-1) & 1) == 0){
+        for (i = 0; i < fl->ninput; i++) {
+            if (((mask >> (fl->ninput - i - 1)) & 1) == 0) {
                 result_j *= fuzzified[i];
                 sum_j +=fl->fInput[i].mf[fuzzified_index[i]].normalizedWeight;
             }
