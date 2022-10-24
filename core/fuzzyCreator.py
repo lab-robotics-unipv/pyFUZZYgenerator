@@ -97,6 +97,9 @@ class fuzzyCreator(object):
                 outDir = self.outDir / model.name
                 if not outDir.exists():
                     outDir.mkdir()
+                model.subfolder = model.name + '/'
+            else:
+                model.subfolder = ""
 
             templ_dir = Path(__file__).parent / '..' / \
                 'templates' / folders[model.type.upper()]

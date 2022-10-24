@@ -5,7 +5,7 @@
 
 {% for mt in model.model_type_list %}
 {% for m in mt.models %}
-#include "init_{{ m.name }}.h"
+#include "{{ m.subfolder }}init_{{ m.name }}.h"
 {% endfor %}
 {% endfor %}
 
