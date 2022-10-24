@@ -6,7 +6,7 @@
 
 	[[model.input_var]]
 		name = "A"
-		description = "A"
+		description = "Variable A"
 		best = "A"
 		worst = "E"
 		
@@ -37,7 +37,7 @@
 
 	[[model.input_var]]
 		name = "B"
-		description = "A"
+		description = "Variable B"
 		best = "A"
 		worst = "E"
 		
@@ -68,7 +68,7 @@
 
 	[[model.input_var]]
 		name = "C"
-		description = "A"
+		description = "Variable C"
 		best = "A"
 		worst = "E"
 		
@@ -99,7 +99,7 @@
 					
 	[[model.output_var]]
 		name = "O"
-		description = "output_1"
+		description = "Output variable"
 		best = "A"
 		worst = "C"
 		
