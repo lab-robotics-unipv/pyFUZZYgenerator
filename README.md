@@ -3,43 +3,84 @@
 <img src="doc/img/pyfuzzy_logo_with_text.png" height="300" />
 
 ## Overview
-pyFUZZYgenerator is a framework to automatically generate a fuzzy systems in ANSI C using configuration files.
+
+pyFUZZYgenerator is a framework to automatically generate the code to evaluate a fuzzy system in ANSI C.
+It uses configuration files to define the characteristics of the fuzzy system.
 
 ## Usage
-To generate a fuzzy library, you have to create a configuration file.
-The files are written in [TOML](https://github.com/toml-lang/toml) syntax.
 
-In the `examples` directory some examples are provided for each fuzzy type.
+To generate a fuzzy library, a configuration file is required.
+Configuration files are in [TOML](https://github.com/toml-lang/toml) format.
 
-In the followings, we will use the default example for the F-IND model: `examples/sampleFIND.toml`.
+In the `examples` directory there is an example that includes all the available fuzzy types.
 
-To create a C library usng the FIND file, you have to run the `main.py` script:
+In the followings, we will use the default example for the F-IND model `examples/sampleFIND.toml`.
+
+To create a C library using the sample file, run the `main.py` script as follows:
+
 ```bash
-python3 main.py examples/sampleFIND.toml -d outputDir
-```
-More details on the options and arguments can be seen in the help:
-```bash
-python3 main.py -h
+python3 main.py examples/sampleFIND.toml -d sample
 ```
 
-The generated code can already be compiled using `gcc *c -lm` in the output folder.
-A sample `main.c` is automatically generated and can be adjusted to fit user needs.
+The generated C source files composing the fuzzy evaluator are placed in the `sample` directory.
 
-## Requirements
+More details on the options and arguments can be obtained with the command:
+
+```bash
+python3 main.py --help
+```
+
+The generated source files include a `Makefile`, so that the executable can be generated as follows:
+
+```bash
+cd sample
+make
+```
+
+These commands generated the `sample` executable that can be ran with
+
+```bash
+./sample
+```
+
+If the model is run without the necessary input parameters, a warning is printed on standard error, and the model uses default values equal to `0` for all the input variables.
+
+The input values for the variables of a model can be specified on the command line as follows:
+
+```bash
+./sample --Test=0.5,1,0.3
+```
+
+This means that the model `Test` requires 3 input values, which are 3 comma-separated numerical values.
+
+The generated fuzzy evaluator supports basic help:
+
+```bash
+./sample --help
+Usage: test [OPTION...]
+
+      --Test=VALUES          Input of model Test: A B C 
+  -?, --help                 Give this help list
+      --usage                Give a short usage message
+```
+
+## Dependencies
+
 The Python (python3) library requires the following packages:
+
 - pytoml
 - jinja2
 - numpy
 
 To simplify the requirements installation, we provide an [Anaconda](https://www.continuum.io/) environment, that can be imported with:
+
 ```bash
 conda env create -f environment.yaml
 ```
 
 ## TODOs
-- Upload the C library of a general fuzzy system
-- Optimize the general fuzzy library
-- Add pip installation for the package
 
-## Contact
-If you find any problem, please open an issue and we'll try to help.
+- Implement the C evaluator for a general fuzzy system
+- Optimize the general fuzzy library
+- Make pyFUZZYgenerator a program installable with pip
+
