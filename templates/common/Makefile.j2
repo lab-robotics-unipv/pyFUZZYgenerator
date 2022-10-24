@@ -1,0 +1,41 @@
+PHONY = all clean
+
+HDR = defCommon.h \
+      findCommon.h \
+      findInput.h \
+      findLogic.h \
+      findOutput.h \
+      memFunc.h \
+      MFShapes.h \
+{% for mt in model.model_type_list %}
+{% for m in mt.models %}
+      {{ m.subfolder }}init_{{ m.name }}.h \
+{% endfor %}
+{% endfor %}
+
+SRC = findInput.c \
+      findLogic.c \
+      findOutput.c \
+      MFShapes.c \
+      memFunc.c \
+{% for mt in model.model_type_list %}
+{% for m in mt.models %}
+      {{ m.subfolder }}init_{{ m.name }}.c \
+{% endfor %}
+{% endfor %}
+
+OBJ := $(patsubst %.c,%.o,$(SRC))
+BIN = {{ model.outdir }}
+CFLAGS = -Wall -O2
+
+all: $(BIN) $(HDR)
+
+$(BIN): $(OBJ) main.c
+	gcc $^ $(CFLAGS) -o $@ -lm
+
+%.o: %.c
+	gcc -c $^ $(CFLAGS) -o $@ -lm
+
+clean:
+	rm $(BIN)
+	rm $(OBJ)

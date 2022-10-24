@@ -63,11 +63,16 @@ class fuzzyCreator(object):
     def __process_template__(self, renderer, template_name, out_dir, add_model_name=None):
         try:
             tmplSplit = template_name.split('.')
+            if tmplSplit[1] == 'j2':
+                extension = ''
+            else:
+                extension = '.' + tmplSplit[1]
+
             if add_model_name is None:
-                outfile = tmplSplit[0] + '.' + tmplSplit[1]
+                outfile = tmplSplit[0] + extension
             else:
                 outfile = tmplSplit[0] + '_' + \
-                    add_model_name + '.' + tmplSplit[1]
+                    add_model_name + extension
             renderer.write(out_dir / outfile, template_name)
         except j2.TemplateSyntaxError as e:
             print("Exception in ", template_name, ":")
@@ -84,7 +89,7 @@ class fuzzyCreator(object):
 
         model_types_added = ModelType.ModelTypeSet()
 
-        outDir = self.outDir
+        base_out_dir = self.outDir
         i = 0
         for model in self.models:
             # this is required to have unique numbers for each model
