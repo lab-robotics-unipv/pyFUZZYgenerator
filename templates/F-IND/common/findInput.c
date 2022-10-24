@@ -38,9 +38,10 @@ uint_t getPercentageFromFindInput(findInput *fuzzy_input, dataType inputValue, d
 	if (inputValue < fuzzy_input->minValue) {
 		*output = 1.0;
 		return 0;
-	} else if (inputValue > fuzzy_input->maxValue) {
+	}
+    if (inputValue > fuzzy_input->maxValue) {
 		*output = 1.0;
-		return fuzzy_input->nMF-(uint_t)1;
+		return fuzzy_input->nMF - (uint_t)(1);
 	}
 	
 	uint_t i;	
@@ -49,6 +50,6 @@ uint_t getPercentageFromFindInput(findInput *fuzzy_input, dataType inputValue, d
 		if(*output>0)
 			return i;
 	}
-	//Warning: it should never reach this point
+	// Warning: it should never reach this point
 	return 0;
 }
